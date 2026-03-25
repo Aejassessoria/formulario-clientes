@@ -1,0 +1,1550 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Abertura de Empresa — A&J Assessoria Contábil</title>
+<meta name="description" content="Abertura de empresa simplificada. Preencha o formulário e nossa equipe entrará em contato.">
+<meta name="theme-color" content="#30323E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="A&J Contábil">
+<link rel="apple-touch-icon" href="./logo-aj-transparente.png">
+<link rel="manifest" href="./manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --dark:#30323E;--dark2:#3d3f4d;--white:#FFFFFF;
+  --off:#F7F6F3;--off2:#EEECEA;
+  --border:rgba(48,50,62,.13);--bstrong:rgba(48,50,62,.28);
+  --gold:#B8A882;--muted:#7a7c8a;
+  --danger:#c0392b;--danger-bg:#fdf0ef;
+  --success:#1a6b4a;--success-bg:#eaf4ef;
+  --warn-bg:#fffbea;--warn-border:#f5c842;--warn-text:#7a5c00;
+  --r:10px;--rs:6px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Jost',sans-serif;background:var(--off);color:var(--dark);min-height:100vh;}
+nav{background:rgba(48,50,62,.96);backdrop-filter:blur(10px);height:84px;display:flex;align-items:center;justify-content:space-between;padding:0 2.25rem;border-bottom:1px solid rgba(255,255,255,.08);position:sticky;top:0;z-index:200;}
+.nav-logo{display:flex;align-items:center;gap:0;}
+.nav-logo img{height:58px;width:auto;display:block;object-fit:contain;filter:none;} 
+.nav-logo-sub{display:none;}
+.nav-tabs{display:flex;gap:2px;}
+.nav-tab{padding:6px 18px;border-radius:var(--rs);font-size:12px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;border:none;background:transparent;color:rgba(255,255,255,.45);transition:.2s;font-family:'Jost',sans-serif;}
+.nav-tab:hover{color:#fff;background:rgba(255,255,255,.08);}
+.nav-tab.active{background:rgba(255,255,255,.12);color:#fff;}
+.view{display:none;}.view.active{display:block;}
+.hero{background:linear-gradient(180deg,#2e3240 0%, #30323E 58%, #343747 100%);padding:4.5rem 2rem 3.25rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 110%,rgba(184,168,130,.15) 0%,transparent 70%);pointer-events:none;}
+.hero img{height:96px;width:auto;display:block;object-fit:contain;margin:0 auto 1.5rem;filter:none;opacity:.98;}
+.hero h1{font-family:'Cormorant Garamond',serif;font-size:2.75rem;font-weight:500;line-height:1.1;color:#fff;margin-bottom:.75rem;letter-spacing:.02em;}
+.hero p{color:rgba(255,255,255,.76);font-size:15px;max-width:620px;margin:0 auto;line-height:1.8;font-weight:300;}
+.hero-line{width:64px;height:2px;background:var(--gold);margin:1.4rem auto 0;border-radius:999px;}
+.prog-wrap{background:#fff;border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;gap:1rem;position:sticky;top:84px;z-index:100;}
+.prog-steps{display:flex;gap:4px;flex:1;}
+.prog-dot{flex:1;height:3px;border-radius:3px;background:var(--off2);transition:.3s;}
+.prog-dot.done{background:var(--dark);}
+.prog-dot.active{background:var(--gold);}
+.prog-lbl{font-size:11px;color:var(--muted);white-space:nowrap;letter-spacing:.05em;text-transform:uppercase;font-weight:500;}
+.form-wrap{max-width:720px;margin:0 auto;padding:2rem 1.5rem 5rem;}
+.fsec{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1.75rem 2rem;margin-bottom:1.1rem;box-shadow:0 1px 3px rgba(48,50,62,.04);}
+.sec-hdr{display:flex;align-items:flex-start;gap:12px;margin-bottom:1.5rem;padding-bottom:1.1rem;border-bottom:1px solid var(--border);}
+.sec-num{width:28px;height:28px;border-radius:50%;background:var(--dark);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:500;}
+.sec-sub{font-size:11.5px;color:var(--muted);margin-top:2px;}
+.fg{margin-bottom:1rem;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.fr.c3{grid-template-columns:1fr 1fr 1fr;}
+label{display:block;font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
+label .req{color:var(--danger);margin-left:2px;}
+/* label with tooltip */
+.lbl-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.lbl-row label{margin-bottom:0;}
+.tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--off2);border:1px solid var(--border);font-size:10px;font-weight:700;color:var(--muted);cursor:help;flex-shrink:0;position:relative;}
+.tip:hover::after{content:attr(data-tip);position:absolute;left:22px;top:50%;transform:translateY(-50%);background:var(--dark);color:#fff;font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;padding:6px 10px;border-radius:var(--rs);width:220px;white-space:normal;line-height:1.5;z-index:50;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+.tip:hover::before{content:'';position:absolute;left:18px;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:var(--dark);z-index:51;}
+input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{
+  width:100%;padding:9px 12px;border:1px solid var(--bstrong);border-radius:var(--rs);
+  font-family:'Jost',sans-serif;font-size:13.5px;color:var(--dark);background:var(--off);
+  transition:.15s;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--dark);background:#fff;box-shadow:0 0 0 3px rgba(48,50,62,.07);}
+input.err,select.err,textarea.err{border-color:var(--danger);}
+input[readonly]{background:var(--off2);color:var(--muted);}
+textarea{resize:vertical;min-height:80px;line-height:1.6;}
+.hint{font-size:11px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.em{font-size:11px;color:var(--danger);margin-top:3px;display:none;}
+.em.show{display:block;}
+.cond{background:var(--off);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--rs);padding:1.1rem 1.1rem .1rem;margin-top:.6rem;display:none;}
+.cond.open{display:block;}
+.cond-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
+.alert{border-radius:var(--rs);padding:.75rem 1rem;margin-top:.6rem;font-size:12.5px;line-height:1.6;display:none;}
+.alert.show{display:block;}
+.alert-warn{background:var(--warn-bg);border:1px solid var(--warn-border);color:var(--warn-text);}
+.alert-info{background:#eef5fb;border:1px solid #b5d4f4;color:#0c447c;}
+.alert strong{font-weight:600;}
+.tipo-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-top:.4rem;}
+.tipo-card{border:1.5px solid var(--bstrong);border-radius:var(--rs);padding:.9rem 1rem;cursor:pointer;transition:.15s;position:relative;background:var(--off);}
+.tipo-card:hover{border-color:var(--dark);background:#fff;}
+.tipo-card.sel{border-color:var(--dark);background:#fff;box-shadow:inset 0 0 0 1px var(--dark);}
+.tipo-card input{position:absolute;opacity:0;width:0;height:0;}
+.tipo-card strong{font-size:13px;display:block;margin-bottom:2px;font-weight:500;}
+.tipo-card span{font-size:11.5px;color:var(--muted);line-height:1.4;}
+.tipo-card .pop{position:absolute;top:7px;right:7px;font-size:9px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:2px 6px;border-radius:3px;background:var(--dark);color:#fff;}
+.chk-grp{display:flex;flex-direction:column;gap:.45rem;margin-top:.4rem;}
+.chk-item{display:flex;align-items:center;gap:.55rem;cursor:pointer;font-size:13.5px;}
+.chk-item input[type=checkbox]{width:15px;height:15px;accent-color:var(--dark);cursor:pointer;flex-shrink:0;}
+.upload-box{border:1.5px dashed var(--bstrong);border-radius:var(--rs);padding:1rem;text-align:center;cursor:pointer;transition:.15s;background:var(--off);}
+.upload-box:hover{border-color:var(--dark);background:#fff;}
+.upload-box input{display:none;}
+.upload-label{font-size:12.5px;color:var(--muted);cursor:pointer;}
+.upload-label strong{color:var(--dark);}
+.upload-list{margin-top:.5rem;display:flex;flex-direction:column;gap:.3rem;}
+.upload-item{font-size:11.5px;color:var(--success);background:var(--success-bg);padding:3px 8px;border-radius:3px;}
+.socio-blk{border:1px solid var(--border);border-radius:var(--rs);padding:1.25rem;margin-bottom:.9rem;background:var(--off);}
+.socio-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;}
+.socio-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--dark);}
+.btn-rm{font-size:11px;color:var(--danger);background:var(--danger-bg);border:none;border-radius:3px;padding:3px 10px;cursor:pointer;font-family:inherit;}
+.btn-add{width:100%;padding:10px;border:1.5px dashed var(--bstrong);border-radius:var(--rs);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;}
+.btn-add:hover{border-color:var(--dark);color:var(--dark);}
+.btn-copy-resp{font-size:11px;padding:4px 12px;border-radius:3px;border:1px solid var(--gold);background:rgba(184,168,130,.1);color:var(--dark);cursor:pointer;font-family:inherit;transition:.15s;white-space:nowrap;}
+.btn-copy-resp:hover{background:rgba(184,168,130,.25);}
+.decl-list{display:flex;flex-direction:column;gap:.75rem;margin-top:.4rem;}
+.decl-item{display:flex;align-items:flex-start;gap:.75rem;padding:.75rem;background:var(--off);border-radius:var(--rs);border:1px solid var(--border);}
+.decl-item input[type=checkbox]{width:16px;height:16px;accent-color:var(--dark);cursor:pointer;flex-shrink:0;margin-top:2px;}
+.decl-item span{font-size:13px;line-height:1.6;color:var(--dark);}
+.nav-btns{display:flex;justify-content:space-between;align-items:center;padding:1.5rem 0 0;}
+.btn-pri{padding:12px 36px;background:var(--dark);color:#fff;border:none;border-radius:var(--rs);font-family:'Jost',sans-serif;font-size:12.5px;font-weight:500;letter-spacing:.06em;cursor:pointer;transition:.15s;text-transform:uppercase;}
+.btn-pri:hover{background:var(--dark2);}
+.btn-sec{padding:12px 22px;background:transparent;color:var(--muted);border:1px solid var(--bstrong);border-radius:var(--rs);font-family:'Jost',sans-serif;font-size:12.5px;cursor:pointer;transition:.15s;}
+.btn-sec:hover{background:var(--off);color:var(--dark);}
+.success{display:none;text-align:center;padding:4rem 2rem;}
+.suc-icon{width:68px;height:68px;border-radius:50%;background:var(--success-bg);margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;}
+.suc-icon svg{width:32px;height:32px;}
+.suc-line{width:36px;height:1px;background:var(--gold);margin:1.25rem auto;}
+.success h2{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:500;margin-bottom:.6rem;}
+.success p{color:var(--muted);max-width:400px;margin:0 auto;font-size:13.5px;line-height:1.7;}
+.suc-code{margin:1.5rem auto;display:inline-block;background:var(--off);border:1px solid var(--bstrong);padding:.7rem 2.5rem;border-radius:var(--rs);font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--dark);letter-spacing:.15em;}
+.adm-bar{background:#fff;border-bottom:1px solid var(--border);padding:1.1rem 2rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.adm-bar h2{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:500;}
+.adm-ctrl{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;}
+.srch{padding:7px 11px;border:1px solid var(--bstrong);border-radius:var(--rs);background:var(--off);font-size:12.5px;font-family:inherit;color:var(--dark);width:200px;outline:none;}
+.srch:focus{border-color:var(--dark);}
+.fsel{padding:7px 11px;border:1px solid var(--bstrong);border-radius:var(--rs);background:var(--off);font-size:12.5px;font-family:inherit;color:var(--dark);outline:none;cursor:pointer;}
+.btn-exp{padding:7px 16px;background:var(--dark);color:#fff;border:none;border-radius:var(--rs);font-size:12px;font-weight:500;font-family:inherit;cursor:pointer;letter-spacing:.05em;text-transform:uppercase;}
+.btn-exp:hover{background:var(--dark2);}
+.stats{padding:1.25rem 2rem;display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.2rem;}
+.stat-l{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);}
+.stat-v{font-family:'Cormorant Garamond',serif;font-size:2.1rem;font-weight:400;color:var(--dark);}
+.stat-s{font-size:11px;color:var(--muted);}
+.tbl-wrap{padding:0 2rem 3rem;}
+.rtbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;font-size:12.5px;}
+.rtbl thead{background:var(--dark);}
+.rtbl th{padding:10px 13px;text-align:left;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.65);}
+.rtbl td{padding:12px 13px;border-bottom:1px solid var(--border);vertical-align:top;}
+.rtbl tr:last-child td{border-bottom:none;}
+.rtbl tr:hover td{background:var(--off);}
+.tbdg{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;display:inline-block;letter-spacing:.03em;}
+.t-MEI{background:#eaf3de;color:#27500a;}.t-LTDA{background:#e1f5ee;color:#085041;}.t-SA{background:#faeeda;color:#633806;}.t-Outro{background:var(--off2);color:var(--dark);}
+.sbdg{font-size:10px;font-weight:600;padding:2px 7px;border-radius:3px;display:inline-block;letter-spacing:.03em;}
+.s-Novo{background:#e1f5ee;color:#085041;}.s-Andamento{background:#faeeda;color:#633806;}.s-Concluido{background:#eaf3de;color:#27500a;}
+.btn-ver{font-size:11px;padding:3px 10px;border-radius:3px;border:1px solid var(--bstrong);background:#fff;cursor:pointer;font-family:inherit;color:var(--dark);}
+.btn-ver:hover{background:var(--off);}
+.btn-dl-tbl{font-size:11px;padding:3px 10px;border-radius:3px;border:none;background:var(--dark);color:#fff;cursor:pointer;font-family:inherit;margin-left:4px;}
+.empty{text-align:center;padding:3rem;color:var(--muted);font-size:13px;}
+.overlay{display:none;position:fixed;inset:0;z-index:300;background:rgba(20,21,26,.6);align-items:center;justify-content:center;padding:1.5rem;}
+.overlay.open{display:flex;}
+.modal{background:#fff;border-radius:var(--r);width:100%;max-width:740px;max-height:88vh;overflow-y:auto;border:1px solid var(--border);}
+.mhd{padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:10;}
+.mhd h3{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:500;}
+.mcls{width:26px;height:26px;border-radius:50%;background:var(--off2);border:none;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--dark);}
+.mbody{padding:1.5rem;}
+.msec{margin-bottom:1.4rem;}
+.msec-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:.7rem;padding-bottom:.4rem;border-bottom:1px solid var(--border);}
+.dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:.65rem;}
+.di dt{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+.di dd{font-size:13px;font-weight:500;}
+.ssel{padding:7px 10px;border:1px solid var(--bstrong);border-radius:var(--rs);font-family:inherit;font-size:12.5px;background:var(--off);color:var(--dark);outline:none;}
+/* CEP status */
+.cep-row{display:flex;gap:.5rem;align-items:flex-start;}
+.cep-row>div{flex:1;}
+.btn-manual{padding:9px 12px;border:1px solid var(--bstrong);border-radius:var(--rs);background:var(--off);font-family:inherit;font-size:11.5px;color:var(--muted);cursor:pointer;white-space:nowrap;transition:.15s;}
+.btn-manual:hover{border-color:var(--dark);color:var(--dark);}
+
+@media(max-width:900px){
+  nav{height:76px;padding:0 1rem;}
+  .nav-logo img{height:48px;}
+  .hero{padding:3.5rem 1rem 2.5rem;}
+  .hero img{height:78px;}
+  .hero h1{font-size:2.2rem;}
+  .prog-wrap{top:76px;padding:.75rem 1rem;}
+}
+@media(max-width:600px){
+  .fr,.fr.c3{grid-template-columns:1fr;}
+  .tipo-grid{grid-template-columns:1fr;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .nav-btns{flex-direction:column-reverse;gap:.75rem;}
+  .btn-pri,.btn-sec{width:100%;text-align:center;}
+  .tip:hover::after,.tip.tip-open::after{left:auto;right:22px;top:auto;bottom:22px;transform:none;}
+  .tip:hover::before,.tip.tip-open::before{left:auto;right:18px;top:auto;bottom:16px;transform:rotate(90deg);}
+}
+.input-pct{position:relative;display:flex;align-items:center;}
+.input-pct input{padding-right:30px;}
+.input-pct::after{content:'%';position:absolute;right:10px;color:var(--muted);font-size:13px;pointer-events:none;font-family:'Jost',sans-serif;}
+.tip.tip-open::after{content:attr(data-tip);position:absolute;left:22px;top:50%;transform:translateY(-50%);background:var(--dark);color:#fff;font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;padding:6px 10px;border-radius:var(--rs);width:220px;white-space:normal;line-height:1.5;z-index:50;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2);}
+.tip.tip-open::before{content:'';position:absolute;left:18px;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:var(--dark);z-index:51;}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-logo">
+    <img src="./logo-aj-transparente.png" alt="A&amp;J Assessoria Contábil" onerror="this.style.display='none'">
+  </div>
+
+</nav>
+<div id="view-form" class="view active">
+  <div class="hero" id="hero">
+    <img src="./logo-aj-transparente.png" alt="A&amp;J Assessoria Contábil" onerror="this.style.display='none'">
+    <h1>Abertura de Empresa</h1>
+    <p>Preencha as informações abaixo. Nossos contadores irão analisar seus dados e entrar em contato para finalizar o processo.</p>
+    <div class="hero-line"></div>
+  </div>
+  <div class="prog-wrap" id="prog-wrap">
+    <div class="prog-steps" id="prog-steps"></div>
+    <div class="prog-lbl" id="prog-lbl"></div>
+  </div>
+  <div class="form-wrap" id="form-wrap"></div>
+  <form name="onboarding" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="bot-field">
+    <input type="hidden" name="form-name" value="onboarding">
+    <input type="text" name="protocolo">
+    <input type="text" name="data_envio">
+    <input type="text" name="tipo">
+    <!-- Responsável -->
+    <input type="text" name="resp_nome">
+    <input type="text" name="resp_cpf">
+    <input type="text" name="resp_nasc">
+    <input type="text" name="resp_profissao">
+    <input type="text" name="resp_civil">
+    <input type="text" name="resp_regime_casamento">
+    <input type="email" name="resp_email">
+    <input type="text" name="resp_tel">
+    <!-- Empresa -->
+    <input type="text" name="razao_social">
+    <input type="text" name="nome_fantasia">
+    <input type="text" name="cep">
+    <input type="text" name="logradouro">
+    <input type="text" name="numero">
+    <input type="text" name="complemento">
+    <input type="text" name="bairro">
+    <input type="text" name="cidade">
+    <input type="text" name="estado">
+    <input type="text" name="sede_tipo">
+    <input type="text" name="atendimento_publico">
+    <input type="text" name="area_total">
+    <input type="text" name="habite_se">
+    <input type="text" name="inscricao_imobiliaria">
+    <input type="text" name="horario_funcionamento">
+    <input type="text" name="area_total_fiscal">
+    <input type="text" name="inscricao_imobiliaria_fiscal">
+    <!-- Atividade -->
+    <input type="text" name="atividades">
+    <input type="text" name="ativ_servico">
+    <input type="text" name="ativ_comercio">
+    <input type="text" name="compras_outros_estados">
+    <input type="text" name="ativ_industria">
+    <input type="text" name="ind_compras_outros_estados">
+    <!-- Capital -->
+    <input type="text" name="capital_social">
+    <input type="text" name="capital_social_extenso">
+    <input type="text" name="capital_integralizacao">
+    <input type="text" name="capital_inicial">
+    <input type="text" name="capital_parcelas">
+    <input type="text" name="capital_prazo">
+    <!-- Regime / Funcionários -->
+    <input type="text" name="regime_tributario">
+    <input type="text" name="tem_funcionarios">
+    <input type="text" name="func_quantidade">
+    <input type="text" name="cnpj_telefone">
+    <input type="text" name="cnpj_email">
+    <!-- Sócios (até 5) -->
+    <input type="text" name="socio_1_nome"><input type="text" name="socio_1_cpf"><input type="text" name="socio_1_rg"><input type="text" name="socio_1_nasc"><input type="text" name="socio_1_civil"><input type="text" name="socio_1_regime_casamento"><input type="text" name="socio_1_profissao"><input type="text" name="socio_1_tel"><input type="text" name="socio_1_email"><input type="text" name="socio_1_participacao"><input type="text" name="socio_1_funcao"><input type="text" name="socio_1_gestao_forma"><input type="text" name="socio_1_prolabore"><input type="text" name="socio_1_prolabore_valor"><input type="text" name="socio_1_end_cep"><input type="text" name="socio_1_end_logradouro"><input type="text" name="socio_1_end_numero"><input type="text" name="socio_1_end_complemento"><input type="text" name="socio_1_end_bairro"><input type="text" name="socio_1_end_cidade"><input type="text" name="socio_1_end_estado"><input type="text" name="socio_1_outra_empresa"><input type="text" name="socio_1_outra_nome"><input type="text" name="socio_1_outra_cnpj"><input type="text" name="socio_1_outra_regime"><input type="text" name="socio_1_outra_participacao">
+    <input type="text" name="socio_2_nome"><input type="text" name="socio_2_cpf"><input type="text" name="socio_2_rg"><input type="text" name="socio_2_nasc"><input type="text" name="socio_2_civil"><input type="text" name="socio_2_regime_casamento"><input type="text" name="socio_2_profissao"><input type="text" name="socio_2_tel"><input type="text" name="socio_2_email"><input type="text" name="socio_2_participacao"><input type="text" name="socio_2_funcao"><input type="text" name="socio_2_gestao_forma"><input type="text" name="socio_2_prolabore"><input type="text" name="socio_2_prolabore_valor"><input type="text" name="socio_2_end_cep"><input type="text" name="socio_2_end_logradouro"><input type="text" name="socio_2_end_numero"><input type="text" name="socio_2_end_complemento"><input type="text" name="socio_2_end_bairro"><input type="text" name="socio_2_end_cidade"><input type="text" name="socio_2_end_estado"><input type="text" name="socio_2_outra_empresa"><input type="text" name="socio_2_outra_nome"><input type="text" name="socio_2_outra_cnpj"><input type="text" name="socio_2_outra_regime"><input type="text" name="socio_2_outra_participacao">
+    <input type="text" name="socio_3_nome"><input type="text" name="socio_3_cpf"><input type="text" name="socio_3_rg"><input type="text" name="socio_3_nasc"><input type="text" name="socio_3_civil"><input type="text" name="socio_3_regime_casamento"><input type="text" name="socio_3_profissao"><input type="text" name="socio_3_tel"><input type="text" name="socio_3_email"><input type="text" name="socio_3_participacao"><input type="text" name="socio_3_funcao"><input type="text" name="socio_3_gestao_forma"><input type="text" name="socio_3_prolabore"><input type="text" name="socio_3_prolabore_valor"><input type="text" name="socio_3_end_cep"><input type="text" name="socio_3_end_logradouro"><input type="text" name="socio_3_end_numero"><input type="text" name="socio_3_end_complemento"><input type="text" name="socio_3_end_bairro"><input type="text" name="socio_3_end_cidade"><input type="text" name="socio_3_end_estado"><input type="text" name="socio_3_outra_empresa"><input type="text" name="socio_3_outra_nome"><input type="text" name="socio_3_outra_cnpj"><input type="text" name="socio_3_outra_regime"><input type="text" name="socio_3_outra_participacao">
+    <input type="text" name="socio_4_nome"><input type="text" name="socio_4_cpf"><input type="text" name="socio_4_rg"><input type="text" name="socio_4_nasc"><input type="text" name="socio_4_civil"><input type="text" name="socio_4_regime_casamento"><input type="text" name="socio_4_profissao"><input type="text" name="socio_4_tel"><input type="text" name="socio_4_email"><input type="text" name="socio_4_participacao"><input type="text" name="socio_4_funcao"><input type="text" name="socio_4_gestao_forma"><input type="text" name="socio_4_prolabore"><input type="text" name="socio_4_prolabore_valor"><input type="text" name="socio_4_end_cep"><input type="text" name="socio_4_end_logradouro"><input type="text" name="socio_4_end_numero"><input type="text" name="socio_4_end_complemento"><input type="text" name="socio_4_end_bairro"><input type="text" name="socio_4_end_cidade"><input type="text" name="socio_4_end_estado"><input type="text" name="socio_4_outra_empresa"><input type="text" name="socio_4_outra_nome"><input type="text" name="socio_4_outra_cnpj"><input type="text" name="socio_4_outra_regime"><input type="text" name="socio_4_outra_participacao">
+    <input type="text" name="socio_5_nome"><input type="text" name="socio_5_cpf"><input type="text" name="socio_5_rg"><input type="text" name="socio_5_nasc"><input type="text" name="socio_5_civil"><input type="text" name="socio_5_regime_casamento"><input type="text" name="socio_5_profissao"><input type="text" name="socio_5_tel"><input type="text" name="socio_5_email"><input type="text" name="socio_5_participacao"><input type="text" name="socio_5_funcao"><input type="text" name="socio_5_gestao_forma"><input type="text" name="socio_5_prolabore"><input type="text" name="socio_5_prolabore_valor"><input type="text" name="socio_5_end_cep"><input type="text" name="socio_5_end_logradouro"><input type="text" name="socio_5_end_numero"><input type="text" name="socio_5_end_complemento"><input type="text" name="socio_5_end_bairro"><input type="text" name="socio_5_end_cidade"><input type="text" name="socio_5_end_estado"><input type="text" name="socio_5_outra_empresa"><input type="text" name="socio_5_outra_nome"><input type="text" name="socio_5_outra_cnpj"><input type="text" name="socio_5_outra_regime"><input type="text" name="socio_5_outra_participacao">
+    <!-- Documentos -->
+    <input type="file" name="doc_rg_cnh">
+    <input type="file" name="doc_comp_res">
+    <input type="file" name="doc_irpf">
+    <input type="file" name="doc_titulo">
+    <input type="file" name="doc_iptu">
+    <input type="file" name="doc_habite_se">
+    <input type="file" name="doc_outros">
+    <!-- Resumos -->
+    <textarea name="resumo_formatado"></textarea>
+    <textarea name="socios_resumo"></textarea>
+    <textarea name="empresa_endereco"></textarea>
+    <textarea name="atividades_resumo"></textarea>
+    <textarea name="dados_completos_json"></textarea>
+  </form>
+  <div class="success" id="success">
+    <div class="suc-icon"><svg fill="none" viewBox="0 0 24 24" stroke="#1a6b4a" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg></div>
+    <div class="suc-line"></div>
+    <h2>Solicitação Recebida</h2>
+    <p>Suas informações foram enviadas com sucesso. Nossa equipe entrará em contato em breve para dar continuidade ao processo.</p>
+    <div class="suc-code" id="suc-code"></div>
+    <p style="font-size:12px;color:var(--muted);margin-top:.25rem">Guarde este número de protocolo.</p>
+  </div>
+</div>
+<div class="overlay" id="overlay" onclick="closeModal(event)"><div class="modal" id="modal-inner"></div></div>
+<script>
+// Tooltip touch support
+document.addEventListener('click',function(e){
+  const tip=e.target.closest('.tip');
+  document.querySelectorAll('.tip.tip-open').forEach(function(t){if(t!==tip)t.classList.remove('tip-open');});
+  if(tip){e.stopPropagation();tip.classList.toggle('tip-open');}
+});
+</script>
+<script>
+const docxReady=new Promise((resolve,reject)=>{
+  function loadScript(src,check,cb){if(check()){cb();return;}const s=document.createElement('script');s.src=src;s.onload=cb;s.onerror=()=>reject(new Error('Falha: '+src));document.head.appendChild(s);}
+  loadScript('https://cdn.jsdelivr.net/npm/docx@9.5.3/build/index.umd.js',()=>typeof window.docx!=='undefined',()=>loadScript('https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js',()=>typeof window.saveAs!=='undefined',()=>resolve(true)));
+});
+</script>
+<script>
+// ══════════════ ESTADO ══════════════
+let step=0;
+const ETAPAS=[
+  {id:'responsavel',title:'Dados do Responsável',sub:'Informações pessoais de quem abre a empresa'},
+  {id:'tipo',title:'Tipo de Empresa',sub:'Selecione o formato jurídico do negócio'},
+  {id:'empresa',title:'Nome e Endereço',sub:'Razão social e localização da empresa'},
+  {id:'atividade',title:'Atividade da Empresa',sub:'O que sua empresa irá exercer'},
+  {id:'capital',title:'Capital Social',sub:'Valor investido para início das operações'},
+  {id:'socios',title:'Sócios',sub:'Dados pessoais e documentação dos sócios'},
+  {id:'gestao',title:'Gestão e Pró-labore',sub:'Função e retirada mensal de cada sócio'},
+  {id:'regime',title:'Regime Tributário e Funcionários',sub:'Tributação, equipe e contatos para o CNPJ'},
+  {id:'documentos',title:'Documentos',sub:'Envio de documentação — não obrigatório agora'},
+  {id:'declaracoes',title:'Declarações Finais',sub:'Confirmações obrigatórias para enviar'},
+];
+let fd={
+  tipo:'',
+  socios:[{nome:'',cpf:'',rg:'',nasc:'',civil:'',regime_casamento:'',profissao:'',tel:'',email:'',
+    end_cep:'',end_logradouro:'',end_numero:'',end_complemento:'',end_bairro:'',end_cidade:'',end_estado:'',
+    participacao:'',outra_empresa:'',outra_nome:'',outra_cnpj:'',outra_regime:'',outra_participacao:'',
+    gestao_funcao:'',gestao_forma:'',prolabore:'',prolabore_valor:''}],
+  atividades:[],capital_integralizacao:'',sede_tipo:'',atendimento_publico:''
+};
+const manualFlags={};
+const uploadedFiles={}; // guarda File[] por id do input
+
+// ══════════════ TOOLTIPS ══════════════
+const TIPS={
+  razao_social:'Nome legal da empresa que será registrado na Junta Comercial.',
+  nome_fantasia:'Nome pelo qual a empresa será conhecida pelo público. Pode ser diferente da razão social e não é obrigatório.',
+  cep:'Ao digitar o CEP, o endereço é preenchido automaticamente. Se não encontrar, clique em "Preencher manual".',
+  sede_tipo:'Informe se o imóvel pertence à empresa ou ao sócio (próprio), se é alugado de terceiro, ou se é residencial.',
+  atendimento_publico:'Se haverá clientes no local presencialmente, serão necessários alvará de funcionamento, habite-se e medidas de segurança.',
+  capital_social:'Valor que os sócios investem para iniciar a empresa. Não precisa estar em dinheiro físico imediatamente.',
+  capital_social_extenso:'Este campo é obrigatório para o contrato social. Será preenchido automaticamente ao digitar o valor.',
+  capital_integralizacao:'Integralizar significa disponibilizar o capital à empresa. À vista = tudo agora. Parcelado = parte agora, restante depois com prazo definido.',
+  inscricao_imobiliaria:'Número que identifica o imóvel no cadastro da prefeitura. Consta no carnê de IPTU.',
+  habite_se:'Documento da prefeitura que certifica que o imóvel pode ser usado para fins comerciais.',
+  horario_funcionamento:'Necessário para o alvará de funcionamento.',
+  area_total:'Em metros quadrados. Consta na planta ou escritura do imóvel.',
+  resp_civil:'Influencia o contrato social. Se casado, precisaremos saber o regime de bens.',
+  resp_regime_casamento:'Define como os bens do casal se relacionam com os da empresa.',
+  socio_participacao:'Percentual de participação deste sócio. A soma de todos os sócios deve ser exatamente 100%.',
+  socio_rg:'Número do RG. Constará no contrato social.',
+  socio_civil:'Se casado, precisaremos saber o regime de bens para o contrato social.',
+  outra_empresa:'Participação em outra empresa pode restringir o enquadramento no Simples Nacional.',
+  gestao_funcao:'Define quem tem poderes para assinar documentos e representar a empresa.',
+  gestao_forma:'Isolada: cada administrador age sozinho. Conjunta: todos devem assinar juntos — mais segurança, menos agilidade.',
+  prolabore:'Remuneração mensal do sócio administrador. Sobre ele incide INSS e Imposto de Renda.',
+  regime_tributario:'Define como os impostos da empresa serão calculados e pagos. Simples Nacional é o mais comum para pequenas empresas.',
+  cnpj_email:'Aparecerá no Cartão CNPJ e será usado pela Receita Federal para comunicações.',
+  cnpj_telefone:'Aparecerá no Cartão CNPJ.',
+};
+function tip(key){const t=TIPS[key]||'';if(!t)return'';return`<span class="tip" data-tip="${t.replace(/"/g,'&quot;')}">?</span>`;}
+function lblR(text,req,tipKey){const r=req?'<span class="req">*</span>':'';const t=tipKey?tip(tipKey):'';return t?`<div class="lbl-row"><label>${text} ${r}</label>${t}</div>`:`<label>${text} ${r}</label>`;}
+function fld(id,label,req,type,tipKey){
+  type=type||'text';const r=req?'<span class="req">*</span>':'';const t=tipKey?tip(tipKey):'';
+  const lh=t?`<div class="lbl-row"><label>${label} ${r}</label>${t}</div>`:`<label>${label} ${r}</label>`;
+  const inp=type==='textarea'?`<textarea id="${id}"></textarea>`:`<input type="${type}" id="${id}" ${type==='number'?'min="0"':''}>`;
+  const em=req?`<p class="em" id="err-${id}">Campo obrigatório</p>`:'';
+  return`<div class="fg">${lh}${inp}${em}</div>`;
+}
+function cepFld(id,label,req,btnId){
+  const r=req?'<span class="req">*</span>':'';const em=req?`<p class="em" id="err-${id}">Campo obrigatório</p>`:'';
+  return`<div class="fg"><div class="lbl-row"><label>${label} ${r}</label>${tip('cep')}</div>
+    <div class="cep-row"><div><input type="text" id="${id}" maxlength="9" placeholder="00000-000" oninput="maskCEP(this)" onblur="buscaCEP('${id}','${btnId}')">${em}</div>
+    <button type="button" class="btn-manual" id="${btnId}" onclick="toggleManual('${id}','${btnId}')">Preencher manual</button></div>
+    <p class="hint" id="st-${id}"></p></div>`;
+}
+function esc(v){return(v||'').toString().replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+// ══════════════ RENDER ══════════════
+function init(){renderStep();updateProgress();}
+function renderStep(){
+  const e=ETAPAS[step];let body='';
+  if(e.id==='responsavel')body=rResponsavel();
+  else if(e.id==='tipo')body=rTipo();
+  else if(e.id==='empresa')body=rEmpresa();
+  else if(e.id==='atividade')body=rAtividade();
+  else if(e.id==='capital')body=rCapital();
+  else if(e.id==='socios')body=rSocios();
+  else if(e.id==='gestao')body=rGestao();
+  else if(e.id==='regime')body=rRegime();
+  else if(e.id==='documentos')body=rDocumentos();
+  else if(e.id==='declaracoes')body=rDeclaracoes();
+  document.getElementById('form-wrap').innerHTML=`<div class="fsec"><div class="sec-hdr"><div class="sec-num">${step+1}</div><div><div class="sec-title">${e.title}</div><div class="sec-sub">${e.sub}</div></div></div>${body}</div><div class="nav-btns">${step>0?'<button class="btn-sec" onclick="prev()">← Voltar</button>':'<span></span>'}<button class="btn-pri" onclick="next()">${step===ETAPAS.length-1?'Enviar Solicitação':'Continuar →'}</button></div>`;
+  restoreValues();bindConds();
+}
+
+function rResponsavel(){return`
+  ${fld('resp_nome','Nome completo',true)}
+  <div class="fr">
+    <div class="fg"><label>CPF <span class="req">*</span></label>
+      <input type="text" id="resp_cpf" maxlength="14" placeholder="000.000.000-00" oninput="maskCPF(this)">
+      <p class="em" id="err-resp_cpf">Campo obrigatório</p></div>
+    ${fld('resp_nasc','Data de nascimento',true,'date')}
+  </div>
+  <div class="fr">
+    ${fld('resp_profissao','Profissão',true)}
+    <div class="fg">${lblR('Estado civil',true,'resp_civil')}
+      <select id="resp_civil"><option value="">Selecione...</option>${['Solteiro(a)','Casado(a)','Divorciado(a)','Viúvo(a)','União estável'].map(o=>`<option>${o}</option>`).join('')}</select>
+      <p class="em" id="err-resp_civil">Campo obrigatório</p></div>
+  </div>
+  <div class="cond" id="cond-resp-casado">
+    <div class="cond-lbl">Regime de casamento</div>
+    <div class="fg">${lblR('Regime de bens',true,'resp_regime_casamento')}
+      <select id="resp_regime_casamento"><option value="">Selecione...</option>${['Comunhão parcial de bens','Comunhão universal de bens','Separação total de bens','Participação final nos aquestos'].map(o=>`<option>${o}</option>`).join('')}</select>
+      <p class="em" id="err-resp_regime_casamento">Campo obrigatório</p></div>
+  </div>
+  <div class="fr">
+    <div class="fg"><label>Telefone / WhatsApp <span class="req">*</span></label>
+      <input type="tel" id="resp_tel" maxlength="14" placeholder="(00) 00000-0000" oninput="maskTel(this)">
+      <p class="em" id="err-resp_tel">Campo obrigatório</p></div>
+    ${fld('resp_email','E-mail',true,'email')}
+  </div>`;}
+
+function rTipo(){
+  const tipos=[{id:'MEI',nome:'MEI',desc:'Microempreendedor Individual. Faturamento até R$ 81 mil/ano.'},
+    {id:'LTDA',nome:'LTDA / Simples Nacional',desc:'Sociedade Limitada. Ideal para a maioria dos negócios.',pop:true},
+    {id:'SA',nome:'S/A',desc:'Sociedade Anônima. Para negócios de maior porte.'},
+    {id:'Outro',nome:'Outro / Não sei',desc:'Nos conte sobre o negócio e indicamos o melhor formato.'}];
+  return`<div class="tipo-grid">${tipos.map(t=>`<label class="tipo-card${fd.tipo===t.id?' sel':''}" onclick="selTipo('${t.id}',this)"><input type="radio" name="tipo" value="${t.id}">${t.pop?'<span class="pop">Popular</span>':''}<strong>${t.nome}</strong><span>${t.desc}</span></label>`).join('')}</div><p class="em" id="err-tipo"></p>`;}
+
+function rEmpresa(){
+  const ufs=['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+  return`
+  <div class="fg">${lblR('Sugestão de razão social',true,'razao_social')}<input type="text" id="razao_social"><p class="em" id="err-razao_social">Campo obrigatório</p></div>
+  <div class="fg">${lblR('Nome fantasia',false,'nome_fantasia')}<input type="text" id="nome_fantasia"></div>
+  ${cepFld('cep','CEP da empresa',true,'btn-cep-emp')}
+  <div id="end-fields-emp">
+    <div class="fr">
+      <div class="fg"><label>Logradouro <span class="req">*</span></label><input type="text" id="logradouro"><p class="em" id="err-logradouro">Campo obrigatório</p></div>
+      <div class="fg"><label>Número <span class="req">*</span></label><input type="text" id="numero"><p class="em" id="err-numero">Campo obrigatório</p></div>
+    </div>
+    <div class="fr c3">
+      <div class="fg"><label>Complemento</label><input type="text" id="complemento" placeholder="Apto, Sala..."></div>
+      <div class="fg"><label>Bairro <span class="req">*</span></label><input type="text" id="bairro"><p class="em" id="err-bairro">Campo obrigatório</p></div>
+      <div class="fg"><label>Cidade <span class="req">*</span></label><input type="text" id="cidade"><p class="em" id="err-cidade">Campo obrigatório</p></div>
+    </div>
+    <div class="fg" style="max-width:140px"><label>Estado <span class="req">*</span></label>
+      <select id="estado"><option value="">UF</option>${ufs.map(u=>`<option>${u}</option>`).join('')}</select>
+      <p class="em" id="err-estado">Campo obrigatório</p></div>
+  </div>
+  <div class="fg">${lblR('O endereço é',true,'sede_tipo')}
+    <select id="sede_tipo"><option value="">Selecione...</option><option value="proprio">Próprio</option><option value="alugado">Alugado</option><option value="residencial">Residencial (home office)</option></select>
+    <p class="em" id="err-sede_tipo">Campo obrigatório</p></div>
+  <div class="fg">${lblR('O local terá atendimento ao público?',true,'atendimento_publico')}
+    <select id="atendimento_publico"><option value="">Selecione...</option>
+      <option value="sim">Sim — haverá atendimento presencial</option>
+      <option value="nao">Não — apenas fiscal / correspondência</option></select>
+    <p class="em" id="err-atendimento_publico">Campo obrigatório</p></div>
+  <div class="cond" id="cond-atend-sim">
+    <div class="cond-lbl">Informações do imóvel — atendimento presencial</div>
+    <div class="fg">${lblR('Área total (m²)',true,'area_total')}<input type="number" id="area_total" min="0"><p class="em" id="err-area_total">Campo obrigatório</p></div>
+    <div class="fg">${lblR('Habite-se comercial',true,'habite_se')}
+      <select id="habite_se"><option value="">Selecione...</option>
+        <option value="sim">Sim, possuo o Habite-se comercial</option>
+        <option value="nao">Não possuo ainda (vou solicitar ao proprietário)</option>
+        <option value="na">Não se aplica ao imóvel</option></select>
+      <p class="em" id="err-habite_se">Campo obrigatório</p></div>
+    <div class="fg">${lblR('Inscrição imobiliária (IPTU)',true,'inscricao_imobiliaria')}<input type="text" id="inscricao_imobiliaria"><p class="em" id="err-inscricao_imobiliaria">Campo obrigatório</p></div>
+    <div class="fg">${lblR('Horário de funcionamento',true,'horario_funcionamento')}<input type="text" id="horario_funcionamento" placeholder="Ex: Seg a Sex 08h–18h"><p class="em" id="err-horario_funcionamento">Campo obrigatório</p></div>
+  </div>
+  <div class="cond" id="cond-atend-nao">
+    <div class="cond-lbl">Informações do imóvel — endereço fiscal</div>
+    <div class="fg">${lblR('Área total do imóvel (m²)',true,'area_total')}<input type="number" id="area_total_fiscal" min="0"><p class="em" id="err-area_total_fiscal">Campo obrigatório</p></div>
+    <div class="fg">${lblR('Inscrição imobiliária (IPTU)',true,'inscricao_imobiliaria')}<input type="text" id="inscricao_imobiliaria_fiscal"><p class="em" id="err-inscricao_imobiliaria_fiscal">Campo obrigatório</p></div>
+    <div class="alert alert-info show" style="margin-top:.5rem"><strong>ℹ Endereço apenas fiscal</strong> — Evita exigências de alvará de bombeiro e vigilância sanitária.</div>
+  </div>`;}
+
+function rAtividade(){
+  const cats=[{id:'servico',l:'Prestação de Serviços'},{id:'comercio',l:'Comércio (revenda de produtos)'},{id:'industria',l:'Indústria / Fabricação'}];
+  return`
+  <div class="fg"><label>Categorias de atuação <span class="req">*</span></label>
+    <p class="hint" style="margin-bottom:.5rem">Selecione todas que se aplicam ao negócio</p>
+    <div class="chk-grp">${cats.map(c=>`<label class="chk-item"><input type="checkbox" id="cat_${c.id}" value="${c.id}" onchange="toggleAtiv('${c.id}')" ${fd.atividades.includes(c.id)?'checked':''}><span>${c.l}</span></label>`).join('')}</div>
+    <p class="em" id="err-ativ">Selecione ao menos uma categoria</p></div>
+  <div class="cond${fd.atividades.includes('servico')?' open':''}" id="cond-servico">
+    <div class="cond-lbl">Serviços — detalhamento</div>
+    <div class="fg"><label>Descreva as atividades de serviço <span class="req">*</span></label><textarea id="ativ_servico"></textarea><p class="em" id="err-ativ_servico">Campo obrigatório</p></div>
+    <div class="alert alert-warn show"><strong>⚠ Atenção:</strong> Serviços podem estar sujeitos a retenções de impostos na fonte (ISS, PIS, COFINS, CSLL, IRPJ). Nossa equipe orientará sobre as alíquotas.</div>
+  </div>
+  <div class="cond${fd.atividades.includes('comercio')?' open':''}" id="cond-comercio">
+    <div class="cond-lbl">Comércio — detalhamento</div>
+    <div class="alert alert-info show" style="margin-bottom:.75rem"><strong>ℹ Comércio</strong> — Esta categoria é para revenda de produtos de terceiros. Para fabricação própria, utilize <strong>Indústria</strong>.</div>
+    <div class="fg"><label>Descreva os produtos a serem comercializados <span class="req">*</span></label><textarea id="ativ_comercio"></textarea><p class="em" id="err-ativ_comercio">Campo obrigatório</p></div>
+    <div class="fg"><label>Realizará compras de outros estados? <span class="req">*</span></label>
+      <select id="compras_outros_estados"><option value="">Selecione...</option><option value="sim">Sim</option><option value="nao">Não</option></select>
+      <p class="em" id="err-compras_outros_estados">Campo obrigatório</p></div>
+    <div class="cond" id="cond-difal"><div class="alert alert-warn show" style="margin:0"><strong>⚠ DIFAL:</strong> Compras de outros estados podem gerar obrigação de recolhimento do Diferencial de Alíquotas. Nossa equipe irá orientar.</div></div>
+  </div>
+  <div class="cond${fd.atividades.includes('industria')?' open':''}" id="cond-industria">
+    <div class="cond-lbl">Indústria — detalhamento</div>
+    <div class="fg"><label>Descreva o que será fabricado ou produzido <span class="req">*</span></label><textarea id="ativ_industria"></textarea><p class="em" id="err-ativ_industria">Campo obrigatório</p></div>
+    <div class="fg"><label>Realizará compras de outros estados? <span class="req">*</span></label>
+      <select id="ind_compras_outros_estados"><option value="">Selecione...</option><option value="sim">Sim</option><option value="nao">Não</option></select>
+      <p class="em" id="err-ind_compras_outros_estados">Campo obrigatório</p></div>
+  </div>`;}
+
+function rCapital(){return`
+  <div class="fg">${lblR('Valor do capital social',true,'capital_social')}
+    <input type="text" id="capital_social" placeholder="0,00" oninput="maskMoney(this)" onblur="gerarExtenso()">
+    <p class="em" id="err-capital_social">Campo obrigatório</p></div>
+  <div class="fg">${lblR('Capital por extenso',true,'capital_social_extenso')}
+    <input type="text" id="capital_social_extenso" placeholder="Preenchido automaticamente — verifique e ajuste se necessário">
+    <p class="em" id="err-capital_social_extenso">Campo obrigatório</p></div>
+  <div class="fg">${lblR('Forma de integralização',true,'capital_integralizacao')}
+    <select id="capital_integralizacao"><option value="">Selecione...</option>
+      <option value="total">À vista — totalmente integralizado agora</option>
+      <option value="parcial">Parcelado — parte será integralizada depois</option></select>
+    <p class="em" id="err-capital_integralizacao">Campo obrigatório</p></div>
+  <div class="cond" id="cond-capital">
+    <div class="cond-lbl">Integralização parcelada</div>
+    <div class="fg"><label>Valor integralizado agora <span class="req">*</span></label>
+      <input type="text" id="capital_inicial" placeholder="0,00" oninput="maskMoney(this)">
+      <p class="em" id="err-capital_inicial">Campo obrigatório</p></div>
+    <div class="fr">
+      <div class="fg"><label>Em quantas parcelas? <span class="req">*</span></label>
+        <input type="number" id="capital_parcelas" min="1"><p class="em" id="err-capital_parcelas">Campo obrigatório</p></div>
+      <div class="fg"><label>Prazo final para integralização <span class="req">*</span></label>
+        <input type="text" id="capital_prazo" placeholder="dd/mm/aaaa" maxlength="10" oninput="maskDate(this)">
+        <p class="em" id="err-capital_prazo">Campo obrigatório</p></div>
+    </div>
+  </div>`;}
+
+function rSocios(){
+  const ufs=['AC','AL','AP','AM','BA','CE','DF','ES','GO','MA','MT','MS','MG','PA','PB','PR','PE','PI','RJ','RN','RS','RO','RR','SC','SP','SE','TO'];
+  const soma=fd.socios.reduce((a,s)=>a+parseFloat(s.participacao||0),0);
+  const somaOk=fd.socios.length<2||Math.abs(soma-100)<0.01;
+  let html='';
+  if(fd.socios.length>1){
+    html+=`<div class="alert ${somaOk?'alert-info show':'alert-warn show'}" style="margin-bottom:1rem">${somaOk?'<strong>✓ Participação correta:</strong> Total = 100%':`<strong>⚠ Participação incorreta:</strong> Soma atual = <strong>${soma.toFixed(1)}%</strong>. O total deve ser exatamente 100%.`}</div>`;}
+  fd.socios.forEach((s,i)=>{
+    html+=`<div class="socio-blk" id="socio-${i}">
+      <div class="socio-hdr">
+        <div class="socio-tag">Sócio ${i+1}${i===0?' — Principal':''}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button type="button" class="btn-copy-resp" onclick="copiarResponsavel(${i})">↙ Copiar dados do responsável</button>
+          ${i>0?`<button class="btn-rm" onclick="rmSocio(${i})">Remover</button>`:''}
+        </div>
+      </div>
+      <div class="fr">
+        <div class="fg"><label>Nome completo <span class="req">*</span></label>
+          <input type="text" id="s${i}_nome" value="${esc(s.nome)}" placeholder="Conforme documento">
+          <p class="em" id="err-s${i}_nome">Obrigatório</p></div>
+        <div class="fg"><label>CPF <span class="req">*</span></label>
+          <input type="text" id="s${i}_cpf" value="${esc(s.cpf)}" maxlength="14" placeholder="000.000.000-00" oninput="maskCPF(this)">
+          <p class="em" id="err-s${i}_cpf">Obrigatório</p></div>
+      </div>
+      <div class="fr">
+        <div class="fg">${lblR('RG',true,'socio_rg')}<input type="text" id="s${i}_rg" value="${esc(s.rg)}"><p class="em" id="err-s${i}_rg">Obrigatório</p></div>
+        <div class="fg"><label>Data de nascimento <span class="req">*</span></label><input type="date" id="s${i}_nasc" value="${esc(s.nasc)}"><p class="em" id="err-s${i}_nasc">Obrigatório</p></div>
+      </div>
+      <div class="fr">
+        <div class="fg">${lblR('Estado civil',true,'socio_civil')}
+          <select id="s${i}_civil"><option value="">Selecione...</option>${['Solteiro(a)','Casado(a)','Divorciado(a)','Viúvo(a)','União estável'].map(o=>`<option ${s.civil===o?'selected':''}>${o}</option>`).join('')}</select>
+          <p class="em" id="err-s${i}_civil">Obrigatório</p></div>
+        <div class="fg"><label>Profissão <span class="req">*</span></label><input type="text" id="s${i}_profissao" value="${esc(s.profissao)}"><p class="em" id="err-s${i}_profissao">Obrigatório</p></div>
+      </div>
+      <div class="cond${s.civil==='Casado(a)'?' open':''}" id="cond-s${i}-casado">
+        <div class="cond-lbl">Regime de casamento</div>
+        <div class="fg"><label>Regime de bens <span class="req">*</span></label>
+          <select id="s${i}_regime_casamento"><option value="">Selecione...</option>${['Comunhão parcial de bens','Comunhão universal de bens','Separação total de bens','Participação final nos aquestos'].map(o=>`<option ${s.regime_casamento===o?'selected':''}>${o}</option>`).join('')}</select>
+          <p class="em" id="err-s${i}_regime_casamento">Obrigatório</p></div>
+      </div>
+      <div class="fr">
+        <div class="fg">${lblR('Participação',true,'socio_participacao')}
+          <div class="input-pct"><input type="number" id="s${i}_participacao" value="${esc(s.participacao)}" min="0" max="100" placeholder="0" oninput="atualizarSoma()"></div>
+          <p class="em" id="err-s${i}_participacao">Obrigatório</p></div>
+        <div class="fg"><label>Telefone / WhatsApp</label>
+          <input type="tel" id="s${i}_tel" value="${esc(s.tel)}" maxlength="14" placeholder="(00) 00000-0000" oninput="maskTel(this)"></div>
+      </div>
+      <div class="fg"><label>E-mail</label><input type="email" id="s${i}_email" value="${esc(s.email)}"></div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:.75rem 0">
+      <p class="hint" style="margin-bottom:.75rem;font-size:12px;font-weight:500">Endereço residencial</p>
+      ${cepFld(`s${i}_end_cep`,'CEP',true,`btn-cep-s${i}`)}
+      <div id="end-fields-s${i}">
+        <div class="fr">
+          <div class="fg"><label>Logradouro <span class="req">*</span></label><input type="text" id="s${i}_end_logradouro" value="${esc(s.end_logradouro)}"><p class="em" id="err-s${i}_end_logradouro">Obrigatório</p></div>
+          <div class="fg"><label>Número <span class="req">*</span></label><input type="text" id="s${i}_end_numero" value="${esc(s.end_numero)}"><p class="em" id="err-s${i}_end_numero">Obrigatório</p></div>
+        </div>
+        <div class="fr c3">
+          <div class="fg"><label>Complemento</label><input type="text" id="s${i}_end_complemento" value="${esc(s.end_complemento)}"></div>
+          <div class="fg"><label>Bairro <span class="req">*</span></label><input type="text" id="s${i}_end_bairro" value="${esc(s.end_bairro)}"><p class="em" id="err-s${i}_end_bairro">Obrigatório</p></div>
+          <div class="fg"><label>Cidade <span class="req">*</span></label><input type="text" id="s${i}_end_cidade" value="${esc(s.end_cidade)}"><p class="em" id="err-s${i}_end_cidade">Obrigatório</p></div>
+        </div>
+        <div class="fg" style="max-width:140px"><label>Estado <span class="req">*</span></label>
+          <select id="s${i}_end_estado"><option value="">UF</option>${ufs.map(u=>`<option ${s.end_estado===u?'selected':''}>${u}</option>`).join('')}</select>
+          <p class="em" id="err-s${i}_end_estado">Obrigatório</p></div>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--border);margin:.75rem 0">
+      <div class="fg">${lblR('Participa de outra empresa?',true,'outra_empresa')}
+        <select id="s${i}_outra_emp" onchange="toggleOutraEmp(${i})"><option value="">Selecione...</option>
+          <option value="sim" ${s.outra_empresa==='sim'?'selected':''}>Sim</option>
+          <option value="nao" ${s.outra_empresa==='nao'?'selected':''}>Não</option></select>
+        <p class="em" id="err-s${i}_outra_emp">Obrigatório</p></div>
+      <div class="cond${s.outra_empresa==='sim'?' open':''}" id="cond-s${i}-outra">
+        <div class="alert alert-warn show" style="margin-bottom:.75rem"><strong>⚠ Simples Nacional:</strong> Participação em outra empresa pode impactar o enquadramento. Nossa equipe irá avaliar.</div>
+        <div class="fr">
+          <div class="fg"><label>Nome da outra empresa <span class="req">*</span></label><input type="text" id="s${i}_outra_nome" value="${esc(s.outra_nome)}"><p class="em" id="err-s${i}_outra_nome">Obrigatório</p></div>
+          <div class="fg"><label>CNPJ <span class="req">*</span></label><input type="text" id="s${i}_outra_cnpj" value="${esc(s.outra_cnpj)}" maxlength="18" placeholder="00.000.000/0000-00" oninput="maskCNPJ(this)"><p class="em" id="err-s${i}_outra_cnpj">Obrigatório</p></div>
+        </div>
+        <div class="fr">
+          <div class="fg"><label>Regime tributário <span class="req">*</span></label>
+            <select id="s${i}_outra_regime"><option value="">Selecione...</option>${['Simples Nacional','Lucro Presumido','Lucro Real','MEI'].map(o=>`<option ${s.outra_regime===o?'selected':''}>${o}</option>`).join('')}</select>
+            <p class="em" id="err-s${i}_outra_regime">Obrigatório</p></div>
+          <div class="fg"><label>% de participação nessa empresa <span class="req">*</span></label>
+            <input type="number" id="s${i}_outra_participacao" value="${esc(s.outra_participacao)}" min="0" max="100" placeholder="0">
+            <p class="em" id="err-s${i}_outra_participacao">Obrigatório</p></div>
+        </div>
+      </div>
+    </div>`; });
+  html+=`<button class="btn-add" onclick="addSocio()">+ Adicionar sócio</button>`;
+  if(fd.socios.length>1)html+=`<p class="em${!somaOk?' show':''}" id="err-participacao-total" style="margin-top:.5rem">A soma das participações deve ser exatamente 100% (atual: ${soma.toFixed(1)}%)</p>`;
+  return html;}
+
+function rGestao(){
+  if(!fd.socios.length)return'<p class="hint">Nenhum sócio cadastrado. Volte e cadastre os sócios.</p>';
+  let html=`<div class="alert alert-info show" style="margin-bottom:1.25rem"><strong>ℹ Como preencher:</strong> Para cada sócio defina a função na empresa e se haverá retirada de pró-labore. Administradores têm poderes para assinar documentos e representar a empresa legalmente.</div>`;
+  fd.socios.forEach((s,i)=>{
+    const funcao=s.gestao_funcao||'';
+    const isAdm=funcao==='adm'||funcao==='adm_nao_socio';
+    const forma=s.gestao_forma||'';
+    const pl=s.prolabore||'';
+    const plval=s.prolabore_valor||'';
+    html+=`<div class="socio-blk">
+      <div class="socio-hdr">
+        <div class="socio-tag">${esc(s.nome)||'Sócio '+(i+1)}</div>
+        <div class="hint" style="font-size:11px">${s.participacao||'0'}% de participação</div>
+      </div>
+      <div class="fg">${lblR('Função na empresa',true,'gestao_funcao')}
+        <select id="g${i}_funcao" onchange="toggleGestaoFuncao(${i})"><option value="">Selecione...</option>
+          <option value="socio" ${funcao==='socio'?'selected':''}>Apenas sócio (sem poderes de administração)</option>
+          <option value="adm" ${funcao==='adm'?'selected':''}>Sócio administrador</option>
+          <option value="adm_nao_socio" ${funcao==='adm_nao_socio'?'selected':''}>Administrador não sócio</option>
+        </select><p class="em" id="err-g${i}_funcao">Campo obrigatório</p></div>
+      <div class="cond${isAdm?' open':''}" id="cond-g${i}-adm">
+        <div class="cond-lbl">Forma de atuação administrativa</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem">
+          <label style="text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer" onclick="selForma(${i},'isolada',this)">
+            <div class="tipo-card${forma==='isolada'?' sel':''}" style="display:flex;gap:10px;align-items:flex-start;padding:.75rem 1rem">
+              <input type="radio" name="gforma_${i}" value="isolada" ${forma==='isolada'?'checked':''} style="margin-top:3px;flex-shrink:0">
+              <div><strong style="font-size:13px;display:block;margin-bottom:3px">Pode assinar isoladamente</strong>
+                <span style="font-size:11.5px;color:var(--muted);line-height:1.5;display:block">Este administrador pode assinar documentos e representar a empresa sozinho, sem precisar da assinatura de outro sócio.</span></div>
+            </div></label>
+          <label style="text-transform:none;letter-spacing:0;font-weight:400;cursor:pointer" onclick="selForma(${i},'conjunto',this)">
+            <div class="tipo-card${forma==='conjunto'?' sel':''}" style="display:flex;gap:10px;align-items:flex-start;padding:.75rem 1rem">
+              <input type="radio" name="gforma_${i}" value="conjunto" ${forma==='conjunto'?'checked':''} style="margin-top:3px;flex-shrink:0">
+              <div><strong style="font-size:13px;display:block;margin-bottom:3px">Deve assinar em conjunto</strong>
+                <span style="font-size:11.5px;color:var(--muted);line-height:1.5;display:block">Dois ou mais administradores devem assinar juntos para que os atos tenham validade jurídica. Maior controle e segurança nas decisões.</span></div>
+            </div></label>
+        </div>
+        <p class="em" id="err-g${i}_forma">Selecione a forma de atuação</p>
+      </div>
+      <div class="fg" style="margin-top:1rem">${lblR('Haverá retirada de pró-labore?',true,'prolabore')}
+        <select id="g${i}_prolabore" onchange="toggleProlabore(${i})"><option value="">Selecione...</option>
+          <option value="sim" ${pl==='sim'?'selected':''}>Sim</option>
+          <option value="nao" ${pl==='nao'?'selected':''}>Não</option>
+        </select><p class="em" id="err-g${i}_prolabore">Campo obrigatório</p></div>
+      <div class="cond${pl==='sim'?' open':''}" id="cond-g${i}-pl">
+        <div class="cond-lbl">Valor do pró-labore</div>
+        <div class="fg"><label>Valor mensal <span class="req">*</span></label>
+          <select id="g${i}_plopt" onchange="togglePlOpt(${i})"><option value="">Selecione...</option>
+            <option value="minimo" ${plval==='minimo'?'selected':''}>Salário mínimo vigente</option>
+            <option value="outro" ${plval&&plval!=='minimo'?'selected':''}>Outro valor — informar</option>
+          </select><p class="em" id="err-g${i}_plopt">Obrigatório</p></div>
+        <div class="cond${plval&&plval!=='minimo'?' open':''}" id="cond-g${i}-plval">
+          <div class="fg"><label>Informe o valor mensal (R$) <span class="req">*</span></label>
+            <input type="text" id="g${i}_plval" value="${plval&&plval!=='minimo'?plval:''}" placeholder="0,00" oninput="maskMoney(this)">
+            <p class="em" id="err-g${i}_plval">Obrigatório</p></div>
+        </div>
+      </div>
+      <div class="alert alert-warn${pl==='nao'?' show':''}" id="alert-g${i}-npl">
+        <strong>⚠ Sem pró-labore:</strong> Este sócio não terá cobertura do INSS — sem auxílio-doença, aposentadoria ou salário-maternidade enquanto não houver recolhimento.
+      </div>
+    </div>`;});
+  return html;}
+
+function rRegime(){return`
+  <div class="fg">${lblR('Regime tributário pretendido',true,'regime_tributario')}
+    <p class="hint" style="margin-bottom:.4rem">Se não souber, nossa equipe orientará na melhor escolha</p>
+    <select id="regime_tributario"><option value="">Selecione...</option>
+      <option value="nao_sei">Não sei — quero orientação da equipe</option>
+      <option value="simples">Simples Nacional</option>
+      <option value="presumido">Lucro Presumido</option>
+      <option value="real">Lucro Real</option>
+      <option value="mei">MEI</option></select>
+    <p class="em" id="err-regime_tributario">Campo obrigatório</p></div>
+  <div class="fg"><label>Haverá funcionários? <span class="req">*</span></label>
+    <select id="tem_funcionarios"><option value="">Selecione...</option><option value="sim">Sim</option><option value="nao">Não</option></select>
+    <p class="em" id="err-tem_funcionarios">Campo obrigatório</p></div>
+  <div class="cond" id="cond-funcionarios">
+    <div class="cond-lbl">Dados sobre funcionários</div>
+    <div class="fg"><label>Quantidade estimada <span class="req">*</span></label><input type="number" id="func_quantidade" min="1"><p class="em" id="err-func_quantidade">Obrigatório</p></div>
+  </div>
+  <div class="fg" style="margin-top:1rem">${lblR('Telefone para o Cartão CNPJ',true,'cnpj_telefone')}
+    <input type="tel" id="cnpj_telefone" maxlength="14" placeholder="(00) 00000-0000" oninput="maskTel(this)">
+    <p class="em" id="err-cnpj_telefone">Campo obrigatório</p></div>
+  <div class="fg">${lblR('E-mail para o Cartão CNPJ',true,'cnpj_email')}<input type="email" id="cnpj_email"><p class="em" id="err-cnpj_email">Campo obrigatório</p></div>`;}
+
+function rDocumentos(){
+  const tipos=[{id:'doc_rg_cnh',l:'RG ou CNH'},{id:'doc_comp_res',l:'Comprovante de residência'},
+    {id:'doc_irpf',l:'Declaração de IRPF (último exercício)'},{id:'doc_titulo',l:'Título de Eleitor'},
+    {id:'doc_iptu',l:'IPTU do imóvel'},{id:'doc_habite_se',l:'Habite-se comercial'},{id:'doc_outros',l:'Outros documentos'}];
+  return`<div class="alert alert-warn show" style="margin-bottom:1.25rem"><strong>📎 Não é obrigatório agora</strong> — mas o envio dos documentos <strong>agiliza muito o processo</strong>. Você também poderá enviar por e-mail ou WhatsApp posteriormente.</div>
+  ${tipos.map(t=>`<div class="fg"><label>${t.l}</label><div class="upload-box" onclick="document.getElementById('${t.id}').click()"><input type="file" id="${t.id}" multiple accept=".pdf,.jpg,.jpeg,.png" onchange="handleUpload('${t.id}')"><div class="upload-label"><strong>Clique para selecionar</strong> ou arraste os arquivos</div><div class="upload-list" id="list-${t.id}"></div></div></div>`).join('')}`;}
+
+function rDeclaracoes(){return`
+  <p style="font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:1.25rem">Para enviar sua solicitação, confirme as três declarações abaixo:</p>
+  <div class="decl-list">
+    <label class="decl-item"><input type="checkbox" id="decl1"><span>Confirmo que todas as informações fornecidas neste formulário são verdadeiras e de minha responsabilidade.</span></label>
+    <label class="decl-item"><input type="checkbox" id="decl2"><span>Autorizo a A&amp;J Assessoria Contábil a realizar os procedimentos necessários para a abertura da empresa em meu nome.</span></label>
+    <label class="decl-item"><input type="checkbox" id="decl3"><span>Autorizo o uso dos dados fornecidos para fins de registro junto aos órgãos competentes (Junta Comercial, Receita Federal, Prefeitura).</span></label>
+  </div>
+  <p class="em" id="err-decl" style="margin-top:.75rem"></p>`;}
+// ══════════════ MÁSCARAS ══════════════
+function maskCPF(el){let v=el.value.replace(/\D/g,'');if(v.length>3)v=v.slice(0,3)+'.'+v.slice(3);if(v.length>7)v=v.slice(0,7)+'.'+v.slice(7);if(v.length>11)v=v.slice(0,11)+'-'+v.slice(11,13);el.value=v.slice(0,14);}
+function maskCNPJ(el){let v=el.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+'.'+v.slice(2);if(v.length>6)v=v.slice(0,6)+'.'+v.slice(6);if(v.length>10)v=v.slice(0,10)+'/'+v.slice(10);if(v.length>15)v=v.slice(0,15)+'-'+v.slice(15,17);el.value=v.slice(0,18);}
+function maskTel(el){let v=el.value.replace(/\D/g,'');if(v.length>0)v='('+v;if(v.length>3)v=v.slice(0,3)+') '+v.slice(3);if(v.length>9)v=v.slice(0,9)+'-'+v.slice(9,14);el.value=v.slice(0,14);}
+function maskCEP(el){let v=el.value.replace(/\D/g,'');if(v.length>5)v=v.slice(0,5)+'-'+v.slice(5,8);el.value=v;}
+function maskDate(el){let v=el.value.replace(/\D/g,'');if(v.length>2)v=v.slice(0,2)+'/'+v.slice(2);if(v.length>5)v=v.slice(0,5)+'/'+v.slice(5,9);el.value=v;}
+function maskMoney(el){let v=el.value.replace(/\D/g,'');if(!v){el.value='';return;}v=(parseInt(v)/100).toFixed(2);el.value=Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function moneyToNumber(str){if(!str)return 0;return parseFloat(str.toString().replace(/\./g,'').replace(',','.').replace(/[^\d.]/g,''))||0;}
+
+// ══════════════ EXTENSO ══════════════
+const UNI=['','um','dois','três','quatro','cinco','seis','sete','oito','nove','dez','onze','doze','treze','catorze','quinze','dezesseis','dezessete','dezoito','dezenove'];
+const DEZ=['','','vinte','trinta','quarenta','cinquenta','sessenta','setenta','oitenta','noventa'];
+const CEN=['','cem','duzentos','trezentos','quatrocentos','quinhentos','seiscentos','setecentos','oitocentos','novecentos'];
+function numExt(n){n=Math.round(n);if(n===0)return'zero';if(n===100)return'cem';let s='';if(n>=1000000){const m=Math.floor(n/1000000);s+=(m===1?'um milhão':numExt(m)+' milhões');n%=1000000;if(n>0)s+=' e ';}if(n>=1000){const m=Math.floor(n/1000);s+=(m===1?'mil':numExt(m)+' mil');n%=1000;if(n>0)s+=' e ';}if(n>=100){s+=CEN[Math.floor(n/100)];n%=100;if(n>0)s+=' e ';}if(n>=20){s+=DEZ[Math.floor(n/10)];n%=10;if(n>0)s+=' e ';}if(n>0)s+=UNI[n];return s;}
+function gerarExtenso(){const el=document.getElementById('capital_social'),ext=document.getElementById('capital_social_extenso');if(!el||!ext)return;const val=moneyToNumber(el.value);if(!val){ext.value='';return;}const int=Math.floor(val),cents=Math.round((val-int)*100);let t=numExt(int)+' reais';if(cents>0)t+=' e '+numExt(cents)+' centavos';ext.value=t;}
+
+// ══════════════ CEP — BUSCA AUTOMÁTICA ══════════════
+function getCepPrefix(fieldId){
+  if(fieldId==='cep') return '';
+  const idx=(fieldId.match(/s(\d+)_/)||[])[1];
+  return idx!==undefined ? `s${idx}_end_` : '';
+}
+function syncEnderecoToState(fieldId){
+  const pre=getCepPrefix(fieldId);
+  const isSocio=fieldId!=='cep';
+  const map={
+    cep: fieldId,
+    logradouro: pre+'logradouro',
+    bairro: pre+'bairro',
+    cidade: pre+'cidade',
+    estado: pre+'estado',
+    numero: pre+'numero',
+    complemento: pre+'complemento'
+  };
+  if(isSocio){
+    const idx=parseInt((fieldId.match(/s(\d+)_/)||[])[1]??'-1',10);
+    if(!fd.socios[idx]) return;
+    fd.socios[idx].end_cep=document.getElementById(map.cep)?.value||'';
+    fd.socios[idx].end_logradouro=document.getElementById(map.logradouro)?.value||'';
+    fd.socios[idx].end_bairro=document.getElementById(map.bairro)?.value||'';
+    fd.socios[idx].end_cidade=document.getElementById(map.cidade)?.value||'';
+    fd.socios[idx].end_estado=document.getElementById(map.estado)?.value||'';
+    fd.socios[idx].end_numero=document.getElementById(map.numero)?.value||'';
+    fd.socios[idx].end_complemento=document.getElementById(map.complemento)?.value||'';
+  } else {
+    fd.cep=document.getElementById(map.cep)?.value||'';
+    fd.logradouro=document.getElementById(map.logradouro)?.value||'';
+    fd.bairro=document.getElementById(map.bairro)?.value||'';
+    fd.cidade=document.getElementById(map.cidade)?.value||'';
+    fd.estado=document.getElementById(map.estado)?.value||'';
+    fd.numero=document.getElementById(map.numero)?.value||'';
+    fd.complemento=document.getElementById(map.complemento)?.value||'';
+  }
+}
+function attachCepAutoFill(fieldId,btnId){
+  const el=document.getElementById(fieldId);
+  if(!el || el.dataset.cepBound==='1') return;
+  el.dataset.cepBound='1';
+  el.addEventListener('blur',()=>buscaCEP(fieldId,btnId));
+  el.addEventListener('input',()=>{
+    maskCEP(el);
+    const raw=el.value.replace(/\D/g,'');
+    syncEnderecoToState(fieldId);
+    if(raw.length===8 && !manualFlags[fieldId]) buscaCEP(fieldId,btnId);
+  });
+}
+function bindAllCepFields(){
+  attachCepAutoFill('cep','btn-cep-emp');
+  (fd.socios||[]).forEach((_,i)=>attachCepAutoFill(`s${i}_end_cep`,`btn-cep-s${i}`));
+}
+async function buscaCEP(fieldId,btnId){
+  const el=document.getElementById(fieldId);if(!el)return;
+  const raw=el.value.replace(/\D/g,'');
+  if(raw.length!==8)return;
+  if(manualFlags[fieldId]){syncEnderecoToState(fieldId);return;}
+  const st=document.getElementById('st-'+fieldId);
+  if(st){st.textContent='Buscando endereço...';st.style.color='var(--muted)';}
+  const isSocio=fieldId!=='cep';
+  const pre=getCepPrefix(fieldId);
+  const setF=(sfx,v)=>{const e=document.getElementById(pre+sfx);if(e){e.value=v||'';if(!manualFlags[fieldId])e.readOnly=true;}};
+  const setUF=(v)=>{const e=document.getElementById(pre+'estado');if(e){e.value=v||'';if(!manualFlags[fieldId])e.disabled=true;}};
+  try{
+    const r=await fetch('https://viacep.com.br/ws/'+raw+'/json/');
+    if(!r.ok) throw new Error('Falha ao consultar CEP');
+    const d=await r.json();
+    if(d.erro){if(st){st.textContent='CEP não encontrado. Preencha manualmente.';st.style.color='var(--danger)';}liberarEnd(fieldId,pre,isSocio);syncEnderecoToState(fieldId);return;}
+    setF('logradouro',d.logradouro||'');
+    setF('bairro',d.bairro||'');
+    setF('cidade',d.localidade||'');
+    setUF(d.uf||'');
+    syncEnderecoToState(fieldId);
+    const numEl=document.getElementById(pre+'numero');if(numEl)setTimeout(()=>numEl.focus(),80);
+    if(st){st.textContent='✓ Endereço encontrado. Complete o número.';st.style.color='var(--success)';}
+  }catch(e){if(st){st.textContent='Erro ao buscar CEP. Preencha manualmente.';st.style.color='var(--danger)';}liberarEnd(fieldId,pre,isSocio);syncEnderecoToState(fieldId);}
+}
+function liberarEnd(fieldId,pre,isSocio){
+  ['logradouro','bairro','cidade'].forEach(s=>{const e=document.getElementById(pre+s);if(e)e.readOnly=false;});
+  const est=document.getElementById(pre+'estado');if(est)est.disabled=false;
+}
+function toggleManual(fieldId,btnId){
+  manualFlags[fieldId]=!manualFlags[fieldId];
+  const btn=document.getElementById(btnId);const st=document.getElementById('st-'+fieldId);
+  const isSocio=fieldId!=='cep';const pre=getCepPrefix(fieldId);
+  if(manualFlags[fieldId]){if(btn)btn.textContent='Cancelar';if(st){st.textContent='Preencha o endereço manualmente.';st.style.color='var(--gold)';}liberarEnd(fieldId,pre,isSocio);syncEnderecoToState(fieldId);}
+  else{if(btn)btn.textContent='Preencher manual';if(st){st.textContent='';st.style.color='';}buscaCEP(fieldId,btnId);}
+}
+
+// ══════════════ TIPO / ATIVIDADES ══════════════
+function selTipo(id,el){fd.tipo=id;document.querySelectorAll('.tipo-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');const em=document.getElementById('err-tipo');if(em){em.textContent='';em.classList.remove('show');}}
+function toggleAtiv(cat){const cb=document.getElementById('cat_'+cat);if(cb.checked){if(!fd.atividades.includes(cat))fd.atividades.push(cat);}else fd.atividades=fd.atividades.filter(a=>a!==cat);document.getElementById('cond-'+cat)?.classList.toggle('open',cb.checked);}
+
+// ══════════════ SÓCIOS ══════════════
+function copiarResponsavel(i){
+  saveValues();
+  const m={'nome':'resp_nome','cpf':'resp_cpf','nasc':'resp_nasc','civil':'resp_civil','regime_casamento':'resp_regime_casamento','profissao':'resp_profissao','tel':'resp_tel','email':'resp_email'};
+  Object.entries(m).forEach(([sf,rf])=>{fd.socios[i][sf]=fd[rf]||'';});
+  renderStep();
+}
+function atualizarSoma(){
+  saveValues();
+  const soma=fd.socios.reduce((a,s)=>a+parseFloat(s.participacao||0),0);
+  const ok=Math.abs(soma-100)<0.01;
+  const alertEl=document.querySelector('.alert.alert-warn,.alert.alert-info');
+  const errEl=document.getElementById('err-participacao-total');
+  if(fd.socios.length>1){
+    if(alertEl){alertEl.className=`alert ${ok?'alert-info':'alert-warn'} show`;alertEl.innerHTML=ok?'<strong>✓ Participação correta:</strong> Total = 100%':`<strong>⚠ Participação incorreta:</strong> Soma atual = <strong>${soma.toFixed(1)}%</strong>. O total deve ser exatamente 100%.`;}
+    if(errEl){errEl.textContent=`A soma das participações deve ser exatamente 100% (atual: ${soma.toFixed(1)}%)`;errEl.className=`em${ok?'':' show'}`;}
+  }
+}
+function addSocio(){saveValues();fd.socios.push({nome:'',cpf:'',rg:'',nasc:'',civil:'',regime_casamento:'',profissao:'',tel:'',email:'',end_cep:'',end_logradouro:'',end_numero:'',end_complemento:'',end_bairro:'',end_cidade:'',end_estado:'',participacao:'',outra_empresa:'',outra_nome:'',outra_cnpj:'',outra_regime:'',outra_participacao:'',gestao_funcao:'',gestao_forma:'',prolabore:'',prolabore_valor:''});renderStep();}
+function rmSocio(i){saveValues();fd.socios.splice(i,1);renderStep();}
+function toggleOutraEmp(i){saveValues();const el=document.getElementById(`s${i}_outra_emp`);fd.socios[i].outra_empresa=el.value;document.getElementById(`cond-s${i}-outra`)?.classList.toggle('open',el.value==='sim');}
+
+// ══════════════ GESTÃO ══════════════
+function toggleGestaoFuncao(i){saveValues();const el=document.getElementById(`g${i}_funcao`);fd.socios[i].gestao_funcao=el.value;const isAdm=el.value==='adm'||el.value==='adm_nao_socio';document.getElementById(`cond-g${i}-adm`)?.classList.toggle('open',isAdm);}
+function selForma(i,val,labelEl){fd.socios[i].gestao_forma=val;document.querySelectorAll(`input[name="gforma_${i}"]`).forEach(r=>r.checked=(r.value===val));document.getElementById(`cond-g${i}-adm`)?.querySelectorAll('.tipo-card').forEach(c=>c.classList.remove('sel'));labelEl?.querySelector('.tipo-card')?.classList.add('sel');document.getElementById(`err-g${i}_forma`)?.classList.remove('show');}
+function toggleProlabore(i){saveValues();const el=document.getElementById(`g${i}_prolabore`);fd.socios[i].prolabore=el.value;document.getElementById(`cond-g${i}-pl`)?.classList.toggle('open',el.value==='sim');document.getElementById(`alert-g${i}-npl`)?.classList.toggle('show',el.value==='nao');}
+function togglePlOpt(i){const el=document.getElementById(`g${i}_plopt`);if(!el)return;const isOutro=el.value==='outro';document.getElementById(`cond-g${i}-plval`)?.classList.toggle('open',isOutro);const em=document.getElementById(`err-g${i}_plopt`);if(em)em.classList.remove('show');// store option
+fd.socios[i].prolabore_valor=el.value==='minimo'?'minimo':(isOutro?(fd.socios[i].prolabore_valor==='minimo'?'':fd.socios[i].prolabore_valor):'');}
+
+// ══════════════ BIND CONDS ══════════════
+function bindConds(){
+  const rc=document.getElementById('resp_civil');
+  if(rc){rc.addEventListener('change',()=>document.getElementById('cond-resp-casado')?.classList.toggle('open',rc.value==='Casado(a)'));if(fd.resp_civil==='Casado(a)')document.getElementById('cond-resp-casado')?.classList.add('open');}
+  const ap=document.getElementById('atendimento_publico');
+  if(ap){const apT=()=>{document.getElementById('cond-atend-sim')?.classList.toggle('open',ap.value==='sim');document.getElementById('cond-atend-nao')?.classList.toggle('open',ap.value==='nao');};ap.addEventListener('change',apT);if(fd.atendimento_publico){ap.value=fd.atendimento_publico;apT();}}
+  const ci=document.getElementById('capital_integralizacao');
+  if(ci){ci.addEventListener('change',()=>document.getElementById('cond-capital')?.classList.toggle('open',ci.value==='parcial'));if(fd.capital_integralizacao){ci.value=fd.capital_integralizacao;document.getElementById('cond-capital')?.classList.toggle('open',fd.capital_integralizacao==='parcial');}}
+  const ce=document.getElementById('compras_outros_estados');
+  if(ce){ce.addEventListener('change',()=>document.getElementById('cond-difal')?.classList.toggle('open',ce.value==='sim'));if(fd.compras_outros_estados){ce.value=fd.compras_outros_estados;document.getElementById('cond-difal')?.classList.toggle('open',fd.compras_outros_estados==='sim');}}
+  const tf=document.getElementById('tem_funcionarios');
+  if(tf){tf.addEventListener('change',()=>document.getElementById('cond-funcionarios')?.classList.toggle('open',tf.value==='sim'));if(fd.tem_funcionarios){tf.value=fd.tem_funcionarios;document.getElementById('cond-funcionarios')?.classList.toggle('open',fd.tem_funcionarios==='sim');}}
+  fd.socios.forEach((_,i)=>{
+    const sc=document.getElementById(`s${i}_civil`);if(sc){sc.addEventListener('change',()=>{saveValues();document.getElementById(`cond-s${i}-casado`)?.classList.toggle('open',sc.value==='Casado(a)');});}
+    if(fd.socios[i]?.civil==='Casado(a)')document.getElementById(`cond-s${i}-casado`)?.classList.add('open');
+    if(fd.socios[i]?.outra_empresa==='sim')document.getElementById(`cond-s${i}-outra`)?.classList.add('open');
+    const gf=fd.socios[i]?.gestao_funcao||'';if(gf){const isAdm=gf==='adm'||gf==='adm_nao_socio';document.getElementById(`cond-g${i}-adm`)?.classList.toggle('open',isAdm);const forma=fd.socios[i].gestao_forma||'';if(forma){document.querySelectorAll(`input[name="gforma_${i}"]`).forEach(r=>{r.checked=(r.value===forma);r.closest('.tipo-card')?.classList.toggle('sel',r.value===forma);});}}
+    if(fd.socios[i]?.prolabore==='sim'){document.getElementById(`cond-g${i}-pl`)?.classList.add('open');const plv=fd.socios[i].prolabore_valor||'';const plopt=document.getElementById(`g${i}_plopt`);if(plopt){plopt.value=plv==='minimo'?'minimo':(plv?'outro':'');}if(plv&&plv!=='minimo')document.getElementById(`cond-g${i}-plval`)?.classList.add('open');}
+    if(fd.socios[i]?.prolabore==='nao')document.getElementById(`alert-g${i}-npl`)?.classList.add('show');
+  });
+}
+
+// ══════════════ SAVE / RESTORE ══════════════
+function restoreValues(){
+  const all=['resp_nome','resp_cpf','resp_nasc','resp_profissao','resp_civil','resp_regime_casamento','resp_tel','resp_email',
+    'razao_social','nome_fantasia','cep','logradouro','numero','complemento','bairro','cidade','estado','sede_tipo','atendimento_publico',
+    'area_total','habite_se','inscricao_imobiliaria','horario_funcionamento','area_total_fiscal','inscricao_imobiliaria_fiscal',
+    'ativ_servico','ativ_comercio','compras_outros_estados','ativ_industria','ind_compras_outros_estados',
+    'capital_social','capital_social_extenso','capital_integralizacao','capital_inicial','capital_parcelas','capital_prazo',
+    'regime_tributario','tem_funcionarios','func_quantidade','cnpj_telefone','cnpj_email'];
+  all.forEach(id=>{const el=document.getElementById(id);if(el&&fd[id]!==undefined)el.value=fd[id];});
+}
+function saveValues(){
+  const all=['resp_nome','resp_cpf','resp_nasc','resp_profissao','resp_civil','resp_regime_casamento','resp_tel','resp_email',
+    'razao_social','nome_fantasia','cep','logradouro','numero','complemento','bairro','cidade','estado','sede_tipo','atendimento_publico',
+    'area_total','habite_se','inscricao_imobiliaria','horario_funcionamento','area_total_fiscal','inscricao_imobiliaria_fiscal',
+    'ativ_servico','ativ_comercio','compras_outros_estados','ativ_industria','ind_compras_outros_estados',
+    'capital_social','capital_social_extenso','capital_integralizacao','capital_inicial','capital_parcelas','capital_prazo',
+    'regime_tributario','tem_funcionarios','func_quantidade','cnpj_telefone','cnpj_email'];
+  all.forEach(id=>{const el=document.getElementById(id);if(el)fd[id]=el.value;});
+  fd.socios.forEach((_,i)=>{
+    ['nome','cpf','rg','nasc','civil','regime_casamento','profissao','tel','email','participacao',
+     'end_cep','end_logradouro','end_numero','end_complemento','end_bairro','end_cidade','end_estado',
+     'outra_nome','outra_cnpj','outra_regime','outra_participacao'].forEach(f=>{const el=document.getElementById(`s${i}_${f}`);if(el)fd.socios[i][f]=el.value;});
+    const oe=document.getElementById(`s${i}_outra_emp`);if(oe)fd.socios[i].outra_empresa=oe.value;
+    const gf=document.getElementById(`g${i}_funcao`);if(gf)fd.socios[i].gestao_funcao=gf.value;
+    const gp=document.getElementById(`g${i}_prolabore`);if(gp)fd.socios[i].prolabore=gp.value;
+    const gpo=document.getElementById(`g${i}_plopt`);if(gpo&&gpo.value){if(gpo.value==='minimo')fd.socios[i].prolabore_valor='minimo';else{const gpv=document.getElementById(`g${i}_plval`);if(gpv)fd.socios[i].prolabore_valor=gpv.value;}}
+    const gr=document.querySelector(`input[name="gforma_${i}"]:checked`);if(gr)fd.socios[i].gestao_forma=gr.value;
+  });
+}
+
+// ══════════════ VALIDAÇÃO ══════════════
+function validate(){
+  let ok=true;
+  const req=(id,msg)=>{const el=document.getElementById(id),em=document.getElementById('err-'+id);if(el&&!el.value.trim()){el.classList.add('err');if(em){em.textContent=msg||'Campo obrigatório';em.classList.add('show');}ok=false;}else if(el){el.classList.remove('err');if(em)em.classList.remove('show');}};
+  const e=ETAPAS[step].id;
+  if(e==='responsavel'){req('resp_nome');req('resp_cpf');req('resp_nasc');req('resp_profissao');req('resp_civil');req('resp_tel');req('resp_email');if(document.getElementById('resp_civil')?.value==='Casado(a)')req('resp_regime_casamento');}
+  if(e==='tipo'){if(!fd.tipo){const em=document.getElementById('err-tipo');if(em){em.textContent='Selecione o tipo de empresa';em.classList.add('show');}ok=false;}}
+  if(e==='empresa'){
+    req('razao_social');req('cep');req('logradouro');req('numero');req('bairro');req('cidade');req('estado');req('sede_tipo');req('atendimento_publico');
+    const atend=document.getElementById('atendimento_publico')?.value;
+    if(atend==='sim'){req('area_total');req('habite_se');req('inscricao_imobiliaria');req('horario_funcionamento');}
+    if(atend==='nao'){req('area_total_fiscal');req('inscricao_imobiliaria_fiscal');}
+  }
+  if(e==='atividade'){
+    if(!fd.atividades.length){document.getElementById('err-ativ')?.classList.add('show');ok=false;}
+    if(fd.atividades.includes('servico'))req('ativ_servico');
+    if(fd.atividades.includes('comercio')){req('ativ_comercio');req('compras_outros_estados');}
+    if(fd.atividades.includes('industria')){req('ativ_industria');req('ind_compras_outros_estados');}
+  }
+  if(e==='capital'){
+    req('capital_social');req('capital_social_extenso');req('capital_integralizacao');
+    if(document.getElementById('capital_integralizacao')?.value==='parcial'){req('capital_inicial');req('capital_parcelas');req('capital_prazo');}
+  }
+  if(e==='socios'){
+    fd.socios.forEach((_,i)=>{
+      ['nome','cpf','rg','nasc','civil','profissao','participacao','end_cep','end_logradouro','end_numero','end_bairro','end_cidade','end_estado'].forEach(f=>req(`s${i}_${f}`));
+      req(`s${i}_outra_emp`);
+      if(document.getElementById(`s${i}_civil`)?.value==='Casado(a)')req(`s${i}_regime_casamento`);
+      if(document.getElementById(`s${i}_outra_emp`)?.value==='sim'){req(`s${i}_outra_nome`);req(`s${i}_outra_cnpj`);req(`s${i}_outra_regime`);req(`s${i}_outra_participacao`);}
+    });
+    if(fd.socios.length>1){
+      const soma=fd.socios.reduce((a,s)=>a+parseFloat(s.participacao||0),0);
+      if(Math.abs(soma-100)>=0.01){const em=document.getElementById('err-participacao-total');if(em){em.textContent=`A soma das participações deve ser exatamente 100% (atual: ${soma.toFixed(1)}%)`;em.classList.add('show');}ok=false;}
+    }
+  }
+  if(e==='gestao'){
+    fd.socios.forEach((_,i)=>{
+      req(`g${i}_funcao`);
+      const funcao=document.getElementById(`g${i}_funcao`)?.value||'';
+      if(funcao==='adm'||funcao==='adm_nao_socio'){
+        const forma=document.querySelector(`input[name="gforma_${i}"]:checked`);
+        if(!forma){const em=document.getElementById(`err-g${i}_forma`);if(em)em.classList.add('show');ok=false;}
+      }
+      req(`g${i}_prolabore`);
+      if(document.getElementById(`g${i}_prolabore`)?.value==='sim'){
+        req(`g${i}_plopt`);
+        const plopt=document.getElementById(`g${i}_plopt`)?.value||'';
+        if(plopt==='outro')req(`g${i}_plval`);
+      }
+    });
+  }
+  if(e==='regime'){req('regime_tributario');req('tem_funcionarios');if(document.getElementById('tem_funcionarios')?.value==='sim'){req('func_quantidade');}req('cnpj_telefone');req('cnpj_email');}
+  if(e==='declaracoes'){const allChk=['decl1','decl2','decl3'].every(id=>document.getElementById(id)?.checked);if(!allChk){const em=document.getElementById('err-decl');if(em){em.textContent='Confirme todas as declarações para prosseguir';em.classList.add('show');}ok=false;}}
+  return ok;
+}
+
+// ══════════════ NAVEGAÇÃO ══════════════
+function next(){saveValues();if(!validate())return;if(step<ETAPAS.length-1){step++;renderStep();updateProgress();window.scrollTo({top:0,behavior:'smooth'});}else{submit();}}
+function prev(){saveValues();step--;renderStep();updateProgress();window.scrollTo({top:0,behavior:'smooth'});}
+function updateProgress(){document.getElementById('prog-steps').innerHTML=ETAPAS.map((_,i)=>`<div class="prog-dot${i<step?' done':i===step?' active':''}"></div>`).join('');document.getElementById('prog-lbl').textContent=`Etapa ${step+1} de ${ETAPAS.length}`;}
+function handleUpload(id){
+  const inp=document.getElementById(id);
+  if(!inp.files.length)return;
+  const novos=Array.from(inp.files);
+  uploadedFiles[id]=[...(uploadedFiles[id]||[]),...novos];
+  const list=document.getElementById('list-'+id);
+  list.innerHTML='';
+  uploadedFiles[id].forEach(f=>{
+    const d=document.createElement('div');
+    d.className='upload-item';
+    d.textContent='✓ '+f.name;
+    list.appendChild(d);
+  });
+}
+
+// ══════════════ SUBMIT ══════════════
+function encode(data){
+  return Object.keys(data)
+    .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key] ?? ''))
+    .join('&');
+}
+
+function resumirSocios(){
+  return (fd.socios||[]).map((s,i)=>{
+    const participacao=s.participacao?` — ${s.participacao}%`:'';
+    return `Sócio ${i+1}: ${s.nome||'Não informado'}${s.cpf?` | CPF: ${s.cpf}`:''}${participacao}${s.gestao_funcao?` | Função: ${s.gestao_funcao}`:''}`;
+  }).join('\n');
+}
+
+function buildResumoFormatado(id){
+  const d=fd;
+  const SEP='─────────────────────────────────';
+
+  // Retorna "Label: valor" ou null se vazio
+  function v(label,val){
+    const s=val!=null?String(val).trim():'';
+    return s?label+': '+s:null;
+  }
+
+  // Monta endereço a partir de partes, ignora vazios
+  function endereco(partes){
+    const s=partes.filter(p=>p&&String(p).trim()).join(', ');
+    return s?'Endereço: '+s:null;
+  }
+
+  // Adiciona seção ao resultado apenas se houver ao menos um campo preenchido
+  const secoes=[];
+  function sec(titulo,campos){
+    const linhas=campos.filter(Boolean);
+    if(linhas.length) secoes.push(SEP+'\n'+titulo+'\n'+linhas.join('\n'));
+  }
+
+  // Cabeçalho sempre presente
+  secoes.push('PROTOCOLO: '+id+'\nDATA: '+new Date().toLocaleString('pt-BR'));
+
+  sec('TIPO DE EMPRESA',[v('Tipo',d.tipo)]);
+
+  sec('RESPONSÁVEL PELO CADASTRO',[
+    v('Nome',d.resp_nome),
+    v('CPF',d.resp_cpf),
+    v('Nascimento',d.resp_nasc),
+    v('Profissão',d.resp_profissao),
+    v('Estado Civil',d.resp_civil),
+    v('Regime de Casamento',d.resp_regime_casamento),
+    v('Telefone',d.resp_tel),
+    v('E-mail',d.resp_email),
+  ]);
+
+  sec('EMPRESA',[
+    v('Razão Social',d.razao_social),
+    v('Nome Fantasia',d.nome_fantasia),
+    endereco([d.logradouro,d.numero,d.complemento,d.bairro,d.cidade,d.estado,d.cep]),
+    v('Tipo de Sede',d.sede_tipo),
+    v('Atendimento ao Público',d.atendimento_publico),
+    v('Área Total',d.area_total),
+    v('Habite-se',d.habite_se),
+    v('Inscrição Imobiliária',d.inscricao_imobiliaria),
+    v('Horário de Funcionamento',d.horario_funcionamento),
+    v('Área Total (fiscal)',d.area_total_fiscal),
+    v('Inscrição Imobiliária (fiscal)',d.inscricao_imobiliaria_fiscal),
+  ]);
+
+  sec('ATIVIDADES',[
+    (d.atividades&&d.atividades.length)?'Categorias: '+d.atividades.join(', '):null,
+    v('Serviços',d.ativ_servico),
+    v('Comércio',d.ativ_comercio),
+    v('Compras de outros estados (comércio)',d.compras_outros_estados),
+    v('Indústria / Fabricação',d.ativ_industria),
+    v('Compras de outros estados (indústria)',d.ind_compras_outros_estados),
+  ]);
+
+  sec('CAPITAL SOCIAL',[
+    v('Valor',d.capital_social),
+    v('Por extenso',d.capital_social_extenso),
+    v('Integralização',d.capital_integralizacao),
+    v('Valor inicial',d.capital_inicial),
+    v('Parcelas',d.capital_parcelas),
+    v('Prazo',d.capital_prazo),
+  ]);
+
+  sec('REGIME TRIBUTÁRIO E FUNCIONÁRIOS',[
+    v('Regime',d.regime_tributario),
+    v('Tem funcionários',d.tem_funcionarios),
+    v('Qtd. funcionários',d.func_quantidade),
+    v('Telefone do CNPJ',d.cnpj_telefone),
+    v('E-mail do CNPJ',d.cnpj_email),
+  ]);
+
+  (d.socios||[]).forEach((s,i)=>{
+    sec('SÓCIO '+(i+1),[
+      v('Nome',s.nome),
+      v('CPF',s.cpf),
+      v('RG',s.rg),
+      v('Nascimento',s.nasc),
+      v('Estado Civil',s.civil),
+      v('Regime de Casamento',s.regime_casamento),
+      v('Profissão',s.profissao),
+      v('Telefone',s.tel),
+      v('E-mail',s.email),
+      endereco([s.end_logradouro,s.end_numero,s.end_complemento,s.end_bairro,s.end_cidade,s.end_estado,s.end_cep]),
+      s.participacao?'Participação: '+s.participacao+'%':null,
+      v('Sócio em outra empresa',s.outra_empresa),
+      v('  Nome da empresa',s.outra_nome),
+      v('  CNPJ',s.outra_cnpj),
+      v('  Regime',s.outra_regime),
+      s.outra_participacao?'  Participação: '+s.outra_participacao+'%':null,
+      v('Função na gestão',s.gestao_funcao),
+      v('Forma de gestão',s.gestao_forma),
+      v('Pró-labore',s.prolabore),
+      v('Valor do pró-labore',s.prolabore_valor),
+    ]);
+  });
+
+  return secoes.join('\n');
+}
+
+function buildNetlifyPayload(id){
+  const payload={
+    'form-name':'onboarding',
+    'bot-field':'',
+    protocolo:id,
+    data_envio:new Date().toLocaleString('pt-BR'),
+    tipo:fd.tipo||'',
+    // Responsável
+    resp_nome:fd.resp_nome||'',
+    resp_cpf:fd.resp_cpf||'',
+    resp_nasc:fd.resp_nasc||'',
+    resp_profissao:fd.resp_profissao||'',
+    resp_civil:fd.resp_civil||'',
+    resp_regime_casamento:fd.resp_regime_casamento||'',
+    resp_email:fd.resp_email||'',
+    resp_tel:fd.resp_tel||'',
+    // Empresa
+    razao_social:fd.razao_social||'',
+    nome_fantasia:fd.nome_fantasia||'',
+    cep:fd.cep||'',
+    logradouro:fd.logradouro||'',
+    numero:fd.numero||'',
+    complemento:fd.complemento||'',
+    bairro:fd.bairro||'',
+    cidade:fd.cidade||'',
+    estado:fd.estado||'',
+    sede_tipo:fd.sede_tipo||'',
+    atendimento_publico:fd.atendimento_publico||'',
+    area_total:fd.area_total||'',
+    habite_se:fd.habite_se||'',
+    inscricao_imobiliaria:fd.inscricao_imobiliaria||'',
+    horario_funcionamento:fd.horario_funcionamento||'',
+    area_total_fiscal:fd.area_total_fiscal||'',
+    inscricao_imobiliaria_fiscal:fd.inscricao_imobiliaria_fiscal||'',
+    empresa_endereco:[fd.logradouro,fd.numero,fd.complemento,fd.bairro,fd.cidade,fd.estado,fd.cep].filter(Boolean).join(', '),
+    // Atividade
+    atividades:(fd.atividades||[]).join(', '),
+    ativ_servico:fd.ativ_servico||'',
+    ativ_comercio:fd.ativ_comercio||'',
+    compras_outros_estados:fd.compras_outros_estados||'',
+    ativ_industria:fd.ativ_industria||'',
+    ind_compras_outros_estados:fd.ind_compras_outros_estados||'',
+    atividades_resumo:[
+      fd.ativ_servico?'Serviços: '+fd.ativ_servico:'',
+      fd.ativ_comercio?'Comércio: '+fd.ativ_comercio:'',
+      fd.ativ_industria?'Indústria: '+fd.ativ_industria:''
+    ].filter(Boolean).join('\n'),
+    // Capital
+    capital_social:fd.capital_social||'',
+    capital_social_extenso:fd.capital_social_extenso||'',
+    capital_integralizacao:fd.capital_integralizacao||'',
+    capital_inicial:fd.capital_inicial||'',
+    capital_parcelas:fd.capital_parcelas||'',
+    capital_prazo:fd.capital_prazo||'',
+    // Regime / Funcionários
+    regime_tributario:fd.regime_tributario||'',
+    tem_funcionarios:fd.tem_funcionarios||'',
+    func_quantidade:fd.func_quantidade||'',
+    cnpj_telefone:fd.cnpj_telefone||'',
+    cnpj_email:fd.cnpj_email||'',
+    // Resumos
+    resumo_formatado:buildResumoFormatado(id),
+    socios_resumo:resumirSocios(),
+    dados_completos_json:JSON.stringify(fd)
+  };
+
+  (fd.socios||[]).forEach((s,i)=>{
+    const n=i+1;
+    payload[`socio_${n}_nome`]=s.nome||'';
+    payload[`socio_${n}_cpf`]=s.cpf||'';
+    payload[`socio_${n}_rg`]=s.rg||'';
+    payload[`socio_${n}_nasc`]=s.nasc||'';
+    payload[`socio_${n}_civil`]=s.civil||'';
+    payload[`socio_${n}_regime_casamento`]=s.regime_casamento||'';
+    payload[`socio_${n}_profissao`]=s.profissao||'';
+    payload[`socio_${n}_tel`]=s.tel||'';
+    payload[`socio_${n}_email`]=s.email||'';
+    payload[`socio_${n}_participacao`]=s.participacao||'';
+    payload[`socio_${n}_funcao`]=s.gestao_funcao||'';
+    payload[`socio_${n}_gestao_forma`]=s.gestao_forma||'';
+    payload[`socio_${n}_prolabore`]=s.prolabore||'';
+    payload[`socio_${n}_prolabore_valor`]=s.prolabore_valor||'';
+    payload[`socio_${n}_end_cep`]=s.end_cep||'';
+    payload[`socio_${n}_end_logradouro`]=s.end_logradouro||'';
+    payload[`socio_${n}_end_numero`]=s.end_numero||'';
+    payload[`socio_${n}_end_complemento`]=s.end_complemento||'';
+    payload[`socio_${n}_end_bairro`]=s.end_bairro||'';
+    payload[`socio_${n}_end_cidade`]=s.end_cidade||'';
+    payload[`socio_${n}_end_estado`]=s.end_estado||'';
+    payload[`socio_${n}_outra_empresa`]=s.outra_empresa||'';
+    payload[`socio_${n}_outra_nome`]=s.outra_nome||'';
+    payload[`socio_${n}_outra_cnpj`]=s.outra_cnpj||'';
+    payload[`socio_${n}_outra_regime`]=s.outra_regime||'';
+    payload[`socio_${n}_outra_participacao`]=s.outra_participacao||'';
+  });
+
+  return payload;
+}
+
+async function submit(){
+  saveValues();
+  const id='AJ-'+Date.now().toString(36).toUpperCase();
+  const payload=buildNetlifyPayload(id);
+
+  // Monta FormData para suportar envio de arquivos
+  // Campos obrigatórios do Netlify sempre incluídos; demais só se preenchidos
+  const netlifyRequired=new Set(['form-name','bot-field','protocolo','data_envio']);
+  const formData=new FormData();
+  Object.entries(payload).forEach(([k,val])=>{
+    const s=val!=null?String(val).trim():'';
+    if(netlifyRequired.has(k)||s) formData.append(k,s);
+  });
+
+  // Anexa arquivos enviados pelo usuário
+  const docIds=['doc_rg_cnh','doc_comp_res','doc_irpf','doc_titulo','doc_iptu','doc_habite_se','doc_outros'];
+  docIds.forEach(docId=>{
+    (uploadedFiles[docId]||[]).forEach(file=>formData.append(docId,file,file.name));
+  });
+
+  try{
+    const resp=await fetch('/',{
+      method:'POST',
+      body:formData // sem Content-Type: o browser define multipart/form-data automaticamente
+    });
+
+    if(!resp.ok) throw new Error('Falha no envio');
+
+    document.getElementById('form-wrap').style.display='none';
+    document.getElementById('prog-wrap').style.display='none';
+    document.getElementById('hero').style.display='none';
+    document.getElementById('success').style.display='block';
+    document.getElementById('suc-code').textContent=id;
+  }catch(e){
+    console.error(e);
+    alert('Não foi possível enviar o formulário. Tente novamente.');
+  }
+}
+
+// ══════════════ PAINEL ADMIN ══════════════
+function renderStats(){const all=JSON.parse(localStorage.getItem('aj_v4')||'[]');document.getElementById('stats').innerHTML=[{l:'Total',v:all.length,s:'solicitações'},{l:'Novas',v:all.filter(r=>r.status==='Novo').length,s:'aguardando'},{l:'Em andamento',v:all.filter(r=>r.status==='Em andamento').length,s:'em processo'},{l:'Concluídas',v:all.filter(r=>r.status==='Concluído').length,s:'abertas'}].map(s=>`<div class="stat"><div class="stat-l">${s.l}</div><div class="stat-v">${s.v}</div><div class="stat-s">${s.s}</div></div>`).join('');}
+function renderTabela(){
+  const all=JSON.parse(localStorage.getItem('aj_v4')||'[]');
+  const q=(document.getElementById('srch')?.value||'').toLowerCase();const ft=document.getElementById('ftipo')?.value||'';const fs=document.getElementById('fstatus')?.value||'';
+  const list=all.filter(r=>{const n=(r.razao_social||r.resp_nome||'').toLowerCase();return(!q||n.includes(q)||r.id.toLowerCase().includes(q))&&(!ft||r.tipo===ft)&&(!fs||r.status===fs);});
+  const tbody=document.getElementById('tbody');if(!list.length){tbody.innerHTML=`<tr><td colspan="8" class="empty">Nenhum registro encontrado</td></tr>`;return;}
+  tbody.innerHTML=list.map(r=>{const dt=new Date(r.data).toLocaleDateString('pt-BR');const sc=r.status==='Novo'?'s-Novo':r.status==='Em andamento'?'s-Andamento':'s-Concluido';return`<tr><td style="font-size:11px;color:var(--muted)">${r.id}</td><td><strong style="font-weight:500">${r.razao_social||r.resp_nome||'—'}</strong></td><td><span class="tbdg t-${r.tipo||'Outro'}">${r.tipo||'—'}</span></td><td>${r.resp_nome||'—'}</td><td style="color:var(--muted)">${r.resp_tel||'—'}</td><td style="color:var(--muted);white-space:nowrap">${dt}</td><td><span class="sbdg ${sc}">${r.status}</span></td><td><button class="btn-ver" onclick="openModal('${r.id}')">Ver</button><button class="btn-dl-tbl" onclick="gerarContratoAdmin('${r.id}')">↓ Word</button></td></tr>`;}).join('');
+}
+function openModal(id){
+  const all=JSON.parse(localStorage.getItem('aj_v4')||'[]');const r=all.find(x=>x.id===id);if(!r)return;
+  const dt=v=>v||'—';
+  const socios=(r.socios||[]).map((s,i)=>`<div style="background:var(--off);border:1px solid var(--border);border-radius:var(--rs);padding:1rem;margin-bottom:.6rem"><div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--gold);margin-bottom:.7rem">Sócio ${i+1} — ${dt(s.nome)}</div><div class="dgrid"><dl class="di"><dt>CPF</dt><dd>${dt(s.cpf)}</dd></dl><dl class="di"><dt>RG</dt><dd>${dt(s.rg)}</dd></dl><dl class="di"><dt>Nascimento</dt><dd>${dt(s.nasc)}</dd></dl><dl class="di"><dt>Estado civil</dt><dd>${dt(s.civil)}${s.regime_casamento?' — '+s.regime_casamento:''}</dd></dl><dl class="di"><dt>Profissão</dt><dd>${dt(s.profissao)}</dd></dl><dl class="di"><dt>Participação</dt><dd>${dt(s.participacao)}%</dd></dl><dl class="di"><dt>Endereço</dt><dd>${s.end_logradouro?s.end_logradouro+', '+s.end_numero+' — '+s.end_cidade+'/'+s.end_estado:'—'}</dd></dl><dl class="di"><dt>Outra empresa</dt><dd>${s.outra_empresa==='sim'?'Sim — '+dt(s.outra_nome)+' ('+dt(s.outra_participacao)+'%)':'Não'}</dd></dl><dl class="di"><dt>Função</dt><dd>${dt(s.gestao_funcao)}</dd></dl><dl class="di"><dt>Atuação adm.</dt><dd>${dt(s.gestao_forma)}</dd></dl><dl class="di"><dt>Pró-labore</dt><dd>${s.prolabore==='sim'?(s.prolabore_valor==='minimo'?'Salário mínimo':'R$ '+s.prolabore_valor):'Não'}</dd></dl></div></div>`).join('');
+  document.getElementById('modal-inner').innerHTML=`<div class="mhd"><h3>${r.razao_social||r.resp_nome||r.id}</h3><button class="mcls" onclick="closeModal()">×</button></div><div class="mbody"><div class="msec"><div class="msec-t">Identificação</div><div class="dgrid"><dl class="di"><dt>Protocolo</dt><dd>${r.id}</dd></dl><dl class="di"><dt>Data</dt><dd>${new Date(r.data).toLocaleString('pt-BR')}</dd></dl><dl class="di"><dt>Tipo</dt><dd>${dt(r.tipo)}</dd></dl><dl class="di"><dt>Capital social</dt><dd>${r.capital_social?'R$ '+r.capital_social:'—'}</dd></dl></div></div><div class="msec"><div class="msec-t">Responsável</div><div class="dgrid"><dl class="di"><dt>Nome</dt><dd>${dt(r.resp_nome)}</dd></dl><dl class="di"><dt>CPF</dt><dd>${dt(r.resp_cpf)}</dd></dl><dl class="di"><dt>Estado civil</dt><dd>${dt(r.resp_civil)}${r.resp_regime_casamento?' — '+r.resp_regime_casamento:''}</dd></dl><dl class="di"><dt>Tel</dt><dd>${dt(r.resp_tel)}</dd></dl><dl class="di"><dt>E-mail</dt><dd>${dt(r.resp_email)}</dd></dl></div></div><div class="msec"><div class="msec-t">Empresa</div><div class="dgrid"><dl class="di"><dt>Razão social</dt><dd>${dt(r.razao_social)}</dd></dl><dl class="di"><dt>Nome fantasia</dt><dd>${dt(r.nome_fantasia)}</dd></dl><dl class="di"><dt>Endereço</dt><dd>${r.logradouro?r.logradouro+', '+r.numero+' — '+r.cidade+'/'+r.estado:'—'}</dd></dl><dl class="di"><dt>Atend. público</dt><dd>${dt(r.atendimento_publico)}</dd></dl><dl class="di"><dt>IPTU</dt><dd>${dt(r.inscricao_imobiliaria||r.inscricao_imobiliaria_fiscal)}</dd></dl><dl class="di"><dt>Habite-se</dt><dd>${dt(r.habite_se)}</dd></dl></div></div><div class="msec"><div class="msec-t">Atividades</div><div class="dgrid">${(r.atividades||[]).map(a=>`<dl class="di" style="grid-column:1/-1"><dt>${a}</dt><dd>${r['ativ_'+a]||'—'}</dd></dl>`).join('')||'<dl class="di"><dt>—</dt><dd>—</dd></dl>'}</div></div><div class="msec"><div class="msec-t">Sócios e Gestão</div>${socios}</div><div class="msec"><div class="msec-t">Status do processo</div><div style="display:flex;align-items:center;gap:.75rem"><select class="ssel" id="modal-status">${['Novo','Em andamento','Concluído'].map(s=>`<option ${r.status===s?'selected':''}>${s}</option>`).join('')}</select><button class="btn-pri" style="padding:8px 20px;font-size:12px" onclick="saveStatus('${r.id}')">Salvar</button><button class="btn-dl-tbl" style="padding:8px 16px;font-size:12px" onclick="gerarContratoAdmin('${r.id}')">↓ Contrato Word</button></div></div></div>`;
+  document.getElementById('overlay').classList.add('open');
+}
+function closeModal(e){if(!e||e.target===document.getElementById('overlay'))document.getElementById('overlay').classList.remove('open');}
+function saveStatus(id){const all=JSON.parse(localStorage.getItem('aj_v4')||'[]');const i=all.findIndex(r=>r.id===id);if(i>-1){all[i].status=document.getElementById('modal-status').value;localStorage.setItem('aj_v4',JSON.stringify(all));renderStats();renderTabela();document.getElementById('overlay').classList.remove('open');}}
+function exportCSV(){const all=JSON.parse(localStorage.getItem('aj_v4')||'[]');if(!all.length){alert('Nenhum registro para exportar.');return;}const cols=['id','data','status','tipo','razao_social','resp_nome','resp_cpf','resp_tel','resp_email','capital_social','capital_integralizacao','logradouro','numero','cidade','estado','cep','regime_tributario','cnpj_telefone','cnpj_email'];const csv=[cols.join(';'),...all.map(r=>cols.map(c=>`"${(r[c]||'').toString().replace(/"/g,'""')}"`).join(';'))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}));a.download='aj_solicitacoes.csv';a.click();}
+function showView(){ return; }
+function gerarContratoAdmin(id){downloadContrato(id);}
+// ══════════════ GERAÇÃO DO CONTRATO WORD ══════════════
+function downloadContrato(id){
+  const all=JSON.parse(localStorage.getItem('aj_v4')||'[]');
+  const d=all.find(r=>r.id===id)||all[0];
+  if(!d){alert('Registro não encontrado.');return;}
+  docxReady.then(()=>{
+    try{
+      const {Document,Packer,Paragraph,TextRun,Table,TableRow,TableCell,AlignmentType,BorderStyle,WidthType,ShadingType}=window.docx;
+      const B=(t,sz)=>new TextRun({text:String(t||''),bold:true,size:sz||24,font:'Arial'});
+      const R=(t,sz)=>new TextRun({text:String(t||''),size:sz||24,font:'Arial'});
+      const I=(t,sz)=>new TextRun({text:String(t||''),italics:true,size:sz||24,font:'Arial'});
+      const P=(runs,align,spc)=>new Paragraph({alignment:align||AlignmentType.JUSTIFIED,spacing:spc||{before:120,after:120},children:Array.isArray(runs)?runs:[runs]});
+      const TITULO=t=>new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:240,after:200},children:[new TextRun({text:t,bold:true,size:28,font:'Arial',allCaps:true})]});
+      const CL=(num,tit,pars)=>[new Paragraph({spacing:{before:280,after:100},children:[B(num+': '),B(tit)]}), ...pars];
+      const socios=d.socios||[];
+      const capTotal=moneyToNumber(d.capital_social);
+      const cidade=d.cidade||'Florianópolis';const estado=d.estado||'SC';
+      const estadoNome={SC:'Santa Catarina',SP:'São Paulo',RJ:'Rio de Janeiro',MG:'Minas Gerais',RS:'Rio Grande do Sul',PR:'Paraná',BA:'Bahia',GO:'Goiás',DF:'Distrito Federal'}[estado]||estado;
+      const dataHoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+      function qualSocio(s,isLast){
+        let civil=s.civil||'solteiro(a)';
+        if(s.civil==='Casado(a)'&&s.regime_casamento)civil='casado(a) em '+s.regime_casamento.toLowerCase();
+        const conn=isLast?[R(', '),B('ajustam e convencionam entre si a constituição de uma sociedade limitada,'),R(' nos termos do Código Civil, que se regerá pelas seguintes cláusulas e condições:')]:[R('; ')];
+        return P([B((s.nome||'___').toUpperCase()),R(', nacionalidade brasileira, nascido(a) em '),B(s.nasc||'__/__/____'),R(', '+civil+', '+(s.profissao||'empresário(a)')+', CPF nº '),B(s.cpf||'___'),R(', carteira de identidade nº '),B(s.rg||'___'),R(', residente e domiciliado(a) na '),B((s.end_logradouro||'___')+', '+(s.end_numero||'')+(s.end_complemento?', '+s.end_complemento:'')+', '+(s.end_bairro||'')+', '+(s.end_cidade||'')+', '+(s.end_estado||'')+', CEP '+(s.end_cep||'')),R(', Brasil'),...conn]);
+      }
+      const border={style:BorderStyle.SINGLE,size:4,color:'30323E'};const borders={top:border,bottom:border,left:border,right:border};
+      const cell=(t,w,hdr,align)=>new TableCell({borders,width:{size:w,type:WidthType.DXA},margins:{top:80,bottom:80,left:120,right:120},shading:{fill:hdr?'30323E':'FFFFFF',type:ShadingType.CLEAR},children:[new Paragraph({alignment:align||AlignmentType.CENTER,children:[new TextRun({text:String(t||''),bold:!!hdr,size:20,font:'Arial',color:hdr?'FFFFFF':'000000'})]})]});
+      const tabelaQ=new Table({width:{size:8000,type:WidthType.DXA},columnWidths:[600,4200,1400,1800],rows:[
+        new TableRow({children:[cell('Nº',600,true),cell('SÓCIO',4200,true,AlignmentType.LEFT),cell('QUOTAS',1400,true),cell('VALOR (R$)',1800,true)]}),
+        ...socios.map((s,idx)=>{const part=parseFloat(s.participacao||0)/100;const q=Math.round(capTotal*part);const v=(capTotal*part).toLocaleString('pt-BR',{minimumFractionDigits:2});return new TableRow({children:[cell(String(idx+1),600),cell(s.nome||'',4200,false,AlignmentType.LEFT),cell(q.toLocaleString('pt-BR'),1400),cell(v,1800)]}); }),
+        new TableRow({children:[cell('',600,true),cell('TOTAL',4200,true,AlignmentType.LEFT),cell(capTotal.toLocaleString('pt-BR'),1400,true),cell(capTotal.toLocaleString('pt-BR',{minimumFractionDigits:2}),1800,true)]}),
+      ]});
+      function integPars(){
+        if(d.capital_integralizacao==='total')return[P([I('Parágrafo Único: O capital social é integralizado neste ato em sua totalidade, no valor de R$ '+capTotal.toLocaleString('pt-BR',{minimumFractionDigits:2})+' ('+( d.capital_social_extenso||'')+'), em moeda corrente nacional.')])];
+        const ini=moneyToNumber(d.capital_inicial);const rest=capTotal-ini;
+        return[P([I('Parágrafo Único: O capital social integralizado neste ato é de R$ '+ini.toLocaleString('pt-BR',{minimumFractionDigits:2})+' em moeda corrente nacional e o valor de R$ '+rest.toLocaleString('pt-BR',{minimumFractionDigits:2})+' a integralizar até '+(d.capital_prazo||'____')+', sendo que:')]),
+          ...socios.map((s,idx)=>{const part=parseFloat(s.participacao||0)/100;return P([I((idx+1)+' - '+s.nome+' integraliza R$ '+(ini*part).toLocaleString('pt-BR',{minimumFractionDigits:2})+' neste ato e integralizará R$ '+(rest*part).toLocaleString('pt-BR',{minimumFractionDigits:2})+' até '+(d.capital_prazo||'____')+', em moeda corrente nacional.')]);})];
+      }
+      const admSocios=socios.filter(s=>s.gestao_funcao==='adm'||s.gestao_funcao==='adm_nao_socio');
+      const admTexto=admSocios.length?admSocios.map(s=>(s.gestao_forma==='isolada'?'ISOLADAMENTE':'EM CONJUNTO')+' o(a) Sócio(a) '+s.nome).join(', '):'a definir';
+      const proLaborePars=[];
+      socios.forEach(s=>{if(s.prolabore==='sim'){const plv=s.prolabore_valor==='minimo'?'salário mínimo vigente':'R$ '+moneyToNumber(s.prolabore_valor).toLocaleString('pt-BR',{minimumFractionDigits:2});proLaborePars.push(P([I(s.nome+': pró-labore de '+plv+' mensais.')]));}});
+      const regimeTxt=d.regime_tributario==='presumido'?'LUCRO PRESUMIDO':d.regime_tributario==='real'?'LUCRO REAL':d.regime_tributario==='mei'?'MEI':'SIMPLES NACIONAL';
+      const objetoSocial=[d.ativ_servico,d.ativ_comercio,d.ativ_industria].filter(Boolean).join('; ')||'objeto social a definir';
+      const assinaturas=socios.flatMap(s=>[new Paragraph({spacing:{before:560,after:0},children:[R('_'.repeat(55))]}),P([B(s.nome||'')],AlignmentType.LEFT,{before:0,after:0}),P([R('CPF: '+(s.cpf||''))],AlignmentType.LEFT,{before:0,after:80})]);
+      const doc=new Document({styles:{default:{document:{run:{font:'Arial',size:24}}}},sections:[{
+        properties:{page:{size:{width:11906,height:16838},margin:{top:1440,right:1134,bottom:1440,left:1701}}},
+        children:[
+          TITULO('Contrato Social'),
+          TITULO(d.razao_social?d.razao_social.toUpperCase():'RAZÃO SOCIAL LTDA'),
+          P([R('')]),
+          ...socios.map((s,idx)=>qualSocio(s,idx===socios.length-1)),
+          P([R('')]),
+          ...CL('Cláusula Primeira','DENOMINAÇÃO',[P([R('A sociedade usará o nome empresarial '),B(d.razao_social||'___'),R('.')])]),
+          ...CL('Cláusula Segunda','SEDE',[P([R('A sociedade terá sua sede social localizada na '),B((d.logradouro||'___')+', '+(d.numero||'')+(d.complemento?', '+d.complemento:'')+', '+(d.bairro||'')+', '+cidade+', '+estado+', CEP '+(d.cep||'___')),R('.')])]),
+          ...CL('Cláusula Terceira','FILIAIS',[P([R('Observadas as disposições da legislação aplicável, a sociedade poderá abrir filiais, sucursais, agências e escritórios em qualquer parte do território nacional, a critério dos sócios.')])]),
+          ...CL('Cláusula Quarta','OBJETO SOCIAL',[P([B(objetoSocial)])]),
+          ...CL('Cláusula Quinta','INÍCIO E PRAZO',[P([R('A sociedade iniciará suas atividades a partir do registro deste ato perante a Junta Comercial do Estado de '+estadoNome+' e seu prazo de duração será indeterminado.')])]),
+          ...CL('Cláusula Sexta','CAPITAL SOCIAL',[
+            P([R('O capital social é de '),B('R$ '+capTotal.toLocaleString('pt-BR',{minimumFractionDigits:2})+' ('+(d.capital_social_extenso||'')+')'),R(', dividido em '+capTotal.toLocaleString('pt-BR')+' quotas no valor de R$ 1,00 (um real) cada uma, subscritas pelos sócios, a saber:')]),
+            new Paragraph({spacing:{before:120,after:0},children:[R('')]}),tabelaQ,new Paragraph({spacing:{before:0,after:0},children:[R('')]}),
+            ...integPars()
+          ]),
+          ...CL('Cláusula Sétima','QUOTAS',[P([R('Serão regidas pela legislação aplicável à matéria, tanto ao valor das quotas, integralização do capital social, a retirada de sócio quanto à dissolução e a liquidação da sociedade.')])]),
+          ...CL('Cláusula Oitava','ADMINISTRAÇÃO',[
+            P([R('A Administração da sociedade será exercida '+admTexto+', e a eles caberão a responsabilidade e representação ativa e passiva da sociedade, judicial e extrajudicialmente, podendo praticar todos os atos compreendidos no objeto social, sempre no interesse da sociedade, ficando vedado, entretanto, o uso do nome empresarial em negócios estranhos aos fins sociais.')]),
+            ...(proLaborePars.length?[P([I('Parágrafo Único: No exercício da administração, os administradores poderão retirar valor mensal a título de pró-labore:')]), ...proLaborePars]:[P([I('Parágrafo Único: Os administradores não retirarão pró-labore neste momento.')])])
+          ]),
+          ...CL('Cláusula Nona','EXERCÍCIO SOCIAL',[
+            P([R('O exercício social terminará em 31/12, quando serão levantados o balanço patrimonial e o balanço de resultado econômico e será efetuada a apuração e a distribuição dos resultados com observância das disposições legais aplicáveis.')]),
+            P([I('Parágrafo Primeiro: Por deliberação dos sócios a distribuição de lucros poderá ser em qualquer período do ano a partir de resultado do período apurado.')]),
+            P([I('Parágrafo Segundo: A distribuição dos lucros poderá não obedecer à participação dos sócios desde que aprovada pelos sócios quotistas.')]),
+          ]),
+          ...CL('Cláusula Décima','DECLARAÇÃO DOS ADMINISTRADORES',[P([R('Os Administradores declaram, sob as penas da lei, que não estão impedidos de exercer a administração da sociedade, por lei especial ou em virtude de condenação criminal, ou por se encontrar sob os efeitos dela, a pena que vede, ainda que temporariamente, o acesso a cargos públicos ou por crime falimentar, de prevaricação, peita ou suborno, concussão, peculato, ou contra economia popular, contra o sistema financeiro nacional, contra normas de defesa da concorrência, contra as relações de consumo, fé pública ou propriedade.')])]),
+          ...CL('Cláusula Décima Primeira','CASOS OMISSOS',[P([R('Os casos omissos neste contrato serão resolvidos com observância dos preceitos do Código Civil (Lei nº 10.406/2002) e de outros dispositivos legais aplicáveis.')])]),
+          ...CL('Cláusula Décima Segunda','REGIME TRIBUTÁRIO',[P([R('Declara, sob as penas da lei, que se enquadra na condição de '),B(regimeTxt),R(' nos termos da legislação vigente.')])]),
+          ...CL('Cláusula Décima Terceira','FORO',[P([R('Fica eleito o foro da comarca de '),B(cidade.toUpperCase()),R(', para dirimir as questões oriundas do presente contrato.')])]),
+          new Paragraph({spacing:{before:400,after:120},alignment:AlignmentType.LEFT,children:[B(cidade.toUpperCase()+', '+dataHoje+'.')]}),
+          ...assinaturas,
+        ]
+      }]});
+      Packer.toBlob(doc).then(blob=>saveAs(blob,'Contrato_Social_'+(d.razao_social||'empresa').replace(/\s+/g,'_')+'.docx')).catch(e=>{console.error(e);alert('Erro ao gerar Word: '+e.message);});
+    }catch(e){console.error(e);alert('Erro ao montar contrato: '+e.message);}
+  }).catch(e=>alert('Erro ao carregar biblioteca: '+e.message));
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  CEP LOOKUP
+// ═══════════════════════════════════════════════════════════════════
+async function lookupCEP(fid, mkey){
+  const el=document.getElementById(fid);
+  if(!el)return;
+  const raw=el.value.replace(/\D/g,'');
+  if(raw.length!==8)return;
+  if(manualMap[fid])return;
+  const st=document.getElementById('cst-'+fid);
+  if(st){st.textContent='Buscando endereço...';st.style.color='var(--mu)';}
+  const isEmp=fid==='cep';
+  try{
+    const r=await fetch(`https://viacep.com.br/ws/${raw}/json/`);
+    const d=await r.json();
+    if(d.erro){
+      if(st){st.textContent='CEP não encontrado. Preencha manualmente.';st.style.color='var(--er)';}
+      unlockFields(fid,isEmp);return;
+    }
+    if(isEmp){
+      setLocked('rua',d.logradouro||'');
+      setLocked('bairro',d.bairro||'');
+      setLocked('cidade',d.localidade||'');
+      const ufEl=document.getElementById('uf');if(ufEl){ufEl.value=d.uf||'';ufEl.disabled=true;}
+      setTimeout(()=>{const n=document.getElementById('enum');if(n)n.focus();},80);
+    }else{
+      const px=fid.replace('cep','');
+      setLocked(px+'ru',d.logradouro||'');
+      setLocked(px+'ba',d.bairro||'');
+      setLocked(px+'ci',d.localidade||'');
+      const ufEl=document.getElementById(px+'uf');if(ufEl){ufEl.value=d.uf||'';ufEl.disabled=true;}
+      setTimeout(()=>{const n=document.getElementById(px+'nu');if(n)n.focus();},80);
+    }
+    if(st){st.textContent='✓ Endereço encontrado. Complete o número.';st.style.color='var(--ok)';}
+  }catch(err){
+    if(st){st.textContent='Erro ao buscar. Preencha manualmente.';st.style.color='var(--er)';}
+    unlockFields(fid,isEmp);
+  }
+}
+function setLocked(id,v){const el=document.getElementById(id);if(el){el.value=v;el.readOnly=true;}}
+function unlockFields(fid,isEmp){
+  if(isEmp){
+    ['rua','bairro','cidade'].forEach(id=>{const el=document.getElementById(id);if(el)el.readOnly=false;});
+    const uf=document.getElementById('uf');if(uf)uf.disabled=false;
+  }else{
+    const px=fid.replace('cep','');
+    [px+'ru',px+'ba',px+'ci'].forEach(id=>{const el=document.getElementById(id);if(el)el.readOnly=false;});
+    const uf=document.getElementById(px+'uf');if(uf)uf.disabled=false;
+  }
+}
+function toggleManual(fid,mkey){
+  manualMap[fid]=!manualMap[fid];
+  const btn=document.getElementById(mkey);
+  const st=document.getElementById('cst-'+fid);
+  if(manualMap[fid]){
+    if(btn)btn.textContent='Cancelar';
+    if(st){st.textContent='Preencha o endereço manualmente.';st.style.color='var(--gd)';}
+    unlockFields(fid,fid==='cep');
+  }else{
+    if(btn)btn.textContent='Manual';
+    if(st){st.textContent='';st.style.color='';}
+  }
+}
+function updPctBar(){
+  save();
+  const tot=fd.socios.reduce((a,s)=>a+parseFloat(s.pct||0),0);
+  const bar=document.getElementById('pct-bar');if(!bar)return;
+  bar.className='pct-bar'+(tot===100?' ok':tot>0?' err':'');
+  bar.textContent=tot===100?'\u2713 Total: 100% \u2014 Correto':tot>0?`\u26a0 Total: ${tot}% \u2014 Deve ser exatamente 100%`:`Total: 0%`;
+}
+function togGFunc(i){
+  save();
+  const el=document.getElementById('g'+i+'f');
+  fd.socios[i].gfunc=el?.value||'';
+  const isAdm=el?.value==='adm'||el?.value==='adm_ns';
+  document.getElementById('cg'+i+'adm')?.classList.toggle('on',isAdm);
+}
+function togPL(i){
+  save();
+  const el=document.getElementById('g'+i+'pl');
+  fd.socios[i].pl=el?.value||'';
+  document.getElementById('cg'+i+'plv')?.classList.toggle('on',el?.value==='sim');
+  document.getElementById('ag'+i+'npl')?.classList.toggle('on',el?.value==='nao');
+}
+function togPLOp(i){
+  save();
+  const el=document.getElementById('g'+i+'plop');
+  fd.socios[i].plop=el?.value||'';
+  document.getElementById('cg'+i+'plval')?.classList.toggle('on',el?.value==='outro');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+//  GERAR WORD
+// ═══════════════════════════════════════════════════════════════════
+function genWord(id){
+  const all=JSON.parse(localStorage.getItem('aj_v4')||'[]');
+  const d=all.find(r=>r.id===id);if(!d){alert('Registro não encontrado.');return;}
+  docxReady.then(()=>{
+    try{
+      const{Document,Packer,Paragraph,TextRun,Table,TableRow,TableCell,AlignmentType,BorderStyle,WidthType,ShadingType}=window.docx;
+      const B=(t,sz=24)=>new TextRun({text:String(t||''),bold:true,size:sz,font:'Arial'});
+      const Rx=(t,sz=24)=>new TextRun({text:String(t||''),size:sz,font:'Arial'});
+      const It=(t,sz=24)=>new TextRun({text:String(t||''),italics:true,size:sz,font:'Arial'});
+      const Px=(runs,al=AlignmentType.JUSTIFIED,sp={before:120,after:120})=>new Paragraph({alignment:al,spacing:sp,children:Array.isArray(runs)?runs:[runs]});
+      const TIT=t=>new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:240,after:200},children:[new TextRun({text:t,bold:true,size:28,font:'Arial',allCaps:true})]});
+      const CL=(n,t,ps)=>[new Paragraph({spacing:{before:300,after:100},children:[B(`${n}: `),B(t)]}), ...ps];
+      const socios=d.socios||[];
+      const capTotal=m2n(d.cap);
+      const cidade=d.cidade||'Florianópolis';
+      const estado=d.uf||'SC';
+      const ENOMES={SC:'Santa Catarina',SP:'São Paulo',RJ:'Rio de Janeiro',MG:'Minas Gerais',RS:'Rio Grande do Sul',PR:'Paraná',BA:'Bahia',GO:'Goiás',DF:'Distrito Federal'};
+      const estadoNome=ENOMES[estado]||estado;
+      const hoje=new Date().toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+      function qualSocio(s,last){
+        let civil=s.civil||'solteiro(a)';
+        if(s.civil==='Casado(a)'&&s.regcas)civil='casado(a) em '+s.regcas.toLowerCase();
+        const conn=last?[Rx(', '),B('ajustam e convencionam entre si a constituição de uma sociedade limitada,'),Rx(' nos termos do Código Civil, que se regerá pelas seguintes cláusulas e condições:')]:[Rx('; ')];
+        return Px([B((s.nome||'___').toUpperCase()),Rx(', nacionalidade brasileira, nascido(a) em '),B(s.nasc||'__/__/____'),Rx(`, ${civil}, ${s.prof||'empresário(a)'}, CPF nº `),B(s.cpf||'___'),Rx(', carteira de identidade nº '),B(s.rg||'___'),Rx(', residente e domiciliado(a) na '),B(`${s.rua||'___'}, ${s.num||''}${s.comp?', '+s.comp:''}, ${s.bairro||''}, ${s.cidade||cidade}, ${s.uf||estado}, CEP ${s.cep||'___'}`),Rx(', Brasil'),...conn]);
+      }
+      const bdr={style:BorderStyle.SINGLE,size:4,color:'30323E'};
+      const bdrs={top:bdr,bottom:bdr,left:bdr,right:bdr};
+      const CELL=(t,w,h=false,al=AlignmentType.CENTER)=>new TableCell({borders:bdrs,width:{size:w,type:WidthType.DXA},margins:{top:80,bottom:80,left:120,right:120},shading:{fill:h?'30323E':'FFFFFF',type:ShadingType.CLEAR},children:[new Paragraph({alignment:al,children:[new TextRun({text:String(t||''),bold:h,size:20,font:'Arial',color:h?'FFFFFF':'000000'})]})]});
+      const tabQ=new Table({width:{size:8000,type:WidthType.DXA},columnWidths:[600,4200,1400,1800],rows:[
+        new TableRow({children:[CELL('Nº',600,true),CELL('SÓCIO',4200,true,AlignmentType.LEFT),CELL('QUOTAS',1400,true),CELL('VALOR (R$)',1800,true)]}),
+        ...socios.map((s,idx)=>{const pt=parseFloat(s.pct||0)/100;const q=Math.round(capTotal*pt);const v=(capTotal*pt).toLocaleString('pt-BR',{minimumFractionDigits:2});return new TableRow({children:[CELL(String(idx+1),600),CELL(s.nome||'',4200,false,AlignmentType.LEFT),CELL(q.toLocaleString('pt-BR'),1400),CELL(v,1800)]});}),
+        new TableRow({children:[CELL('',600,true),CELL('TOTAL',4200,true,AlignmentType.LEFT),CELL(capTotal.toLocaleString('pt-BR'),1400,true),CELL(capTotal.toLocaleString('pt-BR',{minimumFractionDigits:2}),1800,true)]}),
+      ]});
+      function integPars(){
+        if(d.capint==='total')return[Px([It('Parágrafo Único: O capital social é integralizado neste ato em sua totalidade, no valor de R$ '+capTotal.toLocaleString('pt-BR',{minimumFractionDigits:2})+' ('+( d.capext||'')+'), em moeda corrente nacional.')])];
+        const ini=m2n(d.capini);const rest=capTotal-ini;
+        return[Px([It('Parágrafo Único: O capital social integralizado neste ato é de R$ '+ini.toLocaleString('pt-BR',{minimumFractionDigits:2})+' em moeda corrente nacional e o valor de R$ '+rest.toLocaleString('pt-BR',{minimumFractionDigits:2})+' a integralizar até '+(d.capprazo||'____')+', sendo que:')]),
+          ...socios.map((s,idx)=>{const pt=parseFloat(s.pct||0)/100;return Px([It((idx+1)+' - '+s.nome+' integraliza R$ '+(ini*pt).toLocaleString('pt-BR',{minimumFractionDigits:2})+' neste ato e integralizará R$ '+(rest*pt).toLocaleString('pt-BR',{minimumFractionDigits:2})+' até '+(d.capprazo||'____')+', em moeda corrente nacional.')]);})];
+      }
+      const adms=socios.filter(s=>s.gfunc==='adm'||s.gfunc==='adm_ns');
+      const admTxt=adms.length?adms.map(s=>{const f=s.gforma==='isolada'?'ISOLADAMENTE':'EM CONJUNTO';return f+' o(a) Sócio(a)/Administrador(a) '+s.nome;}).join(', '):'a definir';
+      const plPars=socios.filter(s=>s.pl==='sim').map(s=>{const val=s.plop==='minimo'?'salário mínimo vigente':'R$ '+s.plval;return Px([It(s.nome+': pró-labore mensal de '+val+'.')]);});
+      const regTxt=d.regime==='presumido'?'LUCRO PRESUMIDO':d.regime==='real'?'LUCRO REAL':d.regime==='mei'?'MEI':'SIMPLES NACIONAL';
+      const objeto=[d.dsrv,d.dcom,d.dind].filter(Boolean).join('; ')||'objeto social a definir';
+      const assinaturas=socios.flatMap(s=>[
+        new Paragraph({spacing:{before:600,after:0},children:[Rx('_'.repeat(55))]}),
+        Px([B(s.nome||'')],AlignmentType.LEFT,{before:0,after:0}),
+        Px([Rx('CPF: '+(s.cpf||''))],AlignmentType.LEFT,{before:0,after:100}),
+      ]);
+      const doc=new Document({
+        styles:{default:{document:{run:{font:'Arial',size:24}}}},
+        sections:[{
+          properties:{page:{size:{width:11906,height:16838},margin:{top:1440,right:1134,bottom:1440,left:1701}}},
+          children:[
+            TIT('Contrato Social'),TIT(d.razao?d.razao.toUpperCase():'RAZÃO SOCIAL LTDA'),Px([Rx('')]),
+            ...socios.map((s,idx)=>qualSocio(s,idx===socios.length-1)),Px([Rx('')]),
+            ...CL('Cláusula Primeira','DENOMINAÇÃO',[Px([Rx('A sociedade usará o nome empresarial '),B(d.razao||'___'),Rx('.')])]),
+            ...CL('Cláusula Segunda','SEDE',[Px([Rx('A sociedade terá sua sede social localizada na '),B((d.rua||'___')+', '+(d.enum||'')+(d.comp?', '+d.comp:'')+', '+(d.bairro||'')+', '+cidade+', '+estado+', CEP '+(d.cep||'___')),Rx('.')])]),
+            ...CL('Cláusula Terceira','FILIAIS',[Px([Rx('Observadas as disposições da legislação aplicável, a sociedade poderá abrir filiais, sucursais, agências e escritórios em qualquer parte do território nacional, a critério dos sócios.')])]),
+            ...CL('Cláusula Quarta','OBJETO SOCIAL',[Px([B(objeto)])]),
+            ...CL('Cláusula Quinta','INÍCIO E PRAZO',[Px([Rx('A sociedade iniciará suas atividades a partir do registro deste ato perante a Junta Comercial do Estado de '+estadoNome+' e seu prazo de duração será indeterminado.')])]),
+            ...CL('Cláusula Sexta','CAPITAL SOCIAL',[
+              Px([Rx('O capital social é de '),B('R$ '+capTotal.toLocaleString('pt-BR',{minimumFractionDigits:2})+' ('+(d.capext||'')+')'),Rx(', dividido em '+capTotal.toLocaleString('pt-BR')+' quotas no valor de R$ 1,00 (um real) cada uma, subscritas pelos sócios, a saber:')]),
+              new Paragraph({spacing:{before:120,after:0},children:[Rx('')]}),tabQ,new Paragraph({spacing:{before:0,after:0},children:[Rx('')]}),
+              ...integPars()
+            ]),
+            ...CL('Cláusula Sétima','QUOTAS',[Px([Rx('Serão regidas pela legislação aplicável à matéria, tanto ao valor das quotas, integralização do capital social, a retirada de sócio quanto à dissolução e a liquidação da sociedade.')])]),
+            ...CL('Cláusula Oitava','ADMINISTRAÇÃO',[
+              Px([Rx('A Administração da sociedade será exercida '+admTxt+', e a eles caberão a responsabilidade e representação ativa e passiva da sociedade, judicial e extrajudicialmente, podendo praticar todos os atos compreendidos no objeto social.')]),
+              ...(plPars.length?[Px([It('Parágrafo Único: No exercício da administração, os administradores retirarão a título de pró-labore:')]), ...plPars]:[Px([It('Parágrafo Único: Os administradores não retirarão pró-labore neste momento.')])])
+            ]),
+            ...CL('Cláusula Nona','EXERCÍCIO SOCIAL',[
+              Px([Rx('O exercício social terminará em 31/12, quando serão levantados o balanço patrimonial e o balanço de resultado econômico.')]),
+              Px([It('Parágrafo Primeiro: Por deliberação dos sócios, a distribuição de lucros poderá ocorrer em qualquer período do ano a partir de resultado apurado.')]),
+              Px([It('Parágrafo Segundo: A distribuição dos lucros poderá não obedecer à participação dos sócios desde que aprovada pelos sócios quotistas.')]),
+            ]),
+            ...CL('Cláusula Décima','DECLARAÇÃO DOS ADMINISTRADORES',[Px([Rx('Os Administradores declaram, sob as penas da lei, que não estão impedidos de exercer a administração da sociedade, por lei especial ou em virtude de condenação criminal.')])]),
+            ...CL('Cláusula Décima Primeira','CASOS OMISSOS',[Px([Rx('Os casos omissos neste contrato serão resolvidos com observância dos preceitos do Código Civil (Lei nº 10.406/2002) e de outros dispositivos legais aplicáveis.')])]),
+            ...CL('Cláusula Décima Segunda','REGIME TRIBUTÁRIO',[Px([Rx('Declara, sob as penas da lei, que se enquadra na condição de '),B(regTxt),Rx(' nos termos da legislação vigente.')])]),
+            ...CL('Cláusula Décima Terceira','FORO',[Px([Rx('Fica eleito o foro da comarca de '),B(cidade.toUpperCase()),Rx(', para dirimir as questões oriundas do presente contrato.')])]),
+            new Paragraph({spacing:{before:440,after:120},alignment:AlignmentType.LEFT,children:[B(cidade.toUpperCase()+', '+hoje+'.')]}),
+            ...assinaturas,
+          ]
+        }]
+      });
+      Packer.toBlob(doc).then(blob=>saveAs(blob,'Contrato_Social_'+(d.razao||'empresa').replace(/\s+/g,'_')+'.docx')).catch(e=>{console.error(e);alert('Erro Word: '+e.message);});
+    }catch(e){console.error(e);alert('Erro: '+e.message);}
+  }).catch(e=>alert('Erro biblioteca: '+e.message));
+}
+
+init();
+</script></body></html>
