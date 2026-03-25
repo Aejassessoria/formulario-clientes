@@ -1,4 +1,19 @@
 import { NextResponse } from 'next/server';
+import { pool } from '@/lib/db';
+
+// Cria a tabela automaticamente se ainda não existir
+async function garantirTabela() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS formulario_arquivos (
+      id        UUID         DEFAULT gen_random_uuid() PRIMARY KEY,
+      campo     VARCHAR(50),
+      nome      VARCHAR(255),
+      mime      VARCHAR(100),
+      dados     BYTEA,
+      criado_em TIMESTAMPTZ  DEFAULT NOW()
+    )
+  `);
+}
 
 export async function POST(request: Request) {
   const formData = await request.formData();
@@ -9,23 +24,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false, message: 'Arquivo não enviado' }, { status: 400 });
   }
 
-  // Se BLOB_READ_WRITE_TOKEN não estiver configurado, apenas confirma sem URL
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
-    console.warn('[upload] BLOB_READ_WRITE_TOKEN não configurado — arquivo não armazenado');
-    return NextResponse.json({ ok: true, url: '', name: file.name });
-  }
-
   try {
-    const { put } = await import('@vercel/blob');
-    const blob = await put(
-      `formularios/${campo}/${Date.now()}-${file.name}`,
-      file,
-      { access: 'public' }
+    await garantirTabela();
+
+    const buffer = Buffer.from(await file.arrayBuffer());
+    const mime   = file.type || 'application/octet-stream';
+
+    const { rows } = await pool.query(
+      `INSERT INTO formulario_arquivos (campo, nome, mime, dados)
+       VALUES ($1, $2, $3, $4)
+       RETURNING id`,
+      [campo, file.name, mime, buffer]
     );
-    return NextResponse.json({ ok: true, url: blob.url, name: file.name });
+
+    const url = `/api/arquivos/${rows[0].id}`;
+    return NextResponse.json({ ok: true, url, name: file.name });
   } catch (error) {
-    console.error('[upload] Erro ao enviar para Vercel Blob:', error);
-    // Não falha a submissão do formulário por causa do upload
+    console.error('[upload] Erro ao salvar arquivo:', error);
+    // Não interrompe o envio do formulário
     return NextResponse.json({ ok: true, url: '', name: file.name });
   }
 }

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import LogoutButton from './LogoutButton';
+import DeleteRowButton from './DeleteRowButton';
 import {
   listarSolicitacoes,
   contarPorStatus,
@@ -34,15 +36,99 @@ function formatarData(dataStr: string): string {
     return new Date(dataStr).toLocaleString('pt-BR', {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
+      timeZone: 'America/Sao_Paulo',
     });
   } catch {
     return dataStr;
   }
 }
 
+function TabelaSolicitacoes({ rows }: { rows: Solicitacao[] }) {
+  if (rows.length === 0) {
+    return <div className="empty">Nenhuma solicitação nesta lista.</div>;
+  }
+
+  return (
+    <table className="rtbl">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Empresa</th>
+          <th>Responsável / E-mail</th>
+          <th>Telefone</th>
+          <th>Tipo</th>
+          <th>Status</th>
+          <th>Recebido em</th>
+          <th></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => {
+          const tipo        = (row.payload?.tipo as string) ?? '';
+          const tipoColor   = TIPO_COLORS[tipo] ?? TIPO_COLORS.Outro;
+          const statusColor = STATUS_COLORS[row.status] ?? STATUS_COLORS.novo;
+          const nome        = nomeEmpresa(row);
+          const responsavel = row.nome_responsavel || (row.payload?.resp_nome as string) || '';
+          const email       = emailContato(row);
+          const tel         = telefoneContato(row);
+
+          return (
+            <tr key={row.id}>
+              <td style={{ color: 'var(--muted)', fontSize: 11, width: 40 }}>
+                {row.id.slice(0, 8)}…
+              </td>
+              <td>
+                <div style={{ fontWeight: 500, marginBottom: 2 }}>{nome}</div>
+              </td>
+              <td>
+                {responsavel && (
+                  <div style={{ fontSize: 12, marginBottom: 2 }}>{responsavel}</div>
+                )}
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{email}</div>
+              </td>
+              <td style={{ fontSize: 12, color: 'var(--muted)' }}>{tel}</td>
+              <td>
+                {tipo && (
+                  <span className="tbdg" style={{ background: tipoColor.bg, color: tipoColor.color }}>
+                    {tipo}
+                  </span>
+                )}
+              </td>
+              <td>
+                <span className="sbdg" style={{ background: statusColor.bg, color: statusColor.color }}>
+                  {STATUS_LABELS[row.status] ?? row.status}
+                </span>
+              </td>
+              <td style={{ fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+                {formatarData(row.criado_em)}
+              </td>
+              <td>
+                <Link href={`/admin/${row.id}`} className="btn-ver" style={{ textDecoration: 'none' }}>
+                  Ver detalhes
+                </Link>
+              </td>
+              <td>
+                <DeleteRowButton id={row.id} />
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  );
+}
+
 // ─── PAGE ─────────────────────────────────────────────────────────────────────
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ tab?: string }>;
+}) {
+  const { tab } = await searchParams;
+  const abaAtiva = tab === 'concluidos' ? 'concluidos' : 'pendentes';
+
   let rows: Solicitacao[] = [];
   let contagem: Record<string, number> = {};
   let erro: string | null = null;
@@ -56,7 +142,9 @@ export default async function AdminPage() {
     erro = e instanceof Error ? e.message : 'Erro ao carregar dados.';
   }
 
-  const total = rows.length;
+  const pendentes  = rows.filter(r => r.status === 'novo' || r.status === 'em_andamento');
+  const concluidos = rows.filter(r => r.status === 'concluido');
+  const rowsAtuais = abaAtiva === 'concluidos' ? concluidos : pendentes;
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--off)' }}>
@@ -66,9 +154,10 @@ export default async function AdminPage() {
         <div className="nav-logo">
           <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Link href="/abertura-empresa" className="nav-tab">Formulário</Link>
           <span className="nav-tab active">Painel Admin</span>
+          <LogoutButton />
         </div>
       </nav>
 
@@ -90,7 +179,7 @@ export default async function AdminPage() {
       <div className="stats">
         <div className="stat">
           <div className="stat-l">Total</div>
-          <div className="stat-v">{total}</div>
+          <div className="stat-v">{rows.length}</div>
           <div className="stat-s">solicitações recebidas</div>
         </div>
         <div className="stat">
@@ -112,7 +201,7 @@ export default async function AdminPage() {
 
       {/* ERRO */}
       {erro && (
-        <div style={{ padding: '1rem 2rem' }}>
+        <div style={{ padding: '1rem 2.5rem' }}>
           <div className="alert alert-danger">
             <strong>Erro ao carregar dados:</strong> {erro}
             <br />
@@ -124,76 +213,29 @@ export default async function AdminPage() {
         </div>
       )}
 
+      {/* ABAS */}
+      <div className="adm-tabs">
+        <Link
+          href="/admin?tab=pendentes"
+          className={`adm-tab-item${abaAtiva === 'pendentes' ? ' active' : ''}`}
+        >
+          Em aberto
+          <span className="adm-tab-count">{pendentes.length}</span>
+        </Link>
+        <Link
+          href="/admin?tab=concluidos"
+          className={`adm-tab-item${abaAtiva === 'concluidos' ? ' active' : ''}`}
+        >
+          Concluídos
+          <span className="adm-tab-count">{concluidos.length}</span>
+        </Link>
+      </div>
+
       {/* TABELA */}
       <div className="tbl-wrap">
-        {rows.length === 0 && !erro ? (
-          <div className="empty">Nenhuma solicitação recebida ainda.</div>
-        ) : (
-          <table className="rtbl">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Empresa</th>
-                <th>Responsável / E-mail</th>
-                <th>Telefone</th>
-                <th>Tipo</th>
-                <th>Status</th>
-                <th>Recebido em</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => {
-                const tipo = (row.payload?.tipo as string) ?? '';
-                const tipoColor = TIPO_COLORS[tipo] ?? TIPO_COLORS.Outro;
-                const statusColor = STATUS_COLORS[row.status] ?? STATUS_COLORS.novo;
-                const nome = nomeEmpresa(row);
-                const responsavel = (row.nome_responsavel || (row.payload?.resp_nome as string) || '');
-                const email = emailContato(row);
-                const tel = telefoneContato(row);
-
-                return (
-                  <tr key={row.id}>
-                    <td style={{ color: 'var(--muted)', fontSize: 12, width: 40 }}>
-                      {row.id}
-                    </td>
-                    <td>
-                      <div style={{ fontWeight: 500, marginBottom: 2 }}>{nome}</div>
-                    </td>
-                    <td>
-                      {responsavel && (
-                        <div style={{ fontSize: 12, marginBottom: 2 }}>{responsavel}</div>
-                      )}
-                      <div style={{ fontSize: 12, color: 'var(--muted)' }}>{email}</div>
-                    </td>
-                    <td style={{ fontSize: 12, color: 'var(--muted)' }}>{tel}</td>
-                    <td>
-                      {tipo && (
-                        <span className="tbdg" style={{ background: tipoColor.bg, color: tipoColor.color }}>
-                          {tipo}
-                        </span>
-                      )}
-                    </td>
-                    <td>
-                      <span className="sbdg" style={{ background: statusColor.bg, color: statusColor.color }}>
-                        {STATUS_LABELS[row.status] ?? row.status}
-                      </span>
-                    </td>
-                    <td style={{ fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
-                      {formatarData(row.criado_em)}
-                    </td>
-                    <td>
-                      <Link href={`/admin/${row.id}`} className="btn-ver" style={{ textDecoration: 'none' }}>
-                        Ver detalhes
-                      </Link>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        )}
+        <TabelaSolicitacoes rows={rowsAtuais} />
       </div>
+
     </div>
   );
 }

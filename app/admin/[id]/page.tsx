@@ -12,6 +12,8 @@ import {
 import StatusSelect from './StatusSelect';
 import EmailButton from './EmailButton';
 import PrintButton from './PrintButton';
+import DeleteButton from './DeleteButton';
+import LogoutButton from '../LogoutButton';
 
 // ─── TIPOS ────────────────────────────────────────────────────────────────────
 
@@ -210,6 +212,7 @@ function formatarData(dataStr: string): string {
     return new Date(dataStr).toLocaleString('pt-BR', {
       day: '2-digit', month: '2-digit', year: 'numeric',
       hour: '2-digit', minute: '2-digit',
+      timeZone: 'America/Sao_Paulo',
     });
   } catch {
     return dataStr;
@@ -438,8 +441,9 @@ export default async function AdminDetalhePage({
         <div className="nav-logo">
           <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
         </div>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Link href="/admin" className="nav-tab active">Painel Admin</Link>
+          <LogoutButton />
         </div>
       </nav>
 
@@ -450,7 +454,10 @@ export default async function AdminDetalhePage({
           <Link href="/admin" className="btn-sec" style={{ display: 'inline-block', textDecoration: 'none' }}>
             ← Voltar à lista
           </Link>
-          <PrintButton />
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+            <PrintButton />
+            <DeleteButton id={row?.id ?? ''} />
+          </div>
         </div>
 
         {erro && (

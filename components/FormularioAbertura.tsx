@@ -457,6 +457,9 @@ export default function FormularioAbertura() {
     socios.reduce((acc, s) => acc + (parseFloat(s.participacao) || 0), 0),
   [socios]);
 
+  const somaOk        = Math.abs(somaParticipacao - 100) < 0.01;
+  const somaIniciada  = somaParticipacao > 0;
+
   // ── validação ──
 
   function validar(): boolean {
@@ -552,8 +555,8 @@ export default function FormularioAbertura() {
           req(`s${i}_outra_participacao`, s.outra_participacao);
         }
       });
-      if (socios.length > 1 && Math.abs(somaParticipacao - 100) >= 0.01) {
-        e['participacao_total'] = `A soma das participações deve ser 100% (atual: ${somaParticipacao.toFixed(1)}%)`;
+      if (Math.abs(somaParticipacao - 100) >= 0.01) {
+        e['participacao_total'] = `A soma das participações deve ser exatamente 100% (atual: ${somaParticipacao.toFixed(1)}%)`;
       }
     }
 
@@ -632,7 +635,7 @@ export default function FormularioAbertura() {
 
     const payload = {
       protocolo: prot,
-      data_envio: new Date().toLocaleString('pt-BR'),
+      data_envio: new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }),
       ...form,
       socios,
       arquivos,
@@ -1105,14 +1108,13 @@ export default function FormularioAbertura() {
   }
 
   function renderSocios() {
-    const somaOk = socios.length < 2 || Math.abs(somaParticipacao - 100) < 0.01;
     return (
       <>
-        {socios.length > 1 && (
+        {somaIniciada && (
           <div className={`alert ${somaOk ? 'alert-info' : 'alert-warn'}`} style={{ marginBottom: '1rem' }}>
             {somaOk
               ? <><strong>✓ Participação correta:</strong> Total = 100%</>
-              : <><strong>⚠ Participação incorreta:</strong> Soma atual = <strong>{somaParticipacao.toFixed(1)}%</strong>. O total deve ser exatamente 100%.</>}
+              : <><strong>⚠ Participação incorreta:</strong> Soma atual = <strong>{somaParticipacao.toFixed(1)}%</strong> — o total deve ser exatamente <strong>100%</strong>.</>}
           </div>
         )}
 
@@ -1360,7 +1362,7 @@ export default function FormularioAbertura() {
         <button type="button" className="btn-add" onClick={adicionarSocio}>
           + Adicionar sócio
         </button>
-        {socios.length > 1 && !somaOk && (
+        {somaIniciada && !somaOk && (
           <p className="em" style={{ marginTop: '.5rem' }}>
             A soma das participações deve ser exatamente 100% (atual: {somaParticipacao.toFixed(1)}%)
           </p>

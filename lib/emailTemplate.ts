@@ -240,7 +240,7 @@ export function gerarEmailHTML(row: Solicitacao, empresa: string): string {
   const arquivos = payload.arquivos as Record<string, ArquivoItem[]> | undefined;
 
   const dataFormatada = (() => {
-    try { return new Date(row.criado_em).toLocaleString('pt-BR'); } catch { return row.criado_em; }
+    try { return new Date(row.criado_em).toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }); } catch { return row.criado_em; }
   })();
 
   const corpo = [
@@ -282,7 +282,7 @@ export function gerarEmailHTML(row: Solicitacao, empresa: string): string {
     <!-- Rodapé -->
     <div style="padding:16px 32px;background:#f4f3ef;border-top:1px solid #e8e5e0;
                 font-size:11px;color:#aaa;text-align:center;">
-      Gerado automaticamente pelo painel A&amp;J — ${new Date().toLocaleString('pt-BR')}
+      Gerado automaticamente pelo painel A&amp;J — ${new Date().toLocaleString('pt-BR', { timeZone: 'America/Sao_Paulo', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
     </div>
   </div>
 </body>

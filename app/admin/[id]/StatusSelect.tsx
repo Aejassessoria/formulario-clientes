@@ -21,7 +21,7 @@ export default function StatusSelect({
   const [mensagem, setMensagem] = useState<{ tipo: 'ok' | 'erro'; texto: string } | null>(null);
 
   async function salvar() {
-    if (status === statusAtual && !mensagem) return;
+    if (status === statusAtual) return;
     setSalvando(true);
     setMensagem(null);
     try {
