@@ -780,7 +780,7 @@ export default function FormularioAbertura() {
             </div>
           </div>
         )}
-        <div className="fr" style={{ marginTop: '1.5rem' }}>
+        <div className="fr">
           <div className="fg">
             <Lbl req>Telefone / WhatsApp</Lbl>
             <input className={errClass('resp_tel')} type="tel" maxLength={15} placeholder="(00) 00000-0000"
@@ -855,7 +855,7 @@ export default function FormularioAbertura() {
             <ErrMsg k="numero" />
           </div>
         </div>
-        <div className="fr c3">
+        <div className="fr">
           <div className="fg">
             <Lbl>Complemento</Lbl>
             <input type="text" placeholder="Apto, Sala..." value={form.complemento}
@@ -868,6 +868,8 @@ export default function FormularioAbertura() {
               onChange={e => setField('bairro', e.target.value)} />
             <ErrMsg k="bairro" />
           </div>
+        </div>
+        <div className="fr">
           <div className="fg">
             <Lbl req>Cidade</Lbl>
             <input className={errClass('cidade')} type="text" value={form.cidade}
@@ -875,16 +877,16 @@ export default function FormularioAbertura() {
               onChange={e => setField('cidade', e.target.value)} />
             <ErrMsg k="cidade" />
           </div>
-        </div>
-        <div className="fg" style={{ maxWidth: 140 }}>
-          <Lbl req>Estado</Lbl>
-          <select className={errClass('estado')} value={form.estado}
-            disabled={endEmpReadonly && !cepEmpManual}
-            onChange={e => setField('estado', e.target.value)}>
-            <option value="">UF</option>
-            {UFS.map(u => <option key={u}>{u}</option>)}
-          </select>
-          <ErrMsg k="estado" />
+          <div className="fg">
+            <Lbl req>Estado</Lbl>
+            <select className={errClass('estado')} value={form.estado}
+              disabled={endEmpReadonly && !cepEmpManual}
+              onChange={e => setField('estado', e.target.value)}>
+              <option value="">UF</option>
+              {UFS.map(u => <option key={u}>{u}</option>)}
+            </select>
+            <ErrMsg k="estado" />
+          </div>
         </div>
 
         {/* Tipo sede */}
@@ -952,7 +954,7 @@ export default function FormularioAbertura() {
                   }
                 }}>
                 <option value="">Selecione...</option>
-                <option value="Seg a Sex 08h–18h">Comercial — Seg a Sex 08h às 18h</option>
+                <option value="Seg a Sex 08h-18h">Comercial: Seg a Sex 08h às 18h</option>
                 <option value="Seg a Sáb 08h–18h">Seg a Sáb 08h às 18h</option>
                 <option value="Seg a Dom 08h–18h">Seg a Dom 08h às 18h</option>
                 <option value="24 horas">24 horas</option>
@@ -1372,7 +1374,7 @@ export default function FormularioAbertura() {
                 <ErrMsg k={`s${i}_end_numero`} />
               </div>
             </div>
-            <div className="fr c3">
+            <div className="fr">
               <div className="fg">
                 <label>Complemento</label>
                 <input type="text" value={s.end_complemento}
@@ -1385,6 +1387,8 @@ export default function FormularioAbertura() {
                   value={s.end_bairro} onChange={e => setSocioField(i, 'end_bairro', e.target.value)} />
                 <ErrMsg k={`s${i}_end_bairro`} />
               </div>
+            </div>
+            <div className="fr">
               <div className="fg">
                 <label>Cidade <span className="req">*</span></label>
                 <input className={errClass(`s${i}_end_cidade`)} type="text"
@@ -1392,16 +1396,16 @@ export default function FormularioAbertura() {
                   value={s.end_cidade} onChange={e => setSocioField(i, 'end_cidade', e.target.value)} />
                 <ErrMsg k={`s${i}_end_cidade`} />
               </div>
-            </div>
-            <div className="fg" style={{ maxWidth: 140 }}>
-              <label>Estado <span className="req">*</span></label>
-              <select className={errClass(`s${i}_end_estado`)} value={s.end_estado}
-                disabled={endSocioReadonly[i] && !cepSocioManual[i]}
-                onChange={e => setSocioField(i, 'end_estado', e.target.value)}>
-                <option value="">UF</option>
-                {UFS.map(u => <option key={u}>{u}</option>)}
-              </select>
-              <ErrMsg k={`s${i}_end_estado`} />
+              <div className="fg">
+                <label>Estado <span className="req">*</span></label>
+                <select className={errClass(`s${i}_end_estado`)} value={s.end_estado}
+                  disabled={endSocioReadonly[i] && !cepSocioManual[i]}
+                  onChange={e => setSocioField(i, 'end_estado', e.target.value)}>
+                  <option value="">UF</option>
+                  {UFS.map(u => <option key={u}>{u}</option>)}
+                </select>
+                <ErrMsg k={`s${i}_end_estado`} />
+              </div>
             </div>
 
             <hr className="socio-hr" />
@@ -1542,7 +1546,7 @@ export default function FormularioAbertura() {
                 </div>
               )}
 
-              <div className="fg" style={{ marginTop: '1rem' }}>
+              <div className="fg">
                 <div className="lbl-row">
                   <label>Haverá retirada de pró-labore? <span className="req">*</span></label>
                   <Tip tipKey="prolabore" />
@@ -1637,7 +1641,7 @@ export default function FormularioAbertura() {
             </div>
           </div>
         )}
-        <div className="fg" style={{ marginTop: '1rem' }}>
+        <div className="fg">
           <div className="lbl-row">
             <label>Telefone para o Cartão CNPJ <span className="req">*</span></label>
             <Tip tipKey="cnpj_telefone" />
@@ -1909,7 +1913,7 @@ export default function FormularioAbertura() {
               ))}
             </div>
             <div className="prog-lbl" style={{ fontFamily: "Constantia, Georgia, 'Times New Roman', serif", letterSpacing: '0.04em' }}>
-              ETAPA {step + 1} DE {ETAPAS.length} — {etapa.title.toUpperCase()}
+              ETAPA {step + 1} DE {ETAPAS.length}: {etapa.title.toUpperCase()}
             </div>
           </div>
 

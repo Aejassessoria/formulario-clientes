@@ -48,8 +48,11 @@ nav{background:rgba(48,50,62,.96);backdrop-filter:blur(10px);height:130px;displa
 
 /* FIELD GROUPS */
 .fg{margin-bottom:1rem;}
-.fr{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.fg:last-child{margin-bottom:0;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1rem;}
+.fr:last-child{margin-bottom:0;}
 .fr.c3{grid-template-columns:1fr 1fr 1fr;}
+.fr .fg{margin-bottom:0;}
 
 /* LABELS */
 label{display:block;font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:4px;}
@@ -82,8 +85,10 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
 .btn-manual:hover{border-color:var(--dark);color:var(--dark);}
 
 /* CONDITIONAL BLOCKS */
-.cond{background:var(--off);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--rs);padding:1.1rem 1.1rem .1rem;margin-top:.6rem;}
+.cond{background:var(--off);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--rs);padding:1.1rem 1.1rem 1rem;margin-top:.75rem;}
 .cond-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;}
+.cond .fg:last-child{margin-bottom:0;}
+.cond .fr:last-child{margin-bottom:0;}
 
 /* ALERTS */
 .alert{border-radius:var(--rs);padding:.75rem 1rem;font-size:12.5px;line-height:1.6;}
@@ -121,8 +126,9 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
 .upload-item{font-size:11.5px;color:var(--success);background:var(--success-bg);padding:3px 8px;border-radius:3px;}
 
 /* SÓCIOS */
-.socio-blk{border:1px solid var(--border);border-radius:var(--rs);padding:1.25rem;margin-bottom:.9rem;background:var(--off);}
-.socio-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem;}
+.socio-blk{border:1px solid var(--border);border-radius:var(--rs);padding:1.5rem;margin-bottom:1rem;background:var(--off);}
+.socio-blk:last-of-type{margin-bottom:0;}
+.socio-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;flex-wrap:wrap;gap:.5rem;}
 .socio-tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--dark);}
 .btn-rm{font-size:11px;color:var(--danger);background:var(--danger-bg);border:none;border-radius:3px;padding:3px 10px;cursor:pointer;font-family:'Jost',sans-serif;}
 .btn-add{width:100%;padding:10px;border:1.5px dashed var(--bstrong);border-radius:var(--rs);background:transparent;color:var(--muted);font-family:'Jost',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;}
