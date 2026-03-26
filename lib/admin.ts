@@ -122,6 +122,9 @@ export type Rascunho = {
 };
 
 export async function listarRascunhos(): Promise<Rascunho[]> {
+  await pool.query(
+    "DELETE FROM rascunhos WHERE criado_em < NOW() - INTERVAL '7 days'"
+  );
   const { rows } = await pool.query<Rascunho>(
     'SELECT id, nome, email, telefone, criado_em FROM rascunhos ORDER BY criado_em DESC'
   );

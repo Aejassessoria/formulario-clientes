@@ -44,7 +44,6 @@ type FormData = {
 
 const ETAPAS = [
   { id: 'responsavel', title: 'Dados do Responsável',          sub: 'Informações pessoais de quem abre a empresa' },
-  { id: 'tipo',        title: 'Tipo de Empresa',               sub: 'Selecione o formato jurídico do negócio' },
   { id: 'empresa',     title: 'Nome e Endereço',               sub: 'Razão social e localização da empresa' },
   { id: 'atividade',   title: 'Atividade da Empresa',          sub: 'O que sua empresa irá exercer' },
   { id: 'capital',     title: 'Capital Social',                sub: 'Valor investido para início das operações' },
@@ -257,6 +256,7 @@ type UploadedFiles = Record<string, File[]>;
 
 export default function FormularioAbertura() {
   const [step, setStep] = useState(0);
+  const [horarioOutro, setHorarioOutro] = useState(false);
   const [enviado, setEnviado] = useState(false);
   const [protocolo, setProtocolo] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -279,14 +279,27 @@ export default function FormularioAbertura() {
   const [showForm, setShowForm] = useState(false);
   const [salvoBanner, setSalvoBanner] = useState(false);
   const [salvoMsg, setSalvoMsg] = useState('');
+  const [podeAutoSalvar, setPodeAutoSalvar] = useState(false);
   const rascunhoEnviado = useRef(false);
 
+  // Detecta rascunho salvo ao montar
   useEffect(() => {
     const saved = localStorage.getItem('form-abertura');
     if (saved) {
       setSalvoBanner(true);
+    } else {
+      setPodeAutoSalvar(true);
     }
   }, []);
+
+  // Auto-save com debounce de 2 segundos
+  useEffect(() => {
+    if (!podeAutoSalvar) return;
+    const timer = setTimeout(() => {
+      localStorage.setItem('form-abertura', JSON.stringify({ form, socios, step }));
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, [form, socios, step, podeAutoSalvar]);
 
   const etapa = ETAPAS[step];
 
@@ -498,9 +511,6 @@ export default function FormularioAbertura() {
         req('resp_regime_casamento', form.resp_regime_casamento);
     }
 
-    if (etapa.id === 'tipo') {
-      req('tipo', form.tipo, 'Selecione o tipo de empresa');
-    }
 
     if (etapa.id === 'empresa') {
       req('razao_social', form.razao_social);
@@ -516,7 +526,7 @@ export default function FormularioAbertura() {
         req('area_total', form.area_total);
         req('habite_se', form.habite_se);
         req('inscricao_imobiliaria', form.inscricao_imobiliaria);
-        req('horario_funcionamento', form.horario_funcionamento);
+        req('horario_funcionamento', form.horario_funcionamento, horarioOutro ? 'Descreva o horário de funcionamento' : 'Selecione o horário de funcionamento');
       }
       if (form.atendimento_publico === 'nao') {
         req('area_total_fiscal', form.area_total_fiscal);
@@ -768,7 +778,7 @@ export default function FormularioAbertura() {
             </div>
           </div>
         )}
-        <div className="fr">
+        <div className="fr" style={{ marginTop: '1.5rem' }}>
           <div className="fg">
             <Lbl req>Telefone / WhatsApp</Lbl>
             <input className={errClass('resp_tel')} type="tel" maxLength={15} placeholder="(00) 00000-0000"
@@ -790,31 +800,6 @@ export default function FormularioAbertura() {
     );
   }
 
-  function renderTipo() {
-    const tipos = [
-      { id: 'MEI',   nome: 'MEI',               desc: 'Microempreendedor Individual. Faturamento até R$ 81 mil/ano.' },
-      { id: 'LTDA',  nome: 'LTDA / Simples Nacional', desc: 'Sociedade Limitada. Ideal para a maioria dos negócios.', pop: true },
-      { id: 'SA',    nome: 'S/A',               desc: 'Sociedade Anônima. Para negócios de maior porte.' },
-      { id: 'Outro', nome: 'Outro / Não sei',   desc: 'Nos conte sobre o negócio e indicamos o melhor formato.' },
-    ];
-    return (
-      <>
-        <div className="tipo-grid">
-          {tipos.map(t => (
-            <label key={t.id}
-              className={`tipo-card${form.tipo === t.id ? ' sel' : ''}`}
-              onClick={() => { setField('tipo', t.id); }}>
-              <input type="radio" name="tipo" value={t.id} readOnly checked={form.tipo === t.id} />
-              {t.pop && <span className="pop">Popular</span>}
-              <strong>{t.nome}</strong>
-              <span>{t.desc}</span>
-            </label>
-          ))}
-        </div>
-        <ErrMsg k="tipo" />
-      </>
-    );
-  }
 
   function renderEmpresa() {
     return (
@@ -908,7 +893,6 @@ export default function FormularioAbertura() {
             <option value="">Selecione...</option>
             <option value="proprio">Próprio</option>
             <option value="alugado">Alugado</option>
-            <option value="residencial">Residencial (home office)</option>
           </select>
           <ErrMsg k="sede_tipo" />
         </div>
@@ -942,7 +926,6 @@ export default function FormularioAbertura() {
                 <option value="">Selecione...</option>
                 <option value="sim">Sim, possuo o Habite-se comercial</option>
                 <option value="nao">Não possuo ainda (vou solicitar ao proprietário)</option>
-                <option value="na">Não se aplica ao imóvel</option>
               </select>
               <ErrMsg k="habite_se" />
             </div>
@@ -954,10 +937,35 @@ export default function FormularioAbertura() {
             </div>
             <div className="fg">
               <Lbl req tip="horario_funcionamento">Horário de funcionamento</Lbl>
-              <input className={errClass('horario_funcionamento')} type="text" placeholder="Ex: Seg a Sex 08h–18h"
-                value={form.horario_funcionamento}
-                onChange={e => setField('horario_funcionamento', e.target.value)} />
+              <select
+                className={errClass('horario_funcionamento')}
+                value={horarioOutro ? 'outro' : form.horario_funcionamento}
+                onChange={e => {
+                  if (e.target.value === 'outro') {
+                    setHorarioOutro(true);
+                    setField('horario_funcionamento', '');
+                  } else {
+                    setHorarioOutro(false);
+                    setField('horario_funcionamento', e.target.value);
+                  }
+                }}>
+                <option value="">Selecione...</option>
+                <option value="Seg a Sex 08h–18h">Comercial — Seg a Sex 08h às 18h</option>
+                <option value="Seg a Sáb 08h–18h">Seg a Sáb 08h às 18h</option>
+                <option value="Seg a Dom 08h–18h">Seg a Dom 08h às 18h</option>
+                <option value="24 horas">24 horas</option>
+                <option value="outro">Outro (especificar abaixo)</option>
+              </select>
               <ErrMsg k="horario_funcionamento" />
+              {horarioOutro && (
+                <input
+                  className={errClass('horario_funcionamento')}
+                  type="text"
+                  placeholder="Descreva o horário de funcionamento *"
+                  style={{ marginTop: '0.5rem' }}
+                  value={form.horario_funcionamento}
+                  onChange={e => setField('horario_funcionamento', e.target.value)} />
+              )}
             </div>
           </div>
         )}
@@ -1748,7 +1756,6 @@ export default function FormularioAbertura() {
   function renderEtapaAtual() {
     switch (etapa.id) {
       case 'responsavel': return renderResponsavel();
-      case 'tipo':        return renderTipo();
       case 'empresa':     return renderEmpresa();
       case 'atividade':   return renderAtividade();
       case 'capital':     return renderCapital();
@@ -1790,6 +1797,7 @@ export default function FormularioAbertura() {
                   } catch {}
                 }
                 setSalvoBanner(false);
+                setPodeAutoSalvar(true);
                 setShowForm(true);
               }}
               style={{ background: '#fff', color: '#30323E', border: 'none', padding: '6px 16px', cursor: 'pointer', fontFamily: "Constantia, Georgia, 'Times New Roman', serif" }}
@@ -1798,7 +1806,7 @@ export default function FormularioAbertura() {
             </button>
             <button
               type="button"
-              onClick={() => { localStorage.removeItem('form-abertura'); setSalvoBanner(false); }}
+              onClick={() => { localStorage.removeItem('form-abertura'); setSalvoBanner(false); setPodeAutoSalvar(true); }}
               style={{ background: 'transparent', color: '#fff', border: '1px solid #fff', padding: '6px 16px', cursor: 'pointer', fontFamily: "Constantia, Georgia, 'Times New Roman', serif" }}
             >
               Começar do zero

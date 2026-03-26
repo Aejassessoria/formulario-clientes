@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import LogoutButton from './LogoutButton';
 import DeleteRowButton from './DeleteRowButton';
+import DeleteRascunhoButton from './DeleteRascunhoButton';
 import {
   listarSolicitacoes,
   listarRascunhos,
@@ -56,6 +57,7 @@ function TabelaRascunhos({ rows }: { rows: Rascunho[] }) {
           <th>E-mail</th>
           <th>Telefone</th>
           <th>Iniciado em</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -69,6 +71,9 @@ function TabelaRascunhos({ rows }: { rows: Rascunho[] }) {
             <td style={{ fontSize: 12, color: 'var(--muted)' }}>{row.telefone || '—'}</td>
             <td style={{ fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
               {formatarData(row.criado_em)}
+            </td>
+            <td>
+              <DeleteRascunhoButton id={row.id} />
             </td>
           </tr>
         ))}
