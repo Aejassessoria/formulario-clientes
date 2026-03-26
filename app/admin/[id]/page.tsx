@@ -209,11 +209,9 @@ const STATUS_TEXT: Record<string, string> = {
 
 function formatarData(dataStr: string): string {
   try {
-    return new Date(dataStr).toLocaleString('pt-BR', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
-      timeZone: 'America/Sao_Paulo',
-    });
+    const d = new Date(new Date(dataStr).getTime() - 3 * 60 * 60 * 1000);
+    const p = (n: number) => String(n).padStart(2, '0');
+    return `${p(d.getUTCDate())}/${p(d.getUTCMonth() + 1)}/${d.getUTCFullYear()}, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
   } catch {
     return dataStr;
   }

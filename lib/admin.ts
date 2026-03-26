@@ -112,3 +112,18 @@ export async function contarPorStatus(): Promise<Record<string, number>> {
   }
   return contagem;
 }
+
+export type Rascunho = {
+  id: string;
+  nome: string | null;
+  email: string | null;
+  telefone: string | null;
+  criado_em: string;
+};
+
+export async function listarRascunhos(): Promise<Rascunho[]> {
+  const { rows } = await pool.query<Rascunho>(
+    'SELECT id, nome, email, telefone, criado_em FROM rascunhos ORDER BY criado_em DESC'
+  );
+  return rows;
+}

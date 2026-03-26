@@ -3,11 +3,13 @@ import LogoutButton from './LogoutButton';
 import DeleteRowButton from './DeleteRowButton';
 import {
   listarSolicitacoes,
+  listarRascunhos,
   contarPorStatus,
   nomeEmpresa,
   emailContato,
   telefoneContato,
   type Solicitacao,
+  type Rascunho,
 } from '@/lib/admin';
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
@@ -33,14 +35,46 @@ const TIPO_COLORS: Record<string, { bg: string; color: string }> = {
 
 function formatarData(dataStr: string): string {
   try {
-    return new Date(dataStr).toLocaleString('pt-BR', {
-      day: '2-digit', month: '2-digit', year: 'numeric',
-      hour: '2-digit', minute: '2-digit',
-      timeZone: 'America/Sao_Paulo',
-    });
+    const d = new Date(new Date(dataStr).getTime() - 3 * 60 * 60 * 1000);
+    const p = (n: number) => String(n).padStart(2, '0');
+    return `${p(d.getUTCDate())}/${p(d.getUTCMonth() + 1)}/${d.getUTCFullYear()}, ${p(d.getUTCHours())}:${p(d.getUTCMinutes())}`;
   } catch {
     return dataStr;
   }
+}
+
+function TabelaRascunhos({ rows }: { rows: Rascunho[] }) {
+  if (rows.length === 0) {
+    return <div className="empty">Nenhum rascunho encontrado.</div>;
+  }
+  return (
+    <table className="rtbl">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Nome</th>
+          <th>E-mail</th>
+          <th>Telefone</th>
+          <th>Iniciado em</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr key={row.id}>
+            <td style={{ color: 'var(--muted)', fontSize: 11, width: 40 }}>
+              {row.id.slice(0, 8)}…
+            </td>
+            <td>{row.nome || '—'}</td>
+            <td style={{ fontSize: 12, color: 'var(--muted)' }}>{row.email || '—'}</td>
+            <td style={{ fontSize: 12, color: 'var(--muted)' }}>{row.telefone || '—'}</td>
+            <td style={{ fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+              {formatarData(row.criado_em)}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
 function TabelaSolicitacoes({ rows }: { rows: Solicitacao[] }) {
@@ -127,16 +161,18 @@ export default async function AdminPage({
   searchParams: Promise<{ tab?: string }>;
 }) {
   const { tab } = await searchParams;
-  const abaAtiva = tab === 'concluidos' ? 'concluidos' : 'pendentes';
+  const abaAtiva = tab === 'concluidos' ? 'concluidos' : tab === 'rascunhos' ? 'rascunhos' : 'pendentes';
 
   let rows: Solicitacao[] = [];
   let contagem: Record<string, number> = {};
+  let rascunhos: Rascunho[] = [];
   let erro: string | null = null;
 
   try {
-    [rows, contagem] = await Promise.all([
+    [rows, contagem, rascunhos] = await Promise.all([
       listarSolicitacoes(),
       contarPorStatus(),
+      listarRascunhos(),
     ]);
   } catch (e) {
     erro = e instanceof Error ? e.message : 'Erro ao carregar dados.';
@@ -223,6 +259,13 @@ export default async function AdminPage({
           <span className="adm-tab-count">{pendentes.length}</span>
         </Link>
         <Link
+          href="/admin?tab=rascunhos"
+          className={`adm-tab-item${abaAtiva === 'rascunhos' ? ' active' : ''}`}
+        >
+          Em preenchimento
+          <span className="adm-tab-count">{rascunhos.length}</span>
+        </Link>
+        <Link
           href="/admin?tab=concluidos"
           className={`adm-tab-item${abaAtiva === 'concluidos' ? ' active' : ''}`}
         >
@@ -233,7 +276,9 @@ export default async function AdminPage({
 
       {/* TABELA */}
       <div className="tbl-wrap">
-        <TabelaSolicitacoes rows={rowsAtuais} />
+        {abaAtiva === 'rascunhos'
+          ? <TabelaRascunhos rows={rascunhos} />
+          : <TabelaSolicitacoes rows={rowsAtuais} />}
       </div>
 
     </div>

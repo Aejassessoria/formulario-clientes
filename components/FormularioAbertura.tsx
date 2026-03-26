@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
@@ -37,6 +37,7 @@ type FormData = {
   regime_tributario: string; tem_funcionarios: string; func_quantidade: string;
   cnpj_email: string; cnpj_telefone: string;
   decl1: boolean; decl2: boolean; decl3: boolean;
+  distribuicao_lucros: string;
 };
 
 // ─── CONSTANTES ──────────────────────────────────────────────────────────────
@@ -84,6 +85,7 @@ const FORM_VAZIO: FormData = {
   regime_tributario:'',tem_funcionarios:'',func_quantidade:'',
   cnpj_email:'',cnpj_telefone:'',
   decl1:false,decl2:false,decl3:false,
+  distribuicao_lucros:'',
 };
 
 const TIPS: Record<string, string> = {
@@ -92,9 +94,10 @@ const TIPS: Record<string, string> = {
   cep: 'Ao digitar o CEP, o endereço é preenchido automaticamente. Se não encontrar, clique em "Preencher manual".',
   sede_tipo: 'Informe se o imóvel pertence à empresa ou ao sócio (próprio), se é alugado de terceiro, ou se é residencial.',
   atendimento_publico: 'Se haverá clientes no local presencialmente, serão necessários alvará de funcionamento, habite-se e medidas de segurança.',
-  capital_social: 'Valor que os sócios investem para iniciar a empresa. Não precisa estar em dinheiro físico imediatamente.',
+  capital_social: 'Valor total que os sócios investem para constituir a empresa. É o capital total declarado no contrato social — não precisa estar em dinheiro físico imediatamente.',
   capital_social_extenso: 'Este campo é obrigatório para o contrato social. É preenchido automaticamente ao digitar o valor.',
   capital_integralizacao: 'Integralizar significa disponibilizar o capital à empresa. À vista = tudo agora. Parcelado = parte agora, restante depois com prazo definido.',
+  capital_inicial: 'Informe quanto será disponibilizado à empresa no ato da abertura. O restante (diferença até o capital total) será integralizado nas parcelas e prazo informados abaixo.',
   inscricao_imobiliaria: 'Número que identifica o imóvel no cadastro da prefeitura. Consta no carnê de IPTU.',
   habite_se: 'Documento da prefeitura que certifica que o imóvel pode ser usado para fins comerciais.',
   horario_funcionamento: 'Necessário para o alvará de funcionamento.',
@@ -111,6 +114,8 @@ const TIPS: Record<string, string> = {
   regime_tributario: 'Define como os impostos da empresa serão calculados. Simples Nacional é o mais comum para pequenas empresas.',
   cnpj_email: 'Aparecerá no Cartão CNPJ e será usado pela Receita Federal para comunicações.',
   cnpj_telefone: 'Aparecerá no Cartão CNPJ.',
+  natureza_juridica: 'Define a estrutura legal da sua empresa. Ex: MEI, LTDA, SAS. Nossos contadores podem te orientar na escolha certa.',
+  distribuicao_lucros: 'O Código Civil permite que os sócios recebam lucros em proporção diferente da participação no capital. Escolha Proporcional se cada sócio receberá conforme sua cota. Escolha Desproporcional se quiserem definir percentuais diferentes.',
 };
 
 // ─── MÁSCARAS ────────────────────────────────────────────────────────────────
@@ -130,12 +135,13 @@ function maskCNPJ(v: string): string {
   if (v.length > 15) v = v.slice(0,15) + '-' + v.slice(15,17);
   return v.slice(0,18);
 }
-function maskTel(v: string): string {
-  v = v.replace(/\D/g, '');
-  if (v.length > 0) v = '(' + v;
-  if (v.length > 3) v = v.slice(0,3) + ') ' + v.slice(3);
-  if (v.length > 9) v = v.slice(0,9) + '-' + v.slice(9,14);
-  return v.slice(0,14);
+function maskTel(value: string): string {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  if (digits.length === 0) return '';
+  if (digits.length <= 2) return '(' + digits;
+  if (digits.length <= 6) return '(' + digits.slice(0, 2) + ') ' + digits.slice(2);
+  if (digits.length <= 10) return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 6) + '-' + digits.slice(6);
+  return '(' + digits.slice(0, 2) + ') ' + digits.slice(2, 7) + '-' + digits.slice(7);
 }
 function maskCEP(v: string): string {
   v = v.replace(/\D/g, '');
@@ -269,6 +275,18 @@ export default function FormularioAbertura() {
   const [cepSocioStatus, setCepSocioStatus] = useState<CepStatus[]>([{ text: '', color: '' }]);
   const [cepSocioManual, setCepSocioManual] = useState<boolean[]>([false]);
   const [endSocioReadonly, setEndSocioReadonly] = useState<boolean[]>([false]);
+
+  const [showForm, setShowForm] = useState(false);
+  const [salvoBanner, setSalvoBanner] = useState(false);
+  const [salvoMsg, setSalvoMsg] = useState('');
+  const rascunhoEnviado = useRef(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('form-abertura');
+    if (saved) {
+      setSalvoBanner(true);
+    }
+  }, []);
 
   const etapa = ETAPAS[step];
 
@@ -558,6 +576,9 @@ export default function FormularioAbertura() {
       if (Math.abs(somaParticipacao - 100) >= 0.01) {
         e['participacao_total'] = `A soma das participações deve ser exatamente 100% (atual: ${somaParticipacao.toFixed(1)}%)`;
       }
+      if (socios.length > 1) {
+        req('distribuicao_lucros', form.distribuicao_lucros, 'Informe como serão distribuídos os lucros');
+      }
     }
 
     if (etapa.id === 'gestao') {
@@ -592,6 +613,18 @@ export default function FormularioAbertura() {
 
   function avancar() {
     if (!validar()) { window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
+    if (step === 0 && !rascunhoEnviado.current) {
+      rascunhoEnviado.current = true;
+      fetch('/api/rascunhos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nome: form.resp_nome,
+          email: form.resp_email,
+          telefone: form.resp_tel,
+        }),
+      }).catch(() => {});
+    }
     if (step < ETAPAS.length - 1) {
       setStep(s => s + 1);
       setErros({});
@@ -651,6 +684,7 @@ export default function FormularioAbertura() {
       if (!res.ok || !resultado.ok) { alert('Erro ao enviar a solicitação.'); return; }
       setProtocolo(prot);
       setEnviado(true);
+      localStorage.removeItem('form-abertura');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch {
       alert('Não foi possível enviar a solicitação.');
@@ -668,6 +702,12 @@ export default function FormularioAbertura() {
 
   function errClass(k: string) {
     return erros[k] ? 'err' : '';
+  }
+
+  function salvarProgresso() {
+    localStorage.setItem('form-abertura', JSON.stringify({ form, socios, step }));
+    setSalvoMsg('Progresso salvo!');
+    setTimeout(() => setSalvoMsg(''), 3000);
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -731,7 +771,7 @@ export default function FormularioAbertura() {
         <div className="fr">
           <div className="fg">
             <Lbl req>Telefone / WhatsApp</Lbl>
-            <input className={errClass('resp_tel')} type="tel" maxLength={14} placeholder="(00) 00000-0000"
+            <input className={errClass('resp_tel')} type="tel" maxLength={15} placeholder="(00) 00000-0000"
               value={form.resp_tel}
               onChange={e => handleMasked('resp_tel', e.target.value, maskTel)} />
             <ErrMsg k="resp_tel" />
@@ -743,6 +783,9 @@ export default function FormularioAbertura() {
             <ErrMsg k="resp_email" />
           </div>
         </div>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: '1rem' }}>
+          Seus dados iniciais (nome, e-mail e telefone) são salvos automaticamente ao avançar esta etapa para sua comodidade.
+        </p>
       </>
     );
   }
@@ -1033,6 +1076,13 @@ export default function FormularioAbertura() {
               </select>
               <ErrMsg k="ind_compras_outros_estados" />
             </div>
+            {form.ind_compras_outros_estados === 'sim' && (
+              <div className="cond">
+                <div className="alert alert-warn" style={{ margin: 0 }}>
+                  <strong>⚠ DIFAL:</strong> Compras de outros estados podem gerar obrigação de recolhimento do Diferencial de Alíquotas. Nossa equipe irá orientar.
+                </div>
+              </div>
+            )}
           </div>
         )}
       </>
@@ -1043,7 +1093,7 @@ export default function FormularioAbertura() {
     return (
       <>
         <div className="fg">
-          <Lbl req tip="capital_social">Valor do capital social</Lbl>
+          <Lbl req tip="capital_social">Valor total do capital social</Lbl>
           <input className={errClass('capital_social')} type="text" placeholder="0,00"
             value={form.capital_social}
             onChange={e => {
@@ -1075,34 +1125,77 @@ export default function FormularioAbertura() {
           <ErrMsg k="capital_integralizacao" />
         </div>
 
-        {form.capital_integralizacao === 'parcial' && (
-          <div className="cond">
-            <div className="cond-lbl">Integralização parcelada</div>
-            <div className="fg">
-              <label>Valor integralizado agora <span className="req">*</span></label>
-              <input className={errClass('capital_inicial')} type="text" placeholder="0,00"
-                value={form.capital_inicial}
-                onChange={e => setField('capital_inicial', maskMoney(e.target.value))} />
-              <ErrMsg k="capital_inicial" />
-            </div>
-            <div className="fr">
+        {form.capital_integralizacao === 'parcial' && (() => {
+          const totalNum   = moneyToNumber(form.capital_social);
+          const inicialNum = moneyToNumber(form.capital_inicial);
+          const restanteNum = totalNum - inicialNum;
+          const restanteStr = restanteNum > 0
+            ? restanteNum.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+            : null;
+          const inicialOk = inicialNum > 0 && inicialNum < totalNum;
+
+          return (
+            <div className="cond">
+              <div className="cond-lbl">Integralização parcelada</div>
+
               <div className="fg">
-                <label>Em quantas parcelas? <span className="req">*</span></label>
-                <input className={errClass('capital_parcelas')} type="number" min={1}
-                  value={form.capital_parcelas}
-                  onChange={e => setField('capital_parcelas', e.target.value)} />
-                <ErrMsg k="capital_parcelas" />
+                <Lbl req tip="capital_inicial">Valor integralizado agora</Lbl>
+                <input className={errClass('capital_inicial')} type="text" placeholder="0,00"
+                  value={form.capital_inicial}
+                  onChange={e => setField('capital_inicial', maskMoney(e.target.value))} />
+                <ErrMsg k="capital_inicial" />
               </div>
-              <div className="fg">
-                <label>Prazo final para integralização <span className="req">*</span></label>
-                <input className={errClass('capital_prazo')} type="text" placeholder="dd/mm/aaaa" maxLength={10}
-                  value={form.capital_prazo}
-                  onChange={e => setField('capital_prazo', maskDate(e.target.value))} />
-                <ErrMsg k="capital_prazo" />
-              </div>
+
+              {inicialNum > 0 && (
+                inicialNum >= totalNum ? (
+                  <div className="alert alert-warn" style={{ marginTop: '0.5rem' }}>
+                    O valor integralizado agora não pode ser igual ou maior que o capital social total. Reduza o valor ou escolha "À vista".
+                  </div>
+                ) : (
+                  <div style={{
+                    background: '#f0f4f0', border: '1px solid #c8d8c8',
+                    borderRadius: 6, padding: '0.75rem 1rem', marginTop: '0.5rem',
+                  }}>
+                    <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>Resumo da integralização</div>
+                    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                      <div>
+                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>Integralizado agora</div>
+                        <div style={{ fontWeight: 600 }}>R$ {form.capital_inicial}</div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>A integralizar depois</div>
+                        <div style={{ fontWeight: 600 }}>R$ {restanteStr}</div>
+                      </div>
+                      <div>
+                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>Capital total</div>
+                        <div style={{ fontWeight: 600 }}>R$ {form.capital_social}</div>
+                      </div>
+                    </div>
+                  </div>
+                )
+              )}
+
+              {inicialOk && (
+                <div className="fr" style={{ marginTop: '1rem' }}>
+                  <div className="fg">
+                    <label>Em quantas parcelas será integralizado o restante? <span className="req">*</span></label>
+                    <input className={errClass('capital_parcelas')} type="number" min={1}
+                      value={form.capital_parcelas}
+                      onChange={e => setField('capital_parcelas', e.target.value)} />
+                    <ErrMsg k="capital_parcelas" />
+                  </div>
+                  <div className="fg">
+                    <label>Prazo final para integralização <span className="req">*</span></label>
+                    <input className={errClass('capital_prazo')} type="text" placeholder="dd/mm/aaaa" maxLength={10}
+                      value={form.capital_prazo}
+                      onChange={e => setField('capital_prazo', maskDate(e.target.value))} />
+                    <ErrMsg k="capital_prazo" />
+                  </div>
+                </div>
+              )}
             </div>
-          </div>
-        )}
+          );
+        })()}
       </>
     );
   }
@@ -1217,7 +1310,7 @@ export default function FormularioAbertura() {
               </div>
               <div className="fg">
                 <label>Telefone / WhatsApp</label>
-                <input type="tel" maxLength={14} placeholder="(00) 00000-0000"
+                <input type="tel" maxLength={15} placeholder="(00) 00000-0000"
                   value={s.tel} onChange={e => setSocioField(i, 'tel', maskTel(e.target.value))} />
               </div>
             </div>
@@ -1366,6 +1459,21 @@ export default function FormularioAbertura() {
           <p className="em" style={{ marginTop: '.5rem' }}>
             A soma das participações deve ser exatamente 100% (atual: {somaParticipacao.toFixed(1)}%)
           </p>
+        )}
+        {socios.length > 1 && (
+          <div className="fg" style={{ marginTop: '1.5rem' }}>
+            <Lbl req tip="distribuicao_lucros">Distribuição de Lucros</Lbl>
+            <select
+              className={errClass('distribuicao_lucros')}
+              value={form.distribuicao_lucros}
+              onChange={e => setField('distribuicao_lucros', e.target.value)}
+            >
+              <option value="">Selecione...</option>
+              <option value="proporcional">Proporcional às cotas de capital</option>
+              <option value="desproporcional">Desproporcional (percentuais definidos entre os sócios)</option>
+            </select>
+            <ErrMsg k="distribuicao_lucros" />
+          </div>
         )}
       </>
     );
@@ -1524,7 +1632,7 @@ export default function FormularioAbertura() {
             <label>Telefone para o Cartão CNPJ <span className="req">*</span></label>
             <Tip tipKey="cnpj_telefone" />
           </div>
-          <input className={errClass('cnpj_telefone')} type="tel" maxLength={14} placeholder="(00) 00000-0000"
+          <input className={errClass('cnpj_telefone')} type="tel" maxLength={15} placeholder="(00) 00000-0000"
             value={form.cnpj_telefone}
             onChange={e => handleMasked('cnpj_telefone', e.target.value, maskTel)} />
           <ErrMsg k="cnpj_telefone" />
@@ -1616,31 +1724,18 @@ export default function FormularioAbertura() {
 
   if (enviado) {
     return (
-      <div>
-        <nav>
-          <div className="nav-logo">
-            <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f3', padding: '2rem' }}>
+        <div className="success" style={{ display: 'block', maxWidth: 480, width: '100%' }}>
+          <div className="suc-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#30323E" strokeWidth={1.8}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
           </div>
-        </nav>
-        <section className="hero">
-          <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
-          <h1>Abertura de Empresa</h1>
-          <p>Preencha as informações abaixo. Nossos contadores irão analisar seus dados e entrar em contato para finalizar o processo.</p>
-          <div className="hero-line" />
-        </section>
-        <div className="form-wrap">
-          <div className="success" style={{ display: 'block' }}>
-            <div className="suc-icon">
-              <svg fill="none" viewBox="0 0 24 24" stroke="#1a6b4a" strokeWidth={1.8}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-            <div className="suc-line" />
-            <h2>Solicitação Recebida</h2>
-            <p>Suas informações foram enviadas com sucesso. Nossa equipe entrará em contato em breve para dar continuidade ao processo.</p>
-            {protocolo && <div className="suc-code">{protocolo}</div>}
-            {protocolo && <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: '.25rem' }}>Guarde este número de protocolo.</p>}
-          </div>
+          <div className="suc-line" />
+          <h2 style={{ fontFamily: "Constantia, Georgia, 'Times New Roman', serif" }}>Formulário enviado com sucesso!</h2>
+          <p>Seus dados foram recebidos. Nossa equipe entrará em contato em até 2 dias úteis pelo telefone ou WhatsApp cadastrado para dar continuidade ao processo.</p>
+          {protocolo && <div className="suc-code">{protocolo}</div>}
+          {protocolo && <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: '.25rem' }}>Guarde este número de protocolo.</p>}
         </div>
       </div>
     );
@@ -1667,50 +1762,185 @@ export default function FormularioAbertura() {
   }
 
   return (
-    <div>
-      <nav>
-        <div className="nav-logo">
-          <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
+    <>
+      {salvoBanner && (
+        <div style={{
+          background: '#30323E',
+          color: '#fff',
+          padding: '1rem 2rem',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16,
+          flexWrap: 'wrap' as const,
+          fontFamily: "Constantia, Georgia, 'Times New Roman', serif",
+        }}>
+          <span>Encontramos um formulário salvo. Deseja continuar de onde parou?</span>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              type="button"
+              onClick={() => {
+                const saved = localStorage.getItem('form-abertura');
+                if (saved) {
+                  try {
+                    const parsed = JSON.parse(saved);
+                    if (parsed.form) setForm(parsed.form);
+                    if (parsed.socios) setSocios(parsed.socios);
+                    if (typeof parsed.step === 'number') setStep(parsed.step);
+                  } catch {}
+                }
+                setSalvoBanner(false);
+                setShowForm(true);
+              }}
+              style={{ background: '#fff', color: '#30323E', border: 'none', padding: '6px 16px', cursor: 'pointer', fontFamily: "Constantia, Georgia, 'Times New Roman', serif" }}
+            >
+              Sim, continuar
+            </button>
+            <button
+              type="button"
+              onClick={() => { localStorage.removeItem('form-abertura'); setSalvoBanner(false); }}
+              style={{ background: 'transparent', color: '#fff', border: '1px solid #fff', padding: '6px 16px', cursor: 'pointer', fontFamily: "Constantia, Georgia, 'Times New Roman', serif" }}
+            >
+              Começar do zero
+            </button>
+          </div>
         </div>
-      </nav>
+      )}
 
-      <section className="hero">
-        <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
-        <h1>Abertura de Empresa</h1>
-        <p>Preencha as informações abaixo. Nossos contadores irão analisar seus dados e entrar em contato para finalizar o processo.</p>
-        <div className="hero-line" />
-      </section>
-
-      <div className="prog-wrap">
-        <div className="prog-steps">
-          {ETAPAS.map((_, i) => (
-            <div key={i} className={`prog-dot${i < step ? ' done' : i === step ? ' active' : ''}`} />
-          ))}
+      {!showForm ? (
+        <div style={{
+          background: '#30323E',
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column' as const,
+        }}>
+          {/* Conteúdo centralizado — logo + texto + botão em bloco único */}
+          <div style={{
+            flex: 1,
+            display: 'flex',
+            flexDirection: 'column' as const,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '3rem 2rem',
+            gap: '1.5rem',
+          }}>
+            <img
+              src="/logo-aj-transparente.png"
+              alt="A&J Assessoria Contábil"
+              style={{ maxWidth: 'min(300px, 60vw)' }}
+            />
+            <div style={{ width: '100%', maxWidth: 1, height: 1, background: 'rgba(255,255,255,0.2)', margin: '0.5rem 0' }} />
+            <h1 style={{
+              fontFamily: "Constantia, Georgia, 'Times New Roman', serif",
+              color: '#fff',
+              fontSize: 'clamp(1.5rem, 4vw, 2.2rem)',
+              textAlign: 'center' as const,
+              margin: 0,
+            }}>
+              Abertura de Empresa
+            </h1>
+            <p style={{
+              fontFamily: "Constantia, Georgia, 'Times New Roman', serif",
+              color: 'rgba(255,255,255,0.75)',
+              fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+              textAlign: 'center' as const,
+              maxWidth: 480,
+              lineHeight: 1.75,
+              margin: 0,
+            }}>
+              Para garantir agilidade no processo, preencha todos os campos com atenção. Dados incorretos ou incompletos podem atrasar a abertura da sua empresa.
+            </p>
+            <button
+              type="button"
+              onClick={() => setShowForm(true)}
+              style={{
+                fontFamily: "Constantia, Georgia, 'Times New Roman', serif",
+                background: 'transparent',
+                color: '#fff',
+                border: '2px solid #fff',
+                padding: '14px 48px',
+                fontSize: '1rem',
+                cursor: 'pointer',
+                marginTop: '0.5rem',
+                minWidth: 200,
+              }}
+              onMouseEnter={e => {
+                const btn = e.currentTarget as HTMLButtonElement;
+                btn.style.background = '#fff';
+                btn.style.color = '#30323E';
+              }}
+              onMouseLeave={e => {
+                const btn = e.currentTarget as HTMLButtonElement;
+                btn.style.background = 'transparent';
+                btn.style.color = '#fff';
+              }}
+            >
+              Iniciar Formulário
+            </button>
+          </div>
         </div>
-        <div className="prog-lbl">Etapa {step + 1} de {ETAPAS.length}</div>
-      </div>
+      ) : (
+        <div>
+          <nav>
+            <div className="nav-logo">
+              <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
+            </div>
+          </nav>
 
-      <form className="form-wrap" onSubmit={handleSubmit}>
-        <div className="fsec">
-          <div className="sec-hdr">
-            <div className="sec-num">{step + 1}</div>
-            <div>
-              <div className="sec-title">{etapa.title}</div>
-              <div className="sec-sub">{etapa.sub}</div>
+          <div className="prog-wrap">
+            <div style={{ display: 'flex', gap: 4, marginBottom: '0.5rem' }}>
+              {ETAPAS.map((_, i) => (
+                <div key={i} style={{
+                  flex: 1,
+                  height: 6,
+                  background: i <= step ? '#30323E' : '#e0e0e0',
+                  borderRadius: 3,
+                }} />
+              ))}
+            </div>
+            <div className="prog-lbl" style={{ fontFamily: "Constantia, Georgia, 'Times New Roman', serif", letterSpacing: '0.04em' }}>
+              ETAPA {step + 1} DE {ETAPAS.length} — {etapa.title.toUpperCase()}
             </div>
           </div>
-          {renderEtapaAtual()}
-        </div>
 
-        <div className="nav-btns">
-          {step > 0
-            ? <button type="button" className="btn-sec" onClick={voltar}>← Voltar</button>
-            : <span />}
-          {step < ETAPAS.length - 1
-            ? <button type="button" className="btn-pri" onClick={avancar}>Continuar →</button>
-            : <button type="submit" className="btn-pri" disabled={enviando}>{enviando ? 'Enviando arquivos...' : 'Enviar Solicitação'}</button>}
+          <form className="form-wrap" onSubmit={handleSubmit}>
+            <div className="fsec">
+              <div className="sec-hdr">
+                <div className="sec-num">{step + 1}</div>
+                <div>
+                  <div className="sec-title">{etapa.title}</div>
+                  <div className="sec-sub">{etapa.sub}</div>
+                </div>
+              </div>
+              {renderEtapaAtual()}
+            </div>
+
+            <div className="nav-btns">
+              {step > 0
+                ? <button type="button" className="btn-sec" onClick={voltar}>← Voltar</button>
+                : <span />}
+              <button
+                type="button"
+                onClick={salvarProgresso}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid #ccc',
+                  color: 'var(--muted)',
+                  padding: '8px 16px',
+                  cursor: 'pointer',
+                  fontSize: 12,
+                  fontFamily: "Constantia, Georgia, 'Times New Roman', serif",
+                }}
+              >
+                {salvoMsg || 'Salvar e continuar depois'}
+              </button>
+              {step < ETAPAS.length - 1
+                ? <button type="button" className="btn-pri" onClick={avancar}>Continuar →</button>
+                : <button type="submit" className="btn-pri" disabled={enviando}>{enviando ? 'Enviando arquivos...' : 'Enviar Solicitação'}</button>}
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
+      )}
+    </>
   );
 }
