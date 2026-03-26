@@ -68,7 +68,7 @@ label .req{color:var(--danger);margin-left:2px;}
 /* INPUTS */
 input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{
   width:100%;padding:9px 12px;border:1px solid var(--bstrong);border-radius:var(--rs);
-  font-family:'Jost',sans-serif;font-size:13.5px;color:var(--dark);background:var(--off);
+  font-family:'Jost',sans-serif;font-size:13.5px;color:var(--dark);background:#fff;
   transition:.15s;outline:none;
 }
 input:focus,select:focus,textarea:focus{border-color:var(--dark);background:#fff;box-shadow:0 0 0 3px rgba(48,50,62,.07);}
