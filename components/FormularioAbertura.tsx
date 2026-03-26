@@ -1051,9 +1051,6 @@ export default function FormularioAbertura() {
                 onChange={e => setField('ativ_servico', e.target.value)} />
               <ErrMsg k="ativ_servico" />
             </div>
-            <div className="alert alert-warn">
-              <strong>⚠ Atenção:</strong> Serviços podem estar sujeitos a retenções de impostos na fonte (ISS, PIS, COFINS, CSLL, IRPJ). Nossa equipe orientará sobre as alíquotas.
-            </div>
           </div>
         )}
 
