@@ -50,7 +50,7 @@ const ETAPAS = [
   { id: 'socios',      title: 'Sócios',                        sub: 'Dados pessoais e documentação dos sócios' },
   { id: 'gestao',      title: 'Gestão e Pró-labore',           sub: 'Função e retirada mensal de cada sócio' },
   { id: 'regime',      title: 'Regime Tributário e Funcionários', sub: 'Tributação, equipe e contatos para o CNPJ' },
-  { id: 'documentos',  title: 'Documentos',                    sub: 'Envio de documentação — não obrigatório agora' },
+  { id: 'documentos',  title: 'Documentos',                    sub: 'Envio de documentação' },
   { id: 'declaracoes', title: 'Declarações Finais',            sub: 'Confirmações obrigatórias para enviar' },
 ];
 
