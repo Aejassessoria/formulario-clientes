@@ -115,6 +115,8 @@ const TIPS: Record<string, string> = {
   cnpj_telefone: 'Aparecerá no Cartão CNPJ.',
   natureza_juridica: 'Define a estrutura legal da sua empresa. Ex: MEI, LTDA, SAS. Nossos contadores podem te orientar na escolha certa.',
   distribuicao_lucros: 'O Código Civil permite que os sócios recebam lucros em proporção diferente da participação no capital. Escolha Proporcional se cada sócio receberá conforme sua cota. Escolha Desproporcional se quiserem definir percentuais diferentes.',
+  capital_parcelas: 'Informe em quantas vezes o valor restante do capital social será integralizado após a abertura da empresa.',
+  capital_prazo: 'Data limite para que todo o capital social esteja integralizado. Não pode ser uma data no passado.',
 };
 
 // ─── MÁSCARAS ────────────────────────────────────────────────────────────────
@@ -499,10 +501,21 @@ export default function FormularioAbertura() {
       if (v === '' || v === false || v == null) e[k] = msg;
     };
 
+    const validarNasc = (key: string, valor: string) => {
+      if (!valor) { e[key] = 'Campo obrigatório'; return; }
+      const nasc = new Date(valor);
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+      if (nasc > hoje) { e[key] = 'Data de nascimento não pode ser no futuro'; return; }
+      const idadeMs = hoje.getTime() - nasc.getTime();
+      const anos = idadeMs / (1000 * 60 * 60 * 24 * 365.25);
+      if (anos > 120) e[key] = 'Data de nascimento inválida (mais de 120 anos)';
+    };
+
     if (etapa.id === 'responsavel') {
       req('resp_nome', form.resp_nome);
       req('resp_cpf', form.resp_cpf);
-      req('resp_nasc', form.resp_nasc);
+      validarNasc('resp_nasc', form.resp_nasc);
       req('resp_profissao', form.resp_profissao);
       req('resp_civil', form.resp_civil);
       req('resp_tel', form.resp_tel);
@@ -554,7 +567,14 @@ export default function FormularioAbertura() {
       if (form.capital_integralizacao === 'parcial') {
         req('capital_inicial', form.capital_inicial);
         req('capital_parcelas', form.capital_parcelas);
-        req('capital_prazo', form.capital_prazo);
+        if (!form.capital_prazo) {
+          e['capital_prazo'] = 'Campo obrigatório';
+        } else {
+          const prazo = new Date(form.capital_prazo);
+          const hoje = new Date();
+          hoje.setHours(0, 0, 0, 0);
+          if (prazo < hoje) e['capital_prazo'] = 'O prazo não pode ser uma data anterior a hoje';
+        }
       }
     }
 
@@ -563,7 +583,7 @@ export default function FormularioAbertura() {
         req(`s${i}_nome`, s.nome);
         req(`s${i}_cpf`, s.cpf);
         req(`s${i}_rg`, s.rg);
-        req(`s${i}_nasc`, s.nasc);
+        validarNasc(`s${i}_nasc`, s.nasc);
         req(`s${i}_civil`, s.civil);
         req(`s${i}_profissao`, s.profissao);
         req(`s${i}_participacao`, s.participacao);
@@ -1190,17 +1210,24 @@ export default function FormularioAbertura() {
               {inicialOk && (
                 <div className="fr" style={{ marginTop: '1rem' }}>
                   <div className="fg">
-                    <label>Em quantas parcelas será integralizado o restante? <span className="req">*</span></label>
+                    <div className="lbl-row">
+                      <label>Número de parcelas <span className="req">*</span></label>
+                      <Tip tipKey="capital_parcelas" />
+                    </div>
                     <input className={errClass('capital_parcelas')} type="number" min={1}
                       value={form.capital_parcelas}
                       onChange={e => setField('capital_parcelas', e.target.value)} />
                     <ErrMsg k="capital_parcelas" />
                   </div>
                   <div className="fg">
-                    <label>Prazo final para integralização <span className="req">*</span></label>
-                    <input className={errClass('capital_prazo')} type="text" placeholder="dd/mm/aaaa" maxLength={10}
+                    <div className="lbl-row">
+                      <label>Prazo final para integralização <span className="req">*</span></label>
+                      <Tip tipKey="capital_prazo" />
+                    </div>
+                    <input className={errClass('capital_prazo')} type="date"
+                      min={new Date().toISOString().split('T')[0]}
                       value={form.capital_prazo}
-                      onChange={e => setField('capital_prazo', maskDate(e.target.value))} />
+                      onChange={e => setField('capital_prazo', e.target.value)} />
                     <ErrMsg k="capital_prazo" />
                   </div>
                 </div>

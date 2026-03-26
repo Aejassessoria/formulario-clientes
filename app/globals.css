@@ -49,7 +49,7 @@ nav{background:rgba(48,50,62,.96);backdrop-filter:blur(10px);height:130px;displa
 /* FIELD GROUPS */
 .fg{margin-bottom:1rem;}
 .fg:last-child{margin-bottom:0;}
-.fr{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1rem;}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:1rem;align-items:start;}
 .fr:last-child{margin-bottom:0;}
 .fr.c3{grid-template-columns:1fr 1fr 1fr;}
 .fr .fg{margin-bottom:0;}
