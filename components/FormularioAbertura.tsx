@@ -567,6 +567,8 @@ export default function FormularioAbertura() {
         req(`s${i}_civil`, s.civil);
         req(`s${i}_profissao`, s.profissao);
         req(`s${i}_participacao`, s.participacao);
+        if (s.participacao && parseFloat(s.participacao) <= 0)
+          e[`s${i}_participacao`] = 'A participação deve ser maior que 0%';
         req(`s${i}_end_cep`, s.end_cep);
         req(`s${i}_end_logradouro`, s.end_logradouro);
         req(`s${i}_end_numero`, s.end_numero);
@@ -903,8 +905,8 @@ export default function FormularioAbertura() {
           <select className={errClass('atendimento_publico')} value={form.atendimento_publico}
             onChange={e => setField('atendimento_publico', e.target.value)}>
             <option value="">Selecione...</option>
-            <option value="sim">Sim — haverá atendimento presencial</option>
-            <option value="nao">Não — apenas fiscal / correspondência</option>
+            <option value="sim">Sim, haverá atendimento presencial</option>
+            <option value="nao">Não, apenas fiscal / correspondência</option>
           </select>
           <ErrMsg k="atendimento_publico" />
         </div>
@@ -912,7 +914,7 @@ export default function FormularioAbertura() {
         {/* Condicional: atendimento SIM */}
         {form.atendimento_publico === 'sim' && (
           <div className="cond">
-            <div className="cond-lbl">Informações do imóvel — atendimento presencial</div>
+            <div className="cond-lbl">Informações do imóvel: atendimento presencial</div>
             <div className="fg">
               <Lbl req tip="area_total">Área total (m²)</Lbl>
               <input className={errClass('area_total')} type="number" min={0} value={form.area_total}
@@ -973,7 +975,7 @@ export default function FormularioAbertura() {
         {/* Condicional: atendimento NÃO */}
         {form.atendimento_publico === 'nao' && (
           <div className="cond">
-            <div className="cond-lbl">Informações do imóvel — endereço fiscal</div>
+            <div className="cond-lbl">Informações do imóvel: endereço fiscal</div>
             <div className="fg">
               <Lbl req tip="area_total">Área total do imóvel (m²)</Lbl>
               <input className={errClass('area_total_fiscal')} type="number" min={0} value={form.area_total_fiscal}
@@ -987,7 +989,7 @@ export default function FormularioAbertura() {
               <ErrMsg k="inscricao_imobiliaria_fiscal" />
             </div>
             <div className="alert alert-info" style={{ marginTop: '.5rem' }}>
-              <strong>ℹ Endereço apenas fiscal</strong> — Evita exigências de alvará de bombeiro e vigilância sanitária.
+              <strong>ℹ Endereço apenas fiscal:</strong> Evita exigências de alvará de bombeiro e vigilância sanitária.
             </div>
           </div>
         )}
@@ -1020,7 +1022,7 @@ export default function FormularioAbertura() {
 
         {form.atividades.includes('servico') && (
           <div className="cond">
-            <div className="cond-lbl">Serviços — detalhamento</div>
+            <div className="cond-lbl">Serviços: detalhamento</div>
             <div className="fg">
               <label>Descreva as atividades de serviço <span className="req">*</span></label>
               <textarea className={errClass('ativ_servico')} rows={5} value={form.ativ_servico}
@@ -1035,9 +1037,9 @@ export default function FormularioAbertura() {
 
         {form.atividades.includes('comercio') && (
           <div className="cond">
-            <div className="cond-lbl">Comércio — detalhamento</div>
+            <div className="cond-lbl">Comércio: detalhamento</div>
             <div className="alert alert-info" style={{ marginBottom: '.75rem' }}>
-              <strong>ℹ Comércio</strong> — Esta categoria é para revenda de produtos de terceiros. Para fabricação própria, utilize <strong>Indústria</strong>.
+              <strong>ℹ Comércio:</strong> Esta categoria é para revenda de produtos de terceiros. Para fabricação própria, utilize <strong>Indústria</strong>.
             </div>
             <div className="fg">
               <label>Descreva os produtos a serem comercializados <span className="req">*</span></label>
@@ -1067,7 +1069,7 @@ export default function FormularioAbertura() {
 
         {form.atividades.includes('industria') && (
           <div className="cond">
-            <div className="cond-lbl">Indústria — detalhamento</div>
+            <div className="cond-lbl">Indústria: detalhamento</div>
             <div className="fg">
               <label>Descreva o que será fabricado ou produzido <span className="req">*</span></label>
               <textarea className={errClass('ativ_industria')} rows={5} value={form.ativ_industria}
@@ -1127,8 +1129,8 @@ export default function FormularioAbertura() {
           <select className={errClass('capital_integralizacao')} value={form.capital_integralizacao}
             onChange={e => setField('capital_integralizacao', e.target.value)}>
             <option value="">Selecione...</option>
-            <option value="total">À vista — totalmente integralizado agora</option>
-            <option value="parcial">Parcelado — parte será integralizada depois</option>
+            <option value="total">À vista, totalmente integralizado agora</option>
+            <option value="parcial">Parcelado, parte será integralizada depois</option>
           </select>
           <ErrMsg k="capital_integralizacao" />
         </div>
@@ -1215,14 +1217,14 @@ export default function FormularioAbertura() {
           <div className={`alert ${somaOk ? 'alert-info' : 'alert-warn'}`} style={{ marginBottom: '1rem' }}>
             {somaOk
               ? <><strong>✓ Participação correta:</strong> Total = 100%</>
-              : <><strong>⚠ Participação incorreta:</strong> Soma atual = <strong>{somaParticipacao.toFixed(1)}%</strong> — o total deve ser exatamente <strong>100%</strong>.</>}
+              : <><strong>⚠ Participação incorreta:</strong> Soma atual = <strong>{somaParticipacao.toFixed(1)}%</strong>. O total deve ser exatamente <strong>100%</strong>.</>}
           </div>
         )}
 
         {socios.map((s, i) => (
           <div className="socio-blk" key={i}>
             <div className="socio-hdr">
-              <div className="socio-tag">Sócio {i + 1}{i === 0 ? ' — Principal' : ''}</div>
+              <div className="socio-tag">Sócio {i + 1}{i === 0 ? ' (Principal)' : ''}</div>
               <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                 <button type="button" className="btn-copy-resp" onClick={() => copiarResponsavel(i)}>
                   ↙ Copiar dados do responsável
@@ -1311,7 +1313,7 @@ export default function FormularioAbertura() {
                   <Tip tipKey="socio_participacao" />
                 </div>
                 <div className="input-pct">
-                  <input className={errClass(`s${i}_participacao`)} type="number" min={0} max={100} placeholder="0"
+                  <input className={errClass(`s${i}_participacao`)} type="number" min={1} max={100} placeholder="Ex: 50"
                     value={s.participacao} onChange={e => setSocioField(i, 'participacao', e.target.value)} />
                 </div>
                 <ErrMsg k={`s${i}_participacao`} />
@@ -1440,11 +1442,12 @@ export default function FormularioAbertura() {
                 </div>
                 <div className="fr">
                   <div className="fg">
-                    <label>Regime tributário <span className="req">*</span></label>
+                    <label>Função nesta empresa <span className="req">*</span></label>
                     <select className={errClass(`s${i}_outra_regime`)} value={s.outra_regime}
                       onChange={e => setSocioField(i, 'outra_regime', e.target.value)}>
                       <option value="">Selecione...</option>
-                      {['Simples Nacional','Lucro Presumido','Lucro Real','MEI'].map(o => <option key={o}>{o}</option>)}
+                      <option value="socio">Sócio</option>
+                      <option value="socio_administrador">Sócio-administrador</option>
                     </select>
                     <ErrMsg k={`s${i}_outra_regime`} />
                   </div>
@@ -1513,7 +1516,6 @@ export default function FormularioAbertura() {
                   <option value="">Selecione...</option>
                   <option value="socio">Apenas sócio (sem poderes de administração)</option>
                   <option value="adm">Sócio administrador</option>
-                  <option value="adm_nao_socio">Administrador não sócio</option>
                 </select>
                 <ErrMsg k={`g${i}_funcao`} />
               </div>
@@ -1563,7 +1565,7 @@ export default function FormularioAbertura() {
                       onChange={e => setSocioField(i, 'prolabore_opt', e.target.value)}>
                       <option value="">Selecione...</option>
                       <option value="minimo">Salário mínimo vigente</option>
-                      <option value="outro">Outro valor — informar</option>
+                      <option value="outro">Outro valor, informar</option>
                     </select>
                     <ErrMsg k={`g${i}_plopt`} />
                   </div>
@@ -1583,7 +1585,7 @@ export default function FormularioAbertura() {
 
               {s.prolabore === 'nao' && (
                 <div className="alert alert-warn" style={{ marginTop: '.5rem' }}>
-                  <strong>⚠ Sem pró-labore:</strong> Este sócio não terá cobertura do INSS — sem auxílio-doença, aposentadoria ou salário-maternidade enquanto não houver recolhimento.
+                  <strong>⚠ Sem pró-labore:</strong> Esse sócio não terá cobertura pelo INSS nesta empresa. Ou seja, não terá direito a benefícios como auxílio doença, aposentadoria ou salário maternidade nesta condição enquanto não houver recolhimento, salvo se já estiver contribuindo por outra empresa ou como segurado individual.
                 </div>
               )}
             </div>
@@ -1605,7 +1607,7 @@ export default function FormularioAbertura() {
           <select className={errClass('regime_tributario')} value={form.regime_tributario}
             onChange={e => setField('regime_tributario', e.target.value)}>
             <option value="">Selecione...</option>
-            <option value="nao_sei">Não sei — quero orientação da equipe</option>
+            <option value="nao_sei">Não sei, quero orientação da equipe</option>
             <option value="simples">Simples Nacional</option>
             <option value="presumido">Lucro Presumido</option>
             <option value="real">Lucro Real</option>
@@ -1672,7 +1674,7 @@ export default function FormularioAbertura() {
     return (
       <>
         <div className="alert alert-warn" style={{ marginBottom: '1.25rem' }}>
-          <strong>📎 Não é obrigatório agora</strong> — mas o envio dos documentos <strong>agiliza muito o processo</strong>. Você também poderá enviar por e-mail ou WhatsApp posteriormente.
+          <strong>📎 Não é obrigatório neste momento,</strong> porém o envio dos documentos é necessário para a continuidade do processo e contribui para maior rapidez no andamento. Caso prefira, eles poderão ser encaminhados posteriormente por e-mail ou WhatsApp.
         </div>
         {docs.map(d => (
           <div className="fg" key={d.id}>
