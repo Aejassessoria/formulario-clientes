@@ -259,13 +259,18 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
   input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select{
     height:48px;
     font-size:16px;
+    padding:9px 10px;
   }
-  textarea{font-size:16px;}
+  textarea{font-size:16px;padding:9px 10px;}
   label{font-size:11px;}
 
-  /* CARD DO FORMULÁRIO — padding lateral menor = mais área útil */
-  .form-wrap{padding:.75rem .75rem 7rem;}
-  .fsec{padding:1.25rem 1rem;}
+  /* CARD DO FORMULÁRIO — margens menores = campos maiores */
+  .form-wrap{padding:.5rem .5rem 7rem;}
+  .fsec{padding:1rem .75rem;}
+  .fg{margin-bottom:.75rem;}
+  .fr{gap:.6rem;margin-bottom:.75rem;}
+  .socio-blk{padding:1rem .75rem;}
+  .cond{padding:.85rem .85rem .75rem;}
 
   /* BOTÕES DE NAVEGAÇÃO FIXOS NO RODAPÉ */
   .nav-btns{
