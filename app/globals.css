@@ -263,9 +263,12 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
   textarea{font-size:16px;}
   label{font-size:11px;}
 
-  /* CARD DO FORMULÁRIO — margens laterais mínimas para formulário ocupar toda a largura */
-  .form-wrap{padding:.75rem .25rem 7rem;}
-  .fsec{padding:1.25rem .75rem;}
+  /* CARD DO FORMULÁRIO — sem margem lateral, formulário ocupa 100% da largura */
+  .form-wrap{padding:.75rem 0 7rem;}
+  .fsec{padding:1.25rem .6rem;border-radius:0;border-left:none;border-right:none;}
+  /* ESPAÇAMENTO ENTRE CAMPOS — mais arejado */
+  .fg{margin-bottom:1.25rem;}
+  .fr{margin-bottom:1.25rem;}
 
   /* BOTÕES DE NAVEGAÇÃO FIXOS NO RODAPÉ */
   .nav-btns{
