@@ -251,18 +251,56 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
   .tbl-wrap{padding:0 1.25rem 2rem;}
 }
 @media(max-width:600px){
+  /* GRID */
   .fr,.fr.c3{grid-template-columns:1fr;}
   .tipo-grid{grid-template-columns:1fr;}
-  .nav-btns{flex-direction:column-reverse;gap:.75rem;}
-  .btn-pri,.btn-sec{width:100%;text-align:center;}
-  .form-wrap{padding:1rem 1rem 4rem;}
+
+  /* INPUTS — fonte 16px evita zoom automático no iOS, altura 48px facilita toque */
+  input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select{
+    height:48px;
+    font-size:16px;
+  }
+  textarea{font-size:16px;}
+  label{font-size:11px;}
+
+  /* CARD DO FORMULÁRIO — padding lateral menor = mais área útil */
+  .form-wrap{padding:.75rem .75rem 7rem;}
+  .fsec{padding:1.25rem 1rem;}
+
+  /* BOTÕES DE NAVEGAÇÃO FIXOS NO RODAPÉ */
+  .nav-btns{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#fff;
+    border-top:1px solid var(--border);
+    padding:.85rem 1rem;
+    display:flex;
+    flex-direction:row;
+    gap:.6rem;
+    z-index:150;
+    box-shadow:0 -2px 12px rgba(48,50,62,.08);
+  }
+  .btn-pri,.btn-sec{
+    width:100%;
+    text-align:center;
+    padding:14px 12px;
+    font-size:13.5px;
+  }
+  .btn-pri{flex:2;}
+  .btn-sec{flex:1;}
+
+  /* TOOLTIPS — abre para cima no mobile */
   .tip:hover::after,.tip.tip-open::after{left:auto;right:22px;top:auto;bottom:22px;transform:none;}
   .tip:hover::before,.tip.tip-open::before{left:auto;right:18px;top:auto;bottom:16px;transform:rotate(90deg);}
+
+  /* ADMIN */
   .stats{grid-template-columns:repeat(2,1fr);}
   .dgrid{grid-template-columns:1fr;}
   .tbl-wrap{padding:0 .75rem 2rem;}
   .adm-bar{padding:.85rem .75rem;}
-  .adm-detail-wrap{padding:1rem 1rem 4rem;}
+  .adm-detail-wrap{padding:1rem .75rem 4rem;}
 }
 
 /* ── IMPRESSÃO / PDF ─────────────────────────────────────────────────────── */
