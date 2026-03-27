@@ -1586,21 +1586,22 @@ export default function FormularioAbertura() {
 
               {s.prolabore === 'sim' && (
                 <div className="cond">
-                  <div className="cond-lbl">Valor do pró-labore</div>
+                  <div className="cond-lbl">Valor bruto do pró-labore</div>
                   <div className="fg">
-                    <label>Valor mensal <span className="req">*</span></label>
+                    <label>Valor mensal bruto <span className="req">*</span></label>
                     <select className={errClass(`g${i}_plopt`)} value={s.prolabore_opt}
                       onChange={e => setSocioField(i, 'prolabore_opt', e.target.value)}>
                       <option value="">Selecione...</option>
                       <option value="minimo">Salário mínimo vigente</option>
                       <option value="outro">Outro valor, informar</option>
                     </select>
+                    <p className="hint">Informe o valor bruto. Sobre ele incidirão INSS e Imposto de Renda conforme a tabela vigente.</p>
                     <ErrMsg k={`g${i}_plopt`} />
                   </div>
                   {s.prolabore_opt === 'outro' && (
                     <div className="cond">
                       <div className="fg">
-                        <label>Informe o valor mensal (R$) <span className="req">*</span></label>
+                        <label>Informe o valor bruto mensal (R$) <span className="req">*</span></label>
                         <input className={errClass(`g${i}_plval`)} type="text" placeholder="0,00"
                           value={s.prolabore_valor}
                           onChange={e => setSocioField(i, 'prolabore_valor', maskMoney(e.target.value))} />
