@@ -117,6 +117,12 @@ const TIPS: Record<string, string> = {
   distribuicao_lucros: 'O Código Civil permite que os sócios recebam lucros em proporção diferente da participação no capital. Escolha Proporcional se cada sócio receberá conforme sua cota. Escolha Desproporcional se quiserem definir percentuais diferentes.',
   capital_parcelas: 'Informe em quantas vezes o valor restante do capital social será integralizado após a abertura da empresa.',
   capital_prazo: 'Data limite para que todo o capital social esteja integralizado. Não pode ser uma data no passado.',
+  profissao: 'Para fins de contrato social, a profissão mais utilizada é empresário. Você pode manter essa sugestão ou informar outra profissão que melhor represente sua atuação.',
+  ativ_servico: 'Detalhe os serviços que serão prestados. Ex: consultoria em tecnologia, desenvolvimento de software, assessoria jurídica. Quanto mais detalhado, mais preciso será o CNAE da empresa.',
+  ativ_comercio: 'Informe os produtos que serão revendidos. Ex: roupas femininas, peças automotivas, alimentos. Isso define o CNAE e impacta o enquadramento tributário.',
+  ativ_industria: 'Informe o que será fabricado. Ex: móveis sob medida, alimentos artesanais, peças metálicas. Isso define o CNAE industrial da empresa.',
+  tem_funcionarios: 'Considere apenas contratações com registro em carteira (CLT). Sócios que recebem pró-labore não são considerados funcionários.',
+  outra_participacao: 'Informe o percentual de cotas que você possui nessa empresa. Ex: se você tem 50% das cotas, informe 50.',
 };
 
 // ─── MÁSCARAS ────────────────────────────────────────────────────────────────
@@ -771,7 +777,7 @@ export default function FormularioAbertura() {
         </div>
         <div className="fr">
           <div className="fg">
-            <Lbl req>Profissão</Lbl>
+            <Lbl req tip="profissao">Profissão</Lbl>
             <input className={errClass('resp_profissao')} type="text" value={form.resp_profissao}
               onChange={e => setField('resp_profissao', e.target.value)} />
             <ErrMsg k="resp_profissao" />
@@ -1046,7 +1052,10 @@ export default function FormularioAbertura() {
           <div className="cond">
             <div className="cond-lbl">Serviços: detalhamento</div>
             <div className="fg">
-              <label>Descreva as atividades de serviço <span className="req">*</span></label>
+              <div className="lbl-row">
+                <label>Descreva as atividades de serviço <span className="req">*</span></label>
+                <Tip tipKey="ativ_servico" />
+              </div>
               <textarea className={errClass('ativ_servico')} rows={5} value={form.ativ_servico}
                 onChange={e => setField('ativ_servico', e.target.value)} />
               <ErrMsg k="ativ_servico" />
@@ -1061,7 +1070,10 @@ export default function FormularioAbertura() {
               <strong>ℹ Comércio:</strong> Esta categoria é para revenda de produtos de terceiros. Para fabricação própria, utilize <strong>Indústria</strong>.
             </div>
             <div className="fg">
-              <label>Descreva os produtos a serem comercializados <span className="req">*</span></label>
+              <div className="lbl-row">
+                <label>Descreva os produtos a serem comercializados <span className="req">*</span></label>
+                <Tip tipKey="ativ_comercio" />
+              </div>
               <textarea className={errClass('ativ_comercio')} rows={5} value={form.ativ_comercio}
                 onChange={e => setField('ativ_comercio', e.target.value)} />
               <ErrMsg k="ativ_comercio" />
@@ -1090,7 +1102,10 @@ export default function FormularioAbertura() {
           <div className="cond">
             <div className="cond-lbl">Indústria: detalhamento</div>
             <div className="fg">
-              <label>Descreva o que será fabricado ou produzido <span className="req">*</span></label>
+              <div className="lbl-row">
+                <label>Descreva o que será fabricado ou produzido <span className="req">*</span></label>
+                <Tip tipKey="ativ_industria" />
+              </div>
               <textarea className={errClass('ativ_industria')} rows={5} value={form.ativ_industria}
                 onChange={e => setField('ativ_industria', e.target.value)} />
               <ErrMsg k="ativ_industria" />
@@ -1310,7 +1325,10 @@ export default function FormularioAbertura() {
                 <ErrMsg k={`s${i}_civil`} />
               </div>
               <div className="fg">
-                <label>Profissão <span className="req">*</span></label>
+                <div className="lbl-row">
+                  <label>Profissão <span className="req">*</span></label>
+                  <Tip tipKey="profissao" />
+                </div>
                 <input className={errClass(`s${i}_profissao`)} type="text"
                   value={s.profissao} onChange={e => setSocioField(i, 'profissao', e.target.value)} />
                 <ErrMsg k={`s${i}_profissao`} />
@@ -1480,7 +1498,10 @@ export default function FormularioAbertura() {
                     <ErrMsg k={`s${i}_outra_regime`} />
                   </div>
                   <div className="fg">
-                    <label>% de participação nessa empresa <span className="req">*</span></label>
+                    <div className="lbl-row">
+                      <label>% de participação nessa empresa <span className="req">*</span></label>
+                      <Tip tipKey="outra_participacao" />
+                    </div>
                     <input className={errClass(`s${i}_outra_participacao`)} type="number" min={0} max={100} placeholder="0"
                       value={s.outra_participacao} onChange={e => setSocioField(i, 'outra_participacao', e.target.value)} />
                     <ErrMsg k={`s${i}_outra_participacao`} />
@@ -1645,7 +1666,10 @@ export default function FormularioAbertura() {
           <ErrMsg k="regime_tributario" />
         </div>
         <div className="fg">
-          <label>Haverá funcionários? <span className="req">*</span></label>
+          <div className="lbl-row">
+            <label>Haverá funcionários? <span className="req">*</span></label>
+            <Tip tipKey="tem_funcionarios" />
+          </div>
           <select className={errClass('tem_funcionarios')} value={form.tem_funcionarios}
             onChange={e => setField('tem_funcionarios', e.target.value)}>
             <option value="">Selecione...</option>
