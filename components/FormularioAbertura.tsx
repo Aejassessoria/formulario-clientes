@@ -1499,7 +1499,7 @@ export default function FormularioAbertura() {
                   </div>
                   <div className="fg">
                     <div className="lbl-row">
-                      <label>% de participação nessa empresa <span className="req">*</span></label>
+                      <label>% de participação <span className="req">*</span></label>
                       <Tip tipKey="outra_participacao" />
                     </div>
                     <input className={errClass(`s${i}_outra_participacao`)} type="number" min={0} max={100} placeholder="0"
