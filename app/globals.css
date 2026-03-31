@@ -63,8 +63,7 @@ label .req{color:var(--danger);margin-left:2px;}
 
 /* TOOLTIP */
 .tip{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--off2);border:1px solid var(--border);font-size:10px;font-weight:700;color:var(--muted);cursor:help;flex-shrink:0;position:relative;user-select:none;}
-.tip:hover::after,.tip.tip-open::after{content:attr(data-tip);position:absolute;left:22px;top:50%;transform:translateY(-50%);background:var(--dark);color:#fff;font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;padding:6px 10px;border-radius:var(--rs);width:220px;white-space:normal;line-height:1.5;z-index:50;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2);}
-.tip:hover::before,.tip.tip-open::before{content:'';position:absolute;left:18px;top:50%;transform:translateY(-50%);border:5px solid transparent;border-right-color:var(--dark);z-index:51;}
+.tip-popup{background:var(--dark);color:#fff;font-size:11px;font-weight:400;letter-spacing:0;text-transform:none;padding:6px 10px;border-radius:var(--rs);white-space:normal;line-height:1.5;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2);}
 
 /* INPUTS */
 input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number],select,textarea{
@@ -293,10 +292,6 @@ textarea{resize:vertical;min-height:80px;line-height:1.6;}
   }
   .btn-pri{flex:2;}
   .btn-sec{flex:1;}
-
-  /* TOOLTIPS — abre para cima no mobile */
-  .tip:hover::after,.tip.tip-open::after{left:auto;right:22px;top:auto;bottom:22px;transform:none;}
-  .tip:hover::before,.tip.tip-open::before{left:auto;right:18px;top:auto;bottom:16px;transform:rotate(90deg);}
 
   /* ADMIN */
   .stats{grid-template-columns:repeat(2,1fr);}

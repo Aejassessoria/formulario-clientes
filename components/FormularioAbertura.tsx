@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
 
@@ -204,8 +204,42 @@ function gerarExtenso(valorStr: string): string {
 
 function Tip({ tipKey }: { tipKey: string }) {
   const txt = TIPS[tipKey];
+  const [open, setOpen] = useState(false);
+  const btnRef = useRef<HTMLSpanElement>(null);
+  const [tipStyle, setTipStyle] = useState<React.CSSProperties>({});
+
   if (!txt) return null;
-  return <span className="tip" data-tip={txt}>?</span>;
+
+  function calcPos() {
+    if (!btnRef.current) return;
+    const rect = btnRef.current.getBoundingClientRect();
+    const tipW = 220;
+    const margin = 8;
+    let left = rect.right + 10;
+    let top = rect.top + rect.height / 2 - 40;
+    if (left + tipW > window.innerWidth - margin) {
+      left = rect.left - tipW - 10;
+    }
+    if (left < margin) left = margin;
+    if (top < margin) top = margin;
+    if (top + 80 > window.innerHeight - margin) {
+      top = window.innerHeight - 80 - margin;
+    }
+    setTipStyle({ position: 'fixed', top, left, width: tipW, zIndex: 9999 });
+  }
+
+  return (
+    <span
+      ref={btnRef}
+      className="tip"
+      onClick={e => { e.stopPropagation(); if (open) { setOpen(false); } else { calcPos(); setOpen(true); } }}
+      onMouseEnter={() => { calcPos(); setOpen(true); }}
+      onMouseLeave={() => setOpen(false)}
+    >
+      ?
+      {open && <span className="tip-popup" style={tipStyle}>{txt}</span>}
+    </span>
+  );
 }
 
 // ─── LABEL HELPERS ───────────────────────────────────────────────────────────
