@@ -437,7 +437,7 @@ export default async function AdminDetalhePage({
       {/* NAV */}
       <nav className="print-hide">
         <div className="nav-logo">
-          <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
+          <img src="/logo-aj-escura.png" alt="A&J Assessoria Contábil" />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Link href="/admin" className="nav-tab active">Painel Admin</Link>

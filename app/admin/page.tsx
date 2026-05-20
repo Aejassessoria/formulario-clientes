@@ -193,7 +193,7 @@ export default async function AdminPage({
       {/* NAV */}
       <nav>
         <div className="nav-logo">
-          <img src="/logo-aj-transparente.png" alt="A&J Assessoria Contábil" />
+          <img src="/logo-aj-escura.png" alt="A&J Assessoria Contábil" />
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <Link href="/abertura-empresa" className="nav-tab">Formulário</Link>

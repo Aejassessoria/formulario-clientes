@@ -51,7 +51,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <img
-            src="/logo-aj-transparente.png"
+            src="/logo-aj-escura.png"
             alt="A&J Assessoria Contábil"
             style={{ height: 56, objectFit: 'contain' }}
           />
