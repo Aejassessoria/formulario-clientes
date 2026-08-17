@@ -288,3 +288,93 @@ export function gerarEmailHTML(row: Solicitacao, empresa: string): string {
 </body>
 </html>`;
 }
+
+// ─── AVISO INTERNO DE NOVA FICHA ─────────────────────────────────────────────
+
+export type NovaFicha = {
+  empresa: string;
+  responsavel: string;
+  email: string;
+  telefone: string;
+  tipo: string;
+  protocolo: string;
+  linkPainel: string;
+};
+
+function esc(v: string): string {
+  return v
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+/** E-mail curto avisando a equipe que chegou uma ficha nova. */
+export function gerarEmailNovaFicha(d: NovaFicha): string {
+  const agora = new Date().toLocaleString('pt-BR', {
+    timeZone: 'America/Sao_Paulo',
+    day: '2-digit', month: '2-digit', year: 'numeric',
+    hour: '2-digit', minute: '2-digit',
+  });
+
+  const linhas: [string, string][] = [
+    ['Empresa',     d.empresa],
+    ['Responsável', d.responsavel],
+    ['E-mail',      d.email],
+    ['Telefone',    d.telefone],
+    ['Tipo',        d.tipo],
+    ['Protocolo',   d.protocolo],
+    ['Recebido em', agora],
+  ];
+
+  const tabela = linhas
+    .filter(([, valor]) => valor && valor !== '—')
+    .map(([rotulo, valor]) => `
+      <tr>
+        <td style="${TD_LABEL}">${rotulo}</td>
+        <td style="${TD_VALUE}">${esc(valor)}</td>
+      </tr>`)
+    .join('');
+
+  return `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Nova ficha de abertura</title>
+</head>
+<body style="margin:0;padding:0;background:#f0ede7;font-family:Arial,Helvetica,sans-serif;">
+  <div style="max-width:560px;margin:30px auto;background:#fff;border-radius:6px;overflow:hidden;
+              box-shadow:0 2px 16px rgba(0,0,0,.1);">
+
+    <div style="background:#1a6b4a;padding:24px 32px;">
+      <div style="color:#fff;font-size:20px;font-weight:700;letter-spacing:.02em;">A&amp;J Assessoria Contábil</div>
+      <div style="color:rgba(255,255,255,.75);font-size:13px;margin-top:4px;">
+        Nova ficha de abertura cadastrada
+      </div>
+    </div>
+
+    <div style="padding:24px 32px;">
+      <p style="font-size:14px;color:#333;margin:0 0 16px;">
+        Um cliente acabou de enviar o formulário de abertura de empresa.
+      </p>
+
+      <table style="width:100%;border-collapse:collapse;">${tabela}</table>
+
+      ${d.linkPainel ? `
+      <div style="margin-top:24px;text-align:center;">
+        <a href="${d.linkPainel}"
+           style="display:inline-block;background:#1a6b4a;color:#fff;text-decoration:none;
+                  font-size:14px;font-weight:600;padding:12px 28px;border-radius:4px;">
+          Abrir ficha no painel
+        </a>
+      </div>` : ''}
+    </div>
+
+    <div style="padding:16px 32px;background:#f4f3ef;border-top:1px solid #e8e5e0;
+                font-size:11px;color:#aaa;text-align:center;">
+      Aviso automático do painel A&amp;J
+    </div>
+  </div>
+</body>
+</html>`;
+}

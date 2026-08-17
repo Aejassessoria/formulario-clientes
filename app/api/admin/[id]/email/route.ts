@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import { buscarSolicitacao, nomeEmpresa } from '@/lib/admin';
 import { gerarEmailHTML } from '@/lib/emailTemplate';
+import { criarTransporter, remetente, smtpConfigurado } from '@/lib/mailer';
 
 export async function POST(
   request: Request,
@@ -21,7 +21,7 @@ export async function POST(
     }
 
     // Verifica configuração SMTP
-    if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    if (!smtpConfigurado()) {
       return NextResponse.json(
         { ok: false, message: 'Servidor de e-mail não configurado. Defina SMTP_USER e SMTP_PASS no .env.local' },
         { status: 503 }
@@ -31,18 +31,8 @@ export async function POST(
     const empresa = nomeEmpresa(row);
     const html    = gerarEmailHTML(row, empresa);
 
-    const transporter = nodemailer.createTransport({
-      host: process.env.SMTP_HOST || 'smtp.gmail.com',
-      port: Number(process.env.SMTP_PORT) || 587,
-      secure: false,
-      auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-      },
-    });
-
-    await transporter.sendMail({
-      from: `"A&J Assessoria Contábil" <${process.env.SMTP_USER}>`,
+    await criarTransporter().sendMail({
+      from: remetente(),
       to: para,
       subject: `Solicitação de Abertura — ${empresa}`,
       html,
