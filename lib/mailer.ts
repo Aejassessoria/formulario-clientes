@@ -23,11 +23,22 @@ export function remetente(): string {
   return `"A&J Assessoria Contábil" <${process.env.SMTP_USER}>`;
 }
 
+/** Caixas que recebem o aviso de nova ficha quando NOTIFY_EMAIL não está definida. */
+const DESTINATARIOS_PADRAO = [
+  'contato@aejcontabil.com',
+  'societario@aejcontabil.com',
+];
+
 /**
  * Destinatários da notificação interna de nova ficha.
- * Definido em NOTIFY_EMAIL (aceita vários separados por vírgula).
- * Sem a variável, cai no próprio SMTP_USER.
+ * NOTIFY_EMAIL (vários separados por vírgula) tem prioridade e substitui a lista
+ * padrão por completo. Sem a variável, vale DESTINATARIOS_PADRAO.
  */
 export function destinatariosNotificacao(): string {
-  return process.env.NOTIFY_EMAIL || process.env.SMTP_USER || '';
+  const lista = process.env.NOTIFY_EMAIL || DESTINATARIOS_PADRAO.join(',');
+  return lista
+    .split(',')
+    .map(e => e.trim())
+    .filter(Boolean)
+    .join(', ');
 }
