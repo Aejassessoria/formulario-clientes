@@ -1,5 +1,6 @@
 'use client';
 
+import { ACCEPT, validarArquivo } from '@/lib/uploadRegras';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
@@ -307,6 +308,7 @@ export default function FormularioAbertura() {
   const [form, setForm] = useState<FormData>({ ...FORM_VAZIO });
   const [socios, setSocios] = useState<Socio[]>([{ ...SOCIO_VAZIO }]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFiles>({});
+  const [errosUpload, setErrosUpload] = useState<Record<string, string>>({});
 
   // CEP empresa
   const [cepEmpStatus, setCepEmpStatus] = useState<CepStatus>({ text: '', color: '' });
@@ -421,10 +423,24 @@ export default function FormularioAbertura() {
 
   function handleUpload(id: string, files: FileList | null) {
     if (!files || files.length === 0) return;
-    setUploadedFiles(prev => ({
-      ...prev,
-      [id]: [...(prev[id] || []), ...Array.from(files)],
-    }));
+
+    const aceitos: File[] = [];
+    const recusados: string[] = [];
+
+    for (const file of Array.from(files)) {
+      const recusa = validarArquivo(file.name, file.size, file.type);
+      if (recusa) recusados.push(recusa);
+      else aceitos.push(file);
+    }
+
+    if (aceitos.length > 0) {
+      setUploadedFiles(prev => ({
+        ...prev,
+        [id]: [...(prev[id] || []), ...aceitos],
+      }));
+    }
+
+    setErrosUpload(prev => ({ ...prev, [id]: recusados.join('. ') }));
   }
 
   // ── CEP empresa ──
@@ -719,7 +735,9 @@ export default function FormularioAbertura() {
     setEnviando(true);
 
     // Faz upload de cada arquivo para obter URL permanente
-    const arquivos: Record<string, { name: string; url: string }[]> = {};
+    const arquivos: Record<string, { name: string; url: string; erro?: boolean }[]> = {};
+    const falharam: string[] = [];
+
     for (const [campo, files] of Object.entries(uploadedFiles)) {
       arquivos[campo] = [];
       for (const file of files) {
@@ -727,13 +745,33 @@ export default function FormularioAbertura() {
           const fd = new FormData();
           fd.append('file', file);
           fd.append('campo', campo);
-          const res = await fetch('/api/upload', { method: 'POST', body: fd });
+          const res  = await fetch('/api/upload', { method: 'POST', body: fd });
           const data = await res.json();
-          arquivos[campo].push({ name: file.name, url: data.url ?? '' });
+
+          if (!res.ok || !data.ok || !data.url) {
+            arquivos[campo].push({ name: file.name, url: '', erro: true });
+            falharam.push(file.name);
+          } else {
+            arquivos[campo].push({ name: file.name, url: data.url });
+          }
         } catch {
-          arquivos[campo].push({ name: file.name, url: '' });
+          arquivos[campo].push({ name: file.name, url: '', erro: true });
+          falharam.push(file.name);
         }
       }
+    }
+
+    // Antes o anexo sumia em silêncio: o cliente via sucesso e a ficha chegava
+    // sem o documento. Agora ele fica sabendo e a equipe recebe o alerta.
+    if (falharam.length > 0) {
+      const listaFalhas = falharam.map(n => '• ' + n).join('\n');
+      alert(
+        'Não conseguimos anexar ' +
+        (falharam.length === 1 ? 'o arquivo abaixo' : 'os arquivos abaixo') + ':\n\n' +
+        listaFalhas +
+        '\n\nSua solicitação será enviada mesmo assim e nossa equipe será avisada da falha. ' +
+        'Você pode reenviar esses documentos depois por e-mail ou WhatsApp.'
+      );
     }
 
     const prot = 'AJ-' + Date.now().toString(36).toUpperCase();
@@ -1767,7 +1805,7 @@ export default function FormularioAbertura() {
           <div className="fg" key={d.id}>
             <label>{d.l}</label>
             <label className="upload-box" htmlFor={d.id}>
-              <input id={d.id} type="file" multiple accept=".pdf,.jpg,.jpeg,.png"
+              <input id={d.id} type="file" multiple accept={ACCEPT}
                 style={{ display: 'none' }}
                 onChange={e => handleUpload(d.id, e.target.files)} />
               <div className="upload-label">
@@ -1781,6 +1819,7 @@ export default function FormularioAbertura() {
                 </div>
               )}
             </label>
+            {errosUpload[d.id] && <p className="em">{errosUpload[d.id]}</p>}
           </div>
         ))}
       </>

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { pool } from '@/lib/db';
+import { validarArquivo } from '@/lib/uploadRegras';
 
 // Cria a tabela automaticamente se ainda não existir
 async function garantirTabela() {
@@ -17,11 +18,17 @@ async function garantirTabela() {
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const file = formData.get('file') as File;
+  const file  = formData.get('file') as File;
   const campo = (formData.get('campo') as string) || 'misc';
 
   if (!file) {
     return NextResponse.json({ ok: false, message: 'Arquivo não enviado' }, { status: 400 });
+  }
+
+  // O formulário já valida antes de subir, mas quem chama a rota direto não.
+  const recusa = validarArquivo(file.name, file.size, file.type);
+  if (recusa) {
+    return NextResponse.json({ ok: false, message: recusa }, { status: 400 });
   }
 
   try {
@@ -41,7 +48,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, url, name: file.name });
   } catch (error) {
     console.error('[upload] Erro ao salvar arquivo:', error);
-    // Não interrompe o envio do formulário
-    return NextResponse.json({ ok: true, url: '', name: file.name });
+    // Antes esta rota respondia ok:true com url vazia, e o documento sumia sem
+    // ninguém perceber. Agora a falha é declarada e o formulário a exibe.
+    return NextResponse.json(
+      {
+        ok: false,
+        message: `Não foi possível guardar o arquivo "${file.name}". Tente novamente.`,
+      },
+      { status: 500 }
+    );
   }
 }

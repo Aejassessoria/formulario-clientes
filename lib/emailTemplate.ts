@@ -193,7 +193,7 @@ function sociosHTML(socios: Record<string, unknown>[]): string {
   }).join('');
 }
 
-type ArquivoItem = string | { name: string; url: string };
+type ArquivoItem = string | { name: string; url: string; erro?: boolean };
 
 function arquivosHTML(arquivos: Record<string, ArquivoItem[]> | undefined): string {
   if (!arquivos) return '';
@@ -215,6 +215,11 @@ function arquivosHTML(arquivos: Record<string, ArquivoItem[]> | undefined): stri
     const conteudo = files.map(f => {
       const nome = typeof f === 'string' ? f : f.name;
       const url  = typeof f === 'string' ? '' : f.url;
+      const erro = typeof f === 'string' ? false : f.erro === true;
+
+      if (erro) {
+        return `<span style="color:#a12020;font-weight:600;">${nome} (falha no envio, pedir ao cliente)</span>`;
+      }
       return url
         ? `<a href="${url}" style="color:#1a6b4a;text-decoration:none;">${nome}</a>`
         : `<span style="color:#555;">${nome}</span>`;
@@ -299,6 +304,7 @@ export type NovaFicha = {
   tipo: string;
   protocolo: string;
   linkPainel: string;
+  anexosComFalha?: string[];
 };
 
 function esc(v: string): string {
@@ -357,6 +363,18 @@ export function gerarEmailNovaFicha(d: NovaFicha): string {
       <p style="font-size:14px;color:#333;margin:0 0 16px;">
         Um cliente acabou de enviar o formulário de abertura de empresa.
       </p>
+
+      ${(d.anexosComFalha && d.anexosComFalha.length > 0) ? `
+      <div style="border-left:4px solid #a12020;background:#fdf3f3;padding:12px 16px;margin:0 0 18px;">
+        <div style="font-size:13px;font-weight:700;color:#a12020;margin-bottom:6px;">
+          Anexo não recebido
+        </div>
+        <div style="font-size:13px;color:#333;line-height:1.6;">
+          O cliente tentou enviar ${d.anexosComFalha.length === 1 ? 'este arquivo' : 'estes arquivos'} e o sistema não conseguiu guardar.
+          Peça novamente por e-mail ou WhatsApp:<br>
+          <strong>${d.anexosComFalha.map(esc).join('<br>')}</strong>
+        </div>
+      </div>` : ''}
 
       <table style="width:100%;border-collapse:collapse;">${tabela}</table>
 

@@ -357,7 +357,7 @@ function SecaoSocios({ socios }: { socios: SocioPayload[] }) {
   );
 }
 
-type ArquivoItem = string | { name: string; url: string };
+type ArquivoItem = string | { name: string; url: string; erro?: boolean };
 
 function SecaoDocumentos({ arquivos }: { arquivos: Record<string, ArquivoItem[]> | undefined }) {
   if (!arquivos) return null;
@@ -386,6 +386,15 @@ function SecaoDocumentos({ arquivos }: { arquivos: Record<string, ArquivoItem[]>
               {files.map((f, i) => {
                 const nome = typeof f === 'string' ? f : f.name;
                 const url  = typeof f === 'string' ? '' : f.url;
+                const erro = typeof f === 'string' ? false : f.erro === true;
+
+                if (erro) {
+                  return (
+                    <span key={i} style={{ fontSize: 12, color: 'var(--danger)', fontWeight: 600 }}>
+                      ✗ {nome} (falha no envio, pedir ao cliente)
+                    </span>
+                  );
+                }
                 return url
                   ? (
                     <a key={i} href={url} target="_blank" rel="noopener noreferrer"

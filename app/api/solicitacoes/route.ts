@@ -27,6 +27,13 @@ async function notificarNovaFicha(request: Request, id: string | null, body: Rec
   const empresa =
     (body.nome_empresa as string) || (body.razao_social as string) || 'Empresa sem nome informado';
 
+  // Anexos que o cliente tentou enviar e o servidor não conseguiu guardar.
+  const arquivos = (body.arquivos || {}) as Record<string, { name?: string; erro?: boolean }[]>;
+  const anexosComFalha = Object.values(arquivos)
+    .flat()
+    .filter(a => a && a.erro === true)
+    .map(a => a.name || 'arquivo sem nome');
+
   const html = gerarEmailNovaFicha({
     empresa,
     responsavel: (body.nome_responsavel as string) || (body.resp_nome as string) || '',
@@ -35,6 +42,7 @@ async function notificarNovaFicha(request: Request, id: string | null, body: Rec
     tipo:        (body.tipo as string) || '',
     protocolo:   (body.protocolo as string) || '',
     linkPainel:  urlPainel(request, id),
+    anexosComFalha,
   });
 
   await criarTransporter().sendMail({
